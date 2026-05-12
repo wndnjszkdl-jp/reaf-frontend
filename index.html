@@ -1683,8 +1683,8 @@
           <div class="field-group">
             <label class="field-label"><span class="icon">▣</span>분석 방식</label>
             <div class="result-card" style="min-height:auto; padding:12px 14px;">
-              🤖 모든 AI 모델을 자동으로 실행한 뒤<br>
-              가장 신뢰도 높은 1순위 결과를 보여드려요.
+              ⚡ 간단 분석은 빠르게, 정밀 분석은 2개 모델로<br>
+              더 신중하게 결과를 비교해드려요.
             </div>
           </div>
 
@@ -1938,129 +1938,106 @@
     window.location.hostname === "127.0.0.1"
       ? "http://127.0.0.1:8000"
       : "https://plant-fastapi.onrender.com";
-      let aiLoadingTimer = null;
-      let aiLoadingProgress = 0;
 
-      function setAILoadingProgress(percent, message = "") {
-        aiLoadingProgress = Math.max(0, Math.min(100, percent));
+  let aiLoadingTimer = null;
+  let aiLoadingProgress = 0;
 
-        const fill = document.getElementById("aiProgressFill");
-        const percentText = document.getElementById("aiProgressPercent");
-        const messageBox = document.getElementById("aiLoadingMessage");
+  function getSavedToken() {
+    return localStorage.getItem("token") || localStorage.getItem("access_token");
+  }
 
-        if (fill) fill.style.width = `${aiLoadingProgress}%`;
-        if (percentText) percentText.textContent = `${Math.round(aiLoadingProgress)}%`;
-        if (messageBox && message) messageBox.textContent = message;
+  function setAILoadingProgress(percent, message = "") {
+    aiLoadingProgress = Math.max(0, Math.min(100, Number(percent) || 0));
+
+    const fill = document.getElementById("aiProgressFill");
+    const percentText = document.getElementById("aiProgressPercent");
+    const messageBox = document.getElementById("aiLoadingMessage");
+
+    if (fill) fill.style.width = `${aiLoadingProgress}%`;
+    if (percentText) percentText.textContent = `${Math.round(aiLoadingProgress)}%`;
+    if (messageBox && message) messageBox.textContent = message;
+  }
+
+  function showAILoading({
+    title = "AI가 분석 중이에요",
+    message = "이미지를 업로드하고 작물 상태를 확인하고 있어요.",
+    sub = "첫 분석은 모델 준비 때문에 조금 더 걸릴 수 있어요.",
+    maxBeforeDone = 92
+  } = {}) {
+    const overlay = document.getElementById("aiLoadingOverlay");
+    const titleBox = document.getElementById("aiLoadingTitle");
+    const subBox = document.getElementById("aiLoadingSub");
+
+    if (titleBox) titleBox.textContent = title;
+    if (subBox) subBox.textContent = sub;
+    if (overlay) overlay.classList.add("show");
+
+    setAILoadingProgress(5, message);
+    clearInterval(aiLoadingTimer);
+
+    aiLoadingTimer = setInterval(() => {
+      if (aiLoadingProgress < 30) {
+        setAILoadingProgress(aiLoadingProgress + 4, "이미지를 서버로 보내는 중이에요.");
+      } else if (aiLoadingProgress < 65) {
+        setAILoadingProgress(aiLoadingProgress + 2, "AI 모델이 잎의 특징을 살펴보는 중이에요.");
+      } else if (aiLoadingProgress < maxBeforeDone) {
+        setAILoadingProgress(aiLoadingProgress + 1, "결과 후보를 비교하고 있어요.");
       }
+    }, 450);
+  }
 
-      function showAILoading({
-        title = "AI가 분석 중이에요",
-        message = "이미지를 업로드하고 작물 상태를 확인하고 있어요.",
-        sub = "첫 분석은 모델 준비 때문에 조금 더 걸릴 수 있어요.",
-        maxBeforeDone = 92
-      } = {}) {
-        const overlay = document.getElementById("aiLoadingOverlay");
-        const titleBox = document.getElementById("aiLoadingTitle");
-        const subBox = document.getElementById("aiLoadingSub");
+  function finishAILoading(message = "분석이 완료되었어요!") {
+    clearInterval(aiLoadingTimer);
+    setAILoadingProgress(100, message);
 
-        if (titleBox) titleBox.textContent = title;
-        if (subBox) subBox.textContent = sub;
-        if (overlay) overlay.classList.add("show");
+    setTimeout(() => {
+      hideAILoading();
+    }, 500);
+  }
 
-        setAILoadingProgress(5, message);
+  function hideAILoading() {
+    clearInterval(aiLoadingTimer);
 
-        clearInterval(aiLoadingTimer);
+    const overlay = document.getElementById("aiLoadingOverlay");
+    if (overlay) overlay.classList.remove("show");
 
-        aiLoadingTimer = setInterval(() => {
-          if (aiLoadingProgress < 30) {
-            setAILoadingProgress(aiLoadingProgress + 4, "이미지를 서버로 보내는 중이에요.");
-          } else if (aiLoadingProgress < 65) {
-            setAILoadingProgress(aiLoadingProgress + 2, "AI 모델이 잎의 특징을 살펴보는 중이에요.");
-          } else if (aiLoadingProgress < maxBeforeDone) {
-            setAILoadingProgress(aiLoadingProgress + 1, "결과 후보를 비교하고 있어요.");
-          }
-        }, 450);
-      }
-
-      function finishAILoading(message = "분석이 완료되었어요!") {
-        clearInterval(aiLoadingTimer);
-        setAILoadingProgress(100, message);
-
-        setTimeout(() => {
-          hideAILoading();
-        }, 500);
-      }
-
-      function hideAILoading() {
-        clearInterval(aiLoadingTimer);
-
-        const overlay = document.getElementById("aiLoadingOverlay");
-        if (overlay) overlay.classList.remove("show");
-
-        setAILoadingProgress(0);
-      }
-
-  async function login() {
-    // 기존 로그인 코드
-    const response = await fetch(`${API_BASE}/login`, {
-      method: "POST",
-      body: formData
-    });
+    setAILoadingProgress(0);
   }
 
   async function handleOAuthLogin() {
     const urlParams = new URLSearchParams(window.location.search);
-
     const oauthToken = urlParams.get("token");
     const name = urlParams.get("name");
 
-    // 소셜 로그인으로 token 넘어온 경우
-    if (oauthToken) {
+    if (!oauthToken) return;
 
-      localStorage.setItem("token", oauthToken);
-      localStorage.setItem("access_token", oauthToken);
+    localStorage.setItem("token", oauthToken);
+    localStorage.setItem("access_token", oauthToken);
 
-      if (name) {
-        localStorage.setItem(
-          "username",
-          decodeURIComponent(name)
-        );
-      }
-
-      try {
-        const response = await fetch(`${API_BASE}/me`, {
-          headers: {
-            "Authorization": `Bearer ${oauthToken}`
-          }
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-
-          localStorage.setItem(
-            "username",
-            userData.username || name || "회원"
-          );
-        }
-
-      } catch (error) {
-        console.error("사용자 정보 조회 실패:", error);
-      }
-
-      // URL에서 token 제거
-      window.history.replaceState(
-        {},
-        document.title,
-        window.location.pathname
-      );
+    if (name) {
+      localStorage.setItem("username", decodeURIComponent(name));
     }
+
+    try {
+      const response = await fetch(`${API_BASE}/me`, {
+        headers: {
+          "Authorization": `Bearer ${oauthToken}`
+        }
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        localStorage.setItem("username", userData.username || name || "회원");
+      }
+    } catch (error) {
+      console.error("사용자 정보 조회 실패:", error);
+    }
+
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
-  let currentPlotIndex = 0;
-
-  function plantCropVisual(emoji, cropName) {
+  function plantCropVisual() {
     const hero = document.querySelector(".hero");
-
     if (!hero) return;
 
     hero.classList.remove("planted");
@@ -2069,10 +2046,7 @@
   }
 
   function checkLoginStatus() {
-    const savedToken =
-      localStorage.getItem("token") ||
-      localStorage.getItem("access_token");
-
+    const savedToken = getSavedToken();
     const username =
       localStorage.getItem("username") ||
       localStorage.getItem("name") ||
@@ -2099,7 +2073,11 @@
 
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     localStorage.removeItem("username");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+
     checkLoginStatus();
 
     const hero = document.querySelector(".hero");
@@ -2121,7 +2099,7 @@
     const name = String(className || "").toLowerCase();
 
     if (name.includes("토마토") || name.includes("tomato")) return "🍅";
-    if (name.includes("피망") || name.includes("pepper")) return "🌶️";
+    if (name.includes("피망") || name.includes("pepper") || name.includes("파프리카")) return "🌶️";
     if (name.includes("감자") || name.includes("potato")) return "🥔";
     if (name.includes("옥수수") || name.includes("corn")) return "🌽";
     if (name.includes("사과") || name.includes("apple")) return "🍎";
@@ -2138,8 +2116,7 @@
   }
 
   function getModelLabel(value) {
-    const selectedOption = document.querySelector(`#modelSelect option[value="${value}"]`);
-    return selectedOption ? selectedOption.textContent : value;
+    return value || "-";
   }
 
   function renderResult({
@@ -2172,24 +2149,20 @@
       <span class="result-line">${emoji} 예측 결과: <strong>${predictedClass}</strong></span>
       <span class="result-line">📊 확률: <strong class="green">${confidence}</strong></span>
 
-      ${
-        description
-          ? `
-            <div class="info-block">
-              <h3>🌿 어떤 병인가요?</h3>
-              <p>${description}</p>
+      ${description ? `
+        <div class="info-block">
+          <h3>🌿 어떤 병인가요?</h3>
+          <p>${description}</p>
 
-              <h3>🧑‍🌾 관리법</h3>
-              <ul>${careList || "<li>등록된 관리법이 없습니다.</li>"}</ul>
+          <h3>🧑‍🌾 관리법</h3>
+          <ul>${careList || "<li>등록된 관리법이 없습니다.</li>"}</ul>
 
-              <h3>⚠️ 주의사항</h3>
-              <ul>${warningList || "<li>등록된 주의사항이 없습니다.</li>"}</ul>
+          <h3>⚠️ 주의사항</h3>
+          <ul>${warningList || "<li>등록된 주의사항이 없습니다.</li>"}</ul>
 
-              <p class="source-text">📚 출처: ${source || "출처 정보 없음"}</p>
-            </div>
-          `
-          : ""
-      }
+          <p class="source-text">📚 출처: ${source || "출처 정보 없음"}</p>
+        </div>
+      ` : ""}
     `;
   }
 
@@ -2198,8 +2171,7 @@
     confidence = "-",
     description = "",
     care = [],
-    warning = [],
-    source = ""
+    warning = []
   }) {
     const analysisBox = document.getElementById("aiAnalysisResult");
     if (!analysisBox) return;
@@ -2269,7 +2241,7 @@
 
     const topResults = Array.isArray(results)
       ? results
-          .filter(item => item && (item.predicted_class || item.name_ko || item.model_label))
+          .filter(item => item && (item.predicted_class || item.name_ko || item.model_label || item.class_name))
           .sort((a, b) => Number(b.confidence || 0) - Number(a.confidence || 0))
           .slice(0, 5)
       : [];
@@ -2278,14 +2250,14 @@
       list.innerHTML = `
         <div class="top-prediction-empty">
           <strong>AI 예측 후보 대기중</strong><br>
-          작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.
+          작물 이미지를 분석하면 질병 후보가 표시됩니다.
         </div>
       `;
 
       if (guide) {
         guide.innerHTML = `
-          <strong>TOP 5 해석 안내</strong>
-          1순위 결과만 단정하지 않고, AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
+          <strong>TOP 후보 해석 안내</strong>
+          AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
         `;
       }
       return;
@@ -2326,12 +2298,12 @@
       guide.innerHTML = `
         <strong>AI 예측 후보 해석</strong>
         1순위 후보는 38개 후보 기준 랜덤 추정보다 약 ${firstScoreInfo.strengthRatio.toFixed(1)}배 강하게 선택되었습니다.
-        TOP 5는 보조 판단용이며, 실제 잎 상태와 함께 확인해주세요.
+        후보 목록은 보조 판단용이며, 실제 잎 상태와 함께 확인해주세요.
       `;
     }
   }
 
-  function resetTopPredictions(message = "작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.") {
+  function resetTopPredictions(message = "작물 이미지를 분석하면 질병 후보가 표시됩니다.") {
     const list = document.getElementById("topPredictionList");
     const guide = document.getElementById("topPredictionGuide");
 
@@ -2346,320 +2318,275 @@
 
     if (guide) {
       guide.innerHTML = `
-        <strong>TOP 5 해석 안내</strong>
+        <strong>TOP 후보 해석 안내</strong>
         1순위 결과만 단정하지 않고, AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
       `;
     }
   }
 
-    async function predictImage() {
-      const input = document.getElementById("imageInput");
-      const crop = document.getElementById("cropSelect").value;
-      const savedToken = localStorage.getItem("token");
+  async function predictImage() {
+    const input = document.getElementById("imageInput");
+    const crop = document.getElementById("cropSelect")?.value;
+    const savedToken = getSavedToken();
 
-      if (!savedToken) {
-        renderResult({
-          title: "🔐 로그인이 필요해요!",
-          model: "자동 최적 모델 선택",
-          filename: "-",
-          predictedClass: "로그인 후 예측할 수 있어요",
-          confidence: "-",
-          emoji: "🌱"
-        });
-        return;
-      }
-
-      if (!input || input.files.length === 0) {
-        renderResult({
-          title: "🌱 이미지를 먼저 선택해주세요!",
-          model: "자동 최적 모델 선택",
-          filename: "-",
-          predictedClass: "-",
-          confidence: "-",
-          emoji: "🌱"
-        });
-        return;
-      }
-
-      if (!crop) {
-        renderResult({
-          title: "🌱 작물을 먼저 선택해주세요!",
-          model: "자동 최적 모델 선택",
-          filename: input.files[0].name,
-          predictedClass: "-",
-          confidence: "-",
-          emoji: "🌱"
-        });
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", input.files[0]);
-      formData.append("crop", crop);
-
+    if (!savedToken) {
       renderResult({
-        title: "🔍 모든 AI 모델이 작물을 분석하는 중이에요!",
-        model: "자동 최적 모델 선택 중...",
-        filename: input.files[0].name,
-        predictedClass: "분석 중...",
-        confidence: "계산 중...",
-        emoji: "✣"
+        title: "🔐 로그인이 필요해요!",
+        model: "기본 AI 모델",
+        filename: "-",
+        predictedClass: "로그인 후 예측할 수 있어요",
+        confidence: "-",
+        emoji: "🌱"
       });
-
-      resetTopPredictions("AI가 예측 후보를 계산하는 중입니다...");
-      showAILoading({
-        title: "간단 AI 분석 중이에요",
-        message: "이미지를 업로드하고 있어요.",
-        sub: "기본 모델 1개로 빠르게 분석합니다.",
-        maxBeforeDone: 90
-      });
-
-      try {
-        const response = await fetch(`${API_BASE}/predict`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${savedToken}`
-          },
-          body: formData
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.detail?.message ||
-            data.detail ||
-            "서버 응답 오류"
-          );
-        }
-
-        const aiScoreInfo = makeAIScore(data.confidence, 38);
-        const aiScore = aiScoreInfo.score;
-
-        const displayName = data.name_ko || data.predicted_class || "알 수 없음";
-        const cropEmoji = getCropEmoji(displayName);
-
-        plantCropVisual(cropEmoji, displayName);
-
-        renderResult({
-          title: "🌱 최종 1순위 진단 결과가 나왔어요!",
-          model: data.selected_model_label || "자동 선택된 모델",
-          filename: data.filename || input.files[0].name,
-          predictedClass: displayName,
-          confidence: `${aiScore.toFixed(1)}점`,
-          emoji: cropEmoji,
-          description: data.description,
-          care: data.care,
-          warning: data.warning,
-          source: data.source
-        });
-
-        renderAIAnalysis({
-          predictedClass: displayName,
-          confidence: `${aiScore.toFixed(1)}점`,
-          description: data.description,
-          care: data.care,
-          warning: data.warning,
-          source: data.source
-        });
-
-        renderTopPredictions(data.top5_predictions || data.top_predictions || data.all_model_results || []);
-        finishAILoading("간단 분석이 완료되었어요!");
-
-      } catch (error) {
-        hideAILoading();
-        renderResult({
-          title: "⚠️ 서버 연결 오류입니다!",
-          model: "자동 최적 모델 선택",
-          filename: input.files[0].name,
-          predictedClass: error.message || "FastAPI 연결 확인 필요",
-          confidence: "-",
-          emoji: "🤖"
-        });
-
-        renderAIAnalysis({
-          predictedClass: "분석 실패",
-          confidence: "-",
-          warning: [error.message || "FastAPI 연결 상태를 확인해 주세요."]
-        });
-
-        resetTopPredictions("분석에 실패했습니다. 서버 연결 상태를 확인해주세요.");
-
-
-      }
+      return;
     }
 
-    async function predictPreciseImage() {
+    if (!input || input.files.length === 0) {
+      renderResult({
+        title: "🌱 이미지를 먼저 선택해주세요!",
+        model: "기본 AI 모델",
+        filename: "-",
+        predictedClass: "-",
+        confidence: "-",
+        emoji: "🌱"
+      });
+      return;
+    }
 
-      const input = document.getElementById("imageInput");
-      const crop = document.getElementById("cropSelect").value;
-      const savedToken = localStorage.getItem("token");
+    if (!crop) {
+      renderResult({
+        title: "🌱 작물을 먼저 선택해주세요!",
+        model: "기본 AI 모델",
+        filename: input.files[0].name,
+        predictedClass: "-",
+        confidence: "-",
+        emoji: "🌱"
+      });
+      return;
+    }
 
-      if (!savedToken) {
-        alert("로그인이 필요합니다.");
-        return;
+    const formData = new FormData();
+    formData.append("file", input.files[0]);
+    formData.append("crop", crop);
+
+    renderResult({
+      title: "🔍 AI가 작물을 분석하는 중이에요!",
+      model: "기본 모델 분석 중...",
+      filename: input.files[0].name,
+      predictedClass: "분석 중...",
+      confidence: "계산 중...",
+      emoji: "✣"
+    });
+
+    resetTopPredictions("AI가 예측 후보를 계산하는 중입니다...");
+    showAILoading({
+      title: "간단 AI 분석 중이에요",
+      message: "이미지를 업로드하고 있어요.",
+      sub: "기본 모델 1개로 빠르게 분석합니다.",
+      maxBeforeDone: 90
+    });
+
+    try {
+      const response = await fetch(`${API_BASE}/predict`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${savedToken}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail?.message || data.detail || "서버 응답 오류");
       }
 
-      if (!input || input.files.length === 0) {
-        alert("이미지를 선택해주세요.");
-        return;
-      }
+      const aiScoreInfo = makeAIScore(data.confidence, 38);
+      const aiScore = aiScoreInfo.score;
+      const displayName = data.name_ko || data.predicted_class || "알 수 없음";
+      const cropEmoji = getCropEmoji(displayName);
 
-      if (!crop) {
-        alert("작물을 선택해주세요.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", input.files[0]);
-      formData.append("crop", crop);
+      plantCropVisual(cropEmoji, displayName);
 
       renderResult({
-        title: "🔬 모든 AI 모델이 정밀 분석 중입니다!",
-        model: "전체 모델 분석",
+        title: "🌱 최종 진단 결과가 나왔어요!",
+        model: data.selected_model_label || data.selected_model_name || "기본 AI 모델",
+        filename: data.filename || input.files[0].name,
+        predictedClass: displayName,
+        confidence: `${aiScore.toFixed(1)}점`,
+        emoji: cropEmoji,
+        description: data.description,
+        care: data.care,
+        warning: data.warning,
+        source: data.source
+      });
+
+      renderAIAnalysis({
+        predictedClass: displayName,
+        confidence: `${aiScore.toFixed(1)}점`,
+        description: data.description,
+        care: data.care,
+        warning: data.warning,
+        source: data.source
+      });
+
+      renderTopPredictions(data.top5_predictions || data.top_predictions || data.all_model_results || []);
+      finishAILoading("간단 분석이 완료되었어요!");
+    } catch (error) {
+      hideAILoading();
+
+      renderResult({
+        title: "⚠️ 서버 연결 오류입니다!",
+        model: "기본 AI 모델",
         filename: input.files[0].name,
-        predictedClass: "정밀 분석 중...",
-        confidence: "계산 중...",
-        emoji: "🔬"
+        predictedClass: error.message || "FastAPI 연결 확인 필요",
+        confidence: "-",
+        emoji: "🤖"
       });
 
-      resetTopPredictions("정밀 AI 분석 진행 중입니다...");
-      showAILoading({
-        title: "정밀 AI 분석 중이에요",
-        message: "두 개의 AI 모델이 순서대로 분석하고 있어요.",
-        sub: "정밀 분석은 일반 분석보다 시간이 더 걸릴 수 있어요.",
-        maxBeforeDone: 94
+      renderAIAnalysis({
+        predictedClass: "분석 실패",
+        confidence: "-",
+        warning: [error.message || "FastAPI 연결 상태를 확인해 주세요."]
       });
 
-      try {
-
-        const response = await fetch(`${API_BASE}/predict-precise`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${savedToken}`
-          },
-          body: formData
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.detail?.message ||
-            data.detail ||
-            "정밀 분석 실패"
-          );
-        }
-
-        const aiScoreInfo = makeAIScore(data.confidence, 38);
-        const aiScore = aiScoreInfo.score;
-
-        const displayName =
-          data.name_ko ||
-          data.predicted_class ||
-          "알 수 없음";
-
-        const cropEmoji = getCropEmoji(displayName);
-
-        renderResult({
-          title: "🏆 정밀 AI 분석 완료!",
-          model: data.selected_model_label || "전체 모델 분석",
-          filename: data.filename || input.files[0].name,
-          predictedClass: displayName,
-          confidence: `${aiScore.toFixed(1)}점`,
-          emoji: cropEmoji,
-          description: data.description,
-          care: data.care,
-          warning: data.warning,
-          source: data.source
-        });
-
-        renderAIAnalysis({
-          predictedClass: displayName,
-          confidence: `${aiScore.toFixed(1)}점`,
-          description: data.description,
-          care: data.care,
-          warning: data.warning,
-          source: data.source
-        });
-
-        renderTopPredictions(
-          data.all_model_results || []
-        );
-        finishAILoading("정밀 분석이 완료되었어요!");
-
-      } catch (error) {
-        hideAILoading();
-
-        renderResult({
-          title: "⚠️ 정밀 분석 실패",
-          model: "전체 모델 분석",
-          filename: input.files[0].name,
-          predictedClass: error.message,
-          confidence: "-",
-          emoji: "⚠️"
-        });
-
-        resetTopPredictions(
-          "정밀 분석 중 오류가 발생했습니다."
-        );
-      }
+      resetTopPredictions("분석에 실패했습니다. 서버 연결 상태를 확인해주세요.");
     }
+  }
+
+  async function predictPreciseImage() {
+    const input = document.getElementById("imageInput");
+    const crop = document.getElementById("cropSelect")?.value;
+    const savedToken = getSavedToken();
+
+    if (!savedToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    if (!input || input.files.length === 0) {
+      alert("이미지를 선택해주세요.");
+      return;
+    }
+
+    if (!crop) {
+      alert("작물을 선택해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", input.files[0]);
+    formData.append("crop", crop);
+
+    renderResult({
+      title: "🔬 AI가 정밀 분석 중입니다!",
+      model: "정밀 모델 분석",
+      filename: input.files[0].name,
+      predictedClass: "정밀 분석 중...",
+      confidence: "계산 중...",
+      emoji: "🔬"
+    });
+
+    resetTopPredictions("정밀 AI 분석 진행 중입니다...");
+    showAILoading({
+      title: "정밀 AI 분석 중이에요",
+      message: "두 개의 AI 모델이 순서대로 분석하고 있어요.",
+      sub: "정밀 분석은 일반 분석보다 시간이 더 걸릴 수 있어요.",
+      maxBeforeDone: 94
+    });
+
+    try {
+      const response = await fetch(`${API_BASE}/predict-precise`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${savedToken}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail?.message || data.detail || "정밀 분석 실패");
+      }
+
+      const aiScoreInfo = makeAIScore(data.confidence, 38);
+      const aiScore = aiScoreInfo.score;
+      const displayName = data.name_ko || data.predicted_class || "알 수 없음";
+      const cropEmoji = getCropEmoji(displayName);
+
+      plantCropVisual(cropEmoji, displayName);
+
+      renderResult({
+        title: "🏆 정밀 AI 분석 완료!",
+        model: data.selected_model_label || data.selected_model_name || "정밀 AI 모델",
+        filename: data.filename || input.files[0].name,
+        predictedClass: displayName,
+        confidence: `${aiScore.toFixed(1)}점`,
+        emoji: cropEmoji,
+        description: data.description,
+        care: data.care,
+        warning: data.warning,
+        source: data.source
+      });
+
+      renderAIAnalysis({
+        predictedClass: displayName,
+        confidence: `${aiScore.toFixed(1)}점`,
+        description: data.description,
+        care: data.care,
+        warning: data.warning,
+        source: data.source
+      });
+
+      renderTopPredictions(data.all_model_results || data.top5_predictions || data.top_predictions || []);
+      finishAILoading("정밀 분석이 완료되었어요!");
+    } catch (error) {
+      hideAILoading();
+
+      renderResult({
+        title: "⚠️ 정밀 분석 실패",
+        model: "정밀 AI 모델",
+        filename: input.files[0].name,
+        predictedClass: error.message || "정밀 분석 실패",
+        confidence: "-",
+        emoji: "⚠️"
+      });
+
+      renderAIAnalysis({
+        predictedClass: "정밀 분석 실패",
+        confidence: "-",
+        warning: [error.message || "정밀 분석 중 오류가 발생했습니다."]
+      });
+
+      resetTopPredictions("정밀 분석 중 오류가 발생했습니다.");
+    }
+  }
+
+  async function startWarmupInBackground() {
+    try {
+      const response = await fetch(`${API_BASE}/warmup`, { method: "POST" });
+      if (!response.ok) {
+        console.warn("모델 사전 다운로드 API 응답 오류:", response.status);
+        return;
+      }
+      console.log("모델 사전 다운로드 요청 완료");
+    } catch (error) {
+      console.warn("모델 사전 다운로드 요청 실패:", error);
+    }
+  }
 
   async function initPage() {
     await handleOAuthLogin();
     checkLoginStatus();
+
+    setTimeout(() => {
+      startWarmupInBackground();
+    }, 1200);
   }
 
-  initPage();
-    async function loadModelOptions() {
-  const modelSelect = document.getElementById("modelSelect");
+  window.addEventListener("load", initPage);
 
-  if (!modelSelect) return;
-
-  try {
-    const response = await fetch(`${API_BASE}/models`);
-    const data = await response.json();
-
-    if (!response.ok || !data.models) {
-      throw new Error("모델 목록 로드 실패");
-    }
-
-    modelSelect.innerHTML = "";
-
-    data.models.forEach(model => {
-      const option = document.createElement("option");
-      option.value = model.value;
-      option.textContent = model.label;
-      modelSelect.appendChild(option);
-    });
-
-  } catch (error) {
-    console.error(error);
-
-    modelSelect.innerHTML = `
-      <option value="b2_38">EfficientNet B2 (38 클래스)</option>
-    `;
-  }
-}
-loadModelOptions();
-async function startWarmupInBackground() {
-  try {
-    await fetch(`${API_BASE}/warmup`, {
-      method: "POST"
-    });
-
-    console.log("모델 사전 다운로드 요청 완료");
-  } catch (error) {
-    console.warn("모델 사전 다운로드 요청 실패:", error);
-  }
-}
-
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    startWarmupInBackground();
-  }, 1200);
-});
 </script>
 
 <script src="components/header.js"></script>
