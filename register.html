@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <link rel="stylesheet" href="css/common.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스마트팜 회원가입</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: linear-gradient(135deg, #e8fff0, #f6fff9);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+
+    .left {
+      background: linear-gradient(160deg, #34c759, #0f9d58);
+      color: white;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left::before {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      top: -80px;
+      right: -80px;
+    }
+
+    .left::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      bottom: -60px;
+      left: -60px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .left h1 {
+      font-size: 42px;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .left p {
+      font-size: 16px;
+      line-height: 1.7;
+      opacity: 0.95;
+      position: relative;
+      z-index: 2;
+    }
+
+    .feature-box {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .feature {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 16px;
+      border-radius: 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    .feature h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .feature p {
+      font-size: 14px;
+    }
+
+    .right {
+      padding: 60px;
+      background: #ffffff;
+    }
+
+    .form-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+      color: #777;
+      margin-bottom: 40px;
+      font-size: 15px;
+    }
+
+    .input-group {
+      margin-bottom: 22px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: 1px solid #dcdcdc;
+      font-size: 15px;
+      transition: 0.3s;
+      background: #fafafa;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: #28a745;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(40,167,69,0.12);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .checkbox input {
+      width: 18px;
+      height: 18px;
+      accent-color: #28a745;
+    }
+
+    .signup-btn {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #34c759, #0f9d58);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .signup-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(15,157,88,0.25);
+    }
+
+    .bottom-text {
+      text-align: center;
+      margin-top: 24px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .bottom-text a {
+      color: #0f9d58;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .message {
+      margin-top: 18px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .left {
+        display: none;
+      }
+
+      .right {
+        padding: 40px 30px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="commonHeader"></div>
+  <div class="container">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div class="logo">🌱 Re:ef AI</div>
+
+      <h1>
+        미래 농업을 위한<br>
+        스마트팜 플랫폼
+      </h1>
+
+      <p>
+        AI 기반 농작물 분석, 실시간 환경 모니터링,
+        자동화 관리 시스템을 한 번에 경험하세요.
+      </p>
+
+      <div class="feature-box">
+
+        <div class="feature">
+          <h3>📊 실시간 데이터 분석</h3>
+          <p>온도, 습도, 토양 상태를 AI가 자동 분석합니다.</p>
+        </div>
+
+        <div class="feature">
+          <h3>🤖 자동 농장 관리</h3>
+          <p>스마트 제어 시스템으로 효율적인 농장 운영이 가능합니다.</p>
+        </div>
+
+        <div class="feature">
+          <h3>🌾 생산량 예측</h3>
+          <p>AI 예측 시스템으로 농작물 수확량을 분석합니다.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <h2 class="form-title">회원가입</h2>
+      <p class="form-subtitle">
+        스마트팜 서비스를 시작해보세요 🚜
+      </p>
+
+      <form id="registerForm">
+
+        <div class="row">
+
+          <div class="input-group">
+            <label>이름</label>
+            <input type="text" id="name" placeholder="이름 입력" required />
+          </div>
+
+          <div class="input-group">
+            <label>농장 이름</label>
+            <input type="text" id="farm_name" placeholder="농장 이름 입력" />
+          </div>
+
+        </div>
+
+        <div class="input-group">
+          <label>이메일</label>
+          <input type="email" id="email" placeholder="example@email.com" required />
+        </div>
+
+        <div class="row">
+
+          <div class="input-group">
+            <label>비밀번호</label>
+            <input type="password" id="password" placeholder="비밀번호 입력" required />
+          </div>
+
+          <div class="input-group">
+            <label>비밀번호 확인</label>
+            <input type="password" id="password_confirm" placeholder="비밀번호 재입력" required />
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="input-group">
+            <label>농장 규모</label>
+            <select id="farm_size">
+              <option value="">선택하세요</option>
+              <option value="소규모">소규모</option>
+              <option value="중규모">중규모</option>
+              <option value="대규모">대규모</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>재배 작물</label>
+            <select id="crop">
+              <option value="">선택하세요</option>
+              <option value="토마토">토마토</option>
+              <option value="상추">상추</option>
+              <option value="딸기">딸기</option>
+              <option value="오이">오이</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="checkbox">
+          <input type="checkbox" id="agree" required />
+          <span>개인정보 처리방침 및 이용약관에 동의합니다.</span>
+        </div>
+
+        <button type="submit" class="signup-btn">
+          스마트팜 시작하기
+        </button>
+
+      </form>
+
+      <div id="message" class="message"></div>
+
+      <div class="bottom-text">
+        이미 계정이 있으신가요?
+        <a href="login.html">로그인</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+
+    registerForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const farmName = document.getElementById("farm_name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const passwordConfirm = document.getElementById("password_confirm").value.trim();
+      const farmSize = document.getElementById("farm_size").value;
+      const crop = document.getElementById("crop").value;
+      const agree = document.getElementById("agree").checked;
+
+      if (!name || !email || !password || !passwordConfirm) {
+        message.style.color = "#d84315";
+        message.textContent = "필수 항목을 모두 입력해주세요.";
+        return;
+      }
+
+      if (password !== passwordConfirm) {
+        message.style.color = "#d84315";
+        message.textContent = "비밀번호가 일치하지 않습니다.";
+        return;
+      }
+
+      if (!agree) {
+        message.style.color = "#d84315";
+        message.textContent = "이용약관에 동의해주세요.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("farm_name", farmName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("farm_size", farmSize);
+      formData.append("crop", crop);
+
+      try {
+        const response = await fetch("/register", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "회원가입에 실패했습니다.");
+        }
+
+        message.style.color = "#0f9d58";
+        message.textContent = "회원가입 완료! 로그인 페이지로 이동합니다.";
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1200);
+
+      } catch (error) {
+        message.style.color = "#d84315";
+        message.textContent = error.message;
+      }
+    });
+  </script>
+<script src="components/header.js"></script>
+</body>
+</html>

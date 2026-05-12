@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <link rel="stylesheet" href="css/common.css">
+  <meta charset="UTF-8">
+  <title>회원탈퇴 | Re:Leaf AI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Pretendard, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      width: 420px;
+      background: white;
+      border-radius: 20px;
+      padding: 36px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+    button, a {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .danger {
+      background: #dc3545;
+      color: white;
+    }
+    .back {
+      background: #f1f3f5;
+      color: #333;
+    }
+    .rf-topbar {
+      height: 62px !important;
+      background: #ffffff !important;
+      border-bottom: 1px solid rgba(17, 24, 39, 0.08) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 28px 0 38px !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 9999 !important;
+      box-sizing: border-box !important;
+    }
+
+    .rf-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-weight: 800 !important;
+      font-size: 20px !important;
+      color: #101828 !important;
+      text-decoration: none !important;
+    }
+
+    .rf-brand-icon {
+      width: 23px !important;
+      height: 23px !important;
+      border-radius: 50% !important;
+      border: 6px solid #14b858 !important;
+      border-top-color: transparent !important;
+      position: relative !important;
+      transform: rotate(-35deg) !important;
+      flex: 0 0 auto !important;
+    }
+
+    .rf-brand-icon::before {
+      content: "" !important;
+      position: absolute !important;
+      width: 6px !important;
+      height: 6px !important;
+      background: #14b858 !important;
+      border-radius: 999px !important;
+      right: -4px !important;
+      top: -7px !important;
+    }
+
+    .rf-brand-icon::after {
+      content: "" !important;
+      position: absolute !important;
+      width: 8px !important;
+      height: 5px !important;
+      background: #14b858 !important;
+      border-radius: 999px 999px 0 999px !important;
+      right: -3px !important;
+      top: -14px !important;
+      transform: rotate(35deg) !important;
+    }
+
+    .rf-nav {
+      display: flex !important;
+      align-items: center !important;
+      gap: 27px !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      color: #374151 !important;
+      white-space: nowrap !important;
+    }
+
+    .rf-nav a {
+      color: #374151 !important;
+      text-decoration: none !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+    }
+
+    .rf-nav a:hover {
+      color: #049b3b !important;
+    }
+
+    .rf-nav .rf-signup-link {
+      color: #ffffff !important;
+      background: #049b3b !important;
+      padding: 11px 17px !important;
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+    }
+
+  </style>
+
+</head>
+<body>
+<div id="commonHeader"></div>
+  <div class="card">
+    <h1>회원탈퇴</h1>
+    <p>탈퇴하면 계정 정보와 진단 기록이 모두 삭제됩니다.</p>
+    <p>정말 탈퇴하시겠습니까?</p>
+
+    <button class="danger" onclick="deleteAccount()">회원탈퇴하기</button>
+    <a href="mypage.html" class="back">취소하고 돌아가기</a>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      location.href = "login.html";
+    }
+
+    async function deleteAccount() {
+      const ok = confirm("정말 회원탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
+
+      if (!ok) return;
+
+      const res = await fetch("/me/delete", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        alert("회원탈퇴가 완료되었습니다.");
+        localStorage.clear();
+        location.href = "index.html";
+      } else {
+        alert("회원탈퇴에 실패했습니다.");
+      }
+    }
+  </script>
+<script src="components/header.js"></script>
+</body>
+</html>

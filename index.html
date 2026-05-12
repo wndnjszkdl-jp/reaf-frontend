@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <link rel="stylesheet" href="css/common.css">
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re:af | AI 작물 분석 플랫폼</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #049b3b;
+      --green-dark: #008733;
+      --green-soft: #eaf8ef;
+      --blue: #2f7cff;
+      --red: #ff3344;
+      --purple: #a745f7;
+      --yellow: #f5a400;
+      --text: #101828;
+      --sub: #475467;
+      --muted: #f5f7fa;
+      --line: #e5e7eb;
+      --white: #ffffff;
+      --footer: #111827;
+      --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.06);
+      --radius: 18px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+      letter-spacing: -0.025em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    .topbar {
+      height: 62px;
+      background: #fff;
+      border-bottom: 1px solid rgba(17, 24, 39, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px 0 38px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-icon {
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      border: 6px solid #14b858;
+      border-top-color: transparent;
+      position: relative;
+      transform: rotate(-35deg);
+      flex: 0 0 auto;
+    }
+
+    .brand-icon::before {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #14b858;
+      border-radius: 999px;
+      right: -4px;
+      top: -7px;
+    }
+
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 5px;
+      background: #14b858;
+      border-radius: 999px 999px 0 999px;
+      right: -3px;
+      top: -14px;
+      transform: rotate(35deg);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 27px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    .nav a {
+      transition: 0.15s ease;
+    }
+
+    .nav a:hover {
+      color: var(--green);
+    }
+
+    .nav .signup-link {
+      color: #fff;
+      background: var(--green);
+      padding: 11px 17px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .hero {
+      position: relative;
+      height: calc(100vh - 62px);
+      min-height: 720px;
+      padding: 72px 28px 78px;
+      display: flex;
+      align-items: flex-start;
+      overflow: hidden;
+      background-color: #049b3b;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 95, 38, 0.42) 0%,
+          rgba(0, 130, 52, 0.28) 38%,
+          rgba(0, 150, 62, 0.08) 68%,
+          rgba(0, 0, 0, 0.00) 100%
+        ),
+        url("images/farm0.png");
+      background-size: cover;
+      background-position: 25% center;
+      background-repeat: no-repeat;
+      transition: opacity 0.45s ease;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 95, 38, 0.38) 0%,
+          rgba(0, 130, 52, 0.22) 38%,
+          rgba(0, 150, 62, 0.06) 68%,
+          rgba(0, 0, 0, 0.00) 100%
+        ),
+        url("images/farm1.png");
+      background-size: cover;
+      background-position: 25% center;
+      background-repeat: no-repeat;
+      transition: opacity 0.45s ease;
+    }
+
+    .hero.planted::before {
+      opacity: 0;
+    }
+
+    .hero.planted::after {
+      opacity: 1;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      width: min(1140px, 100%);
+      height: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) minmax(420px, 448px);
+      gap: 70px;
+      align-items: start;
+    }
+
+    .hero-copy {
+      color: #fff;
+      padding-top: 72px;
+    }
+
+    .hero-title {
+      margin: 0 0 24px;
+      font-size: clamp(46px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -0.07em;
+      font-weight: 500;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 32px;
+      max-width: 600px;
+      font-size: clamp(21px, 2vw, 26px);
+      line-height: 1.35;
+      letter-spacing: -0.04em;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-btn {
+      min-width: 128px;
+      height: 52px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 26px;
+      border: 2px solid #fff;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-btn.primary {
+      background: #fff;
+      color: var(--green);
+      border-color: #fff;
+    }
+
+    .predict-card {
+      width: 448px;
+      justify-self: end;
+      align-self: start;
+      max-height: calc(100vh - 122px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: #fff;
+      border-radius: 16px;
+      padding: 34px 32px 30px;
+      box-shadow: var(--shadow);
+      scrollbar-width: thin;
+    }
+
+    .predict-card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .predict-card::-webkit-scrollbar-thumb {
+      background: rgba(15, 23, 42, 0.18);
+      border-radius: 999px;
+    }
+
+    .predict-card::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .card-title {
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 27px;
+      line-height: 1.25;
+      font-weight: 500;
+      letter-spacing: -0.055em;
+      color: #111827;
+    }
+
+    .sparkle {
+      color: var(--green);
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .card-desc {
+      margin: 0 0 24px;
+      color: #4b5563;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: -0.025em;
+    }
+
+    .auth-menu {
+      margin-bottom: 18px;
+      padding: 13px 14px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+    }
+
+    #userStatus {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .auth-buttons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+
+    .auth-buttons button {
+      min-height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0;
+      width: 100%;
+    }
+
+    .field-group {
+      margin-bottom: 17px;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .field-label .icon {
+      color: #4b5563;
+      width: 15px;
+      text-align: center;
+    }
+
+    .file-box {
+      position: relative;
+      width: 100%;
+      height: 43px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      height: 100%;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: #4b5563;
+      cursor: pointer;
+    }
+
+    select {
+      width: 100%;
+      height: 43px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #374151;
+      outline: none;
+    }
+
+    .predict-button {
+      width: 100%;
+      height: 49px;
+      margin: 0;
+      border: 0;
+      border-radius: 9px;
+      background: var(--green);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .predict-button:hover {
+      filter: brightness(0.96);
+      transform: translateY(-1px);
+    }
+
+    .predict-button:active {
+      transform: translateY(0);
+    }
+
+    .divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 24px 0 20px;
+    }
+
+    .result-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 13px;
+      padding: 18px 18px;
+      min-height: 160px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .result-title {
+      display: block;
+      margin-bottom: 8px;
+      color: #111827;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .result-line {
+      display: block;
+      font-weight: 500;
+    }
+
+    .result-line strong,
+    .result-line .green {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .info-block {
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #4b5563;
+    }
+
+    .info-block h3 {
+      margin: 9px 0 5px;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .info-block ul {
+      margin: 6px 0 10px;
+      padding-left: 20px;
+    }
+
+    .source-text {
+      margin: 8px 0 0;
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .history-link {
+      display: block;
+      margin-top: 13px;
+      text-align: center;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .tip {
+      margin: 20px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .section {
+      padding: 64px 28px;
+    }
+
+    .section.white {
+      background: #fff;
+    }
+
+    .section.gray {
+      background: #f5f6f8;
+    }
+
+    .section.green-tint {
+      background: linear-gradient(180deg, #f7fffb 0%, #ffffff 100%);
+    }
+
+    .section.tip-section {
+      background: #effbf4;
+      padding-top: 72px;
+      padding-bottom: 64px;
+    }
+
+    .container {
+      width: min(1140px, 100%);
+      margin: 0 auto;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      min-height: 232px;
+      border-radius: 14px;
+      padding: 31px 31px 28px;
+      box-shadow: none;
+    }
+
+    .feature-card.red {
+      background: #fff0f0;
+    }
+
+    .feature-card.green {
+      background: #ecfbf1;
+    }
+
+    .feature-card.blue {
+      background: #ecf5ff;
+    }
+
+    .feature-card.purple {
+      background: #f7efff;
+    }
+
+    .feature-icon {
+      width: 57px;
+      height: 57px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 31px;
+      margin-bottom: 21px;
+      font-weight: 800;
+    }
+
+    .feature-card.red .feature-icon {
+      background: var(--red);
+    }
+
+    .feature-card.green .feature-icon {
+      background: #00c753;
+    }
+
+    .feature-card.blue .feature-icon {
+      background: #2f7cff;
+    }
+
+    .feature-card.purple .feature-icon {
+      background: #a745f7;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 9px;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.055em;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #344054;
+      font-size: 15px;
+      line-height: 1.55;
+      letter-spacing: -0.03em;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 362px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 34px 32px;
+      box-shadow: var(--shadow-soft);
+      min-height: auto;
+    }
+
+    .dashboard-title {
+      margin: 0 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.055em;
+    }
+
+    .dashboard-sub {
+      color: #344054;
+      margin: 0 0 24px;
+      font-size: 16px;
+      letter-spacing: -0.03em;
+    }
+
+    .chart-wrap {
+      width: 100%;
+      height: 270px;
+      position: relative;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    .top-prediction-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .top-prediction-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 15px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .top-rank-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      background: #edf5ff;
+      color: #2f7cff;
+      flex: 0 0 auto;
+    }
+
+    .top-prediction-item.rank-1 {
+      border-color: rgba(4, 155, 59, 0.28);
+      background: #f0fdf4;
+    }
+
+    .top-prediction-item.rank-1 .top-rank-badge {
+      background: #049b3b;
+      color: #ffffff;
+    }
+
+    .top-prediction-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .top-prediction-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .top-prediction-score {
+      font-size: 14px;
+      font-weight: 800;
+      color: #049b3b;
+      white-space: nowrap;
+    }
+
+    .top-prediction-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e5e7eb;
+    }
+
+    .top-prediction-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2f7cff, #00b94c);
+      transition: width 0.55s ease;
+    }
+
+    .top-prediction-desc {
+      margin: 7px 0 0;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #475467;
+    }
+
+    .top-prediction-empty {
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .top-prediction-guide {
+      margin-top: 18px;
+      padding: 15px 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .top-prediction-guide strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .analysis-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .analysis-item {
+      border-radius: 4px;
+      padding: 16px 18px;
+      border-left: 4px solid;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .analysis-item.good {
+      background: #ecfbf1;
+      border-color: #00b94c;
+    }
+
+    .analysis-item.warn {
+      background: #fffbea;
+      border-color: #f5a400;
+    }
+
+    .analysis-item.info {
+      background: #edf5ff;
+      border-color: #2f7cff;
+    }
+
+    .analysis-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .analysis-item p {
+      margin: 0;
+      color: #344054;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 10px;
+      font-size: 38px;
+      line-height: 1.22;
+      font-weight: 500;
+      letter-spacing: -0.06em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: #344054;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 34px;
+      text-align: center;
+    }
+
+    .why-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .why-card:nth-child(1) .why-icon {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .why-card:nth-child(2) .why-icon {
+      background: #f3e8ff;
+      color: #9333ea;
+    }
+
+    .why-card:nth-child(3) .why-icon {
+      background: #dcfce7;
+      color: #00a647;
+    }
+
+    .why-card:nth-child(4) .why-icon {
+      background: #ffedd5;
+      color: #f97316;
+    }
+
+    .why-card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.05em;
+    }
+
+    .why-card p {
+      margin: 0;
+      color: #344054;
+      font-size: 16px;
+      line-height: 1.6;
+      letter-spacing: -0.035em;
+    }
+
+    .crop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .crop-card {
+      overflow: hidden;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .crop-image {
+      height: 195px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .crop-image.leaf {
+      background:
+        radial-gradient(ellipse at 46% 36%, rgba(98, 173, 67, 0.95) 0 18%, transparent 19%),
+        radial-gradient(ellipse at 58% 46%, rgba(73, 150, 52, 0.9) 0 15%, transparent 16%),
+        radial-gradient(ellipse at 37% 51%, rgba(134, 195, 82, 0.92) 0 16%, transparent 17%),
+        linear-gradient(135deg, #80542b 0%, #b9874a 45%, #654320 100%);
+    }
+
+    .crop-image.leaf::after {
+      content: "잎채소";
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      color: #166534;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .crop-image.fruit {
+      background:
+        radial-gradient(circle at 34% 52%, #f44336 0 33px, transparent 34px),
+        radial-gradient(circle at 54% 46%, #ff7043 0 38px, transparent 39px),
+        radial-gradient(circle at 68% 58%, #e53935 0 32px, transparent 33px),
+        radial-gradient(ellipse at 48% 24%, #2e7d32 0 35px, transparent 36px),
+        linear-gradient(135deg, #def7e7 0%, #a9e1b9 100%);
+    }
+
+    .crop-image.fruit::after {
+      content: "토마토·과채류";
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .crop-image.root {
+      background:
+        radial-gradient(circle at 28% 51%, #d7a340 0 34px, transparent 35px),
+        radial-gradient(circle at 47% 42%, #edc45e 0 42px, transparent 43px),
+        radial-gradient(circle at 66% 56%, #c98d2e 0 36px, transparent 37px),
+        radial-gradient(circle at 73% 35%, #e5b84b 0 30px, transparent 31px),
+        linear-gradient(135deg, #6b421e 0%, #9a632e 100%);
+    }
+
+    .crop-image.root::after {
+      content: "감자·근채류";
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: #92400e;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .crop-body {
+      padding: 22px;
+    }
+
+    .crop-body h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+    }
+
+    .crop-body p {
+      margin: 0;
+      color: #475467;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 31px;
+    }
+
+    .tip-card {
+      min-height: 265px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .13);
+    }
+
+    .tip-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 21px;
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .tip-card:nth-child(1) .tip-icon {
+      background: #dcfce7;
+      color: #10b45b;
+    }
+
+    .tip-card:nth-child(2) .tip-icon {
+      background: #dbeafe;
+      color: #2977ff;
+    }
+
+    .tip-card:nth-child(3) .tip-icon {
+      background: #fff4c7;
+      color: #d99000;
+    }
+
+    .tip-card h3 {
+      margin: 0 0 15px;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.05em;
+    }
+
+    .tip-card p {
+      margin: 0;
+      color: #344054;
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: -0.035em;
+    }
+
+    .footer {
+      background: #111827;
+      color: #d1d5db;
+      padding: 52px 28px 34px;
+    }
+
+    .footer-grid {
+      width: min(1140px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 44px;
+      padding-bottom: 34px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .footer-brand .brand-icon {
+      width: 17px;
+      height: 17px;
+      border-width: 5px;
+      filter: grayscale(1) brightness(3);
+    }
+
+    .footer p,
+    .footer a {
+      color: #cbd5e1;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .footer h3 {
+      margin: 0 0 18px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .footer-bottom {
+      width: min(1140px, 100%);
+      margin: 28px auto 0;
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 16px;
+    }
+
+    .farm-area {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(121, 85, 45, 0.95), rgba(92, 58, 28, 0.95));
+      border: 3px solid #6b421e;
+    }
+
+    .plot {
+      height: 58px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,.18), transparent 25%),
+        linear-gradient(135deg, #8b5a2b, #5c3618);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,.25);
+      transition: 0.25s ease;
+    }
+
+    .plot.planted {
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,.25), transparent 22%),
+        linear-gradient(135deg, #7b4a21, #4f2f16);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding: 42px 18px 56px !important;
+        align-items: flex-start !important;
+
+        background-size: cover !important;
+        background-position: 28% top !important;
+      }
+
+      .hero.planted {
+        background-size: cover !important;
+        background-position: 28% top !important;
+      }
+
+      .hero-grid {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 34px !important;
+        padding-top: 0 !important;
+      }
+
+      .hero-copy {
+        padding-top: 34px !important;
+      }
+
+      .hero-title {
+        font-size: 44px !important;
+        line-height: 1.12 !important;
+      }
+
+      .hero-subtitle {
+        font-size: 20px !important;
+        line-height: 1.45 !important;
+      }
+
+      .hero-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      .hero-btn {
+        width: 100% !important;
+        height: 56px !important;
+        font-size: 18px !important;
+      }
+
+      .predict-card {
+        width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        justify-self: stretch !important;
+        padding: 30px 24px !important;
+        border-radius: 24px !important;
+      }
+
+      .result-card {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+    }
+
+      @keyframes farmGrowPop {
+        0% {
+          opacity: 0.4;
+          transform: scale(0.97) translateY(12px);
+        }
+
+        65% {
+          opacity: 1;
+          transform: scale(1.025) translateY(-4px);
+        }
+
+        100% {
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .plant-ground {
+        position: absolute;
+        bottom: 36px;
+        width: 190px;
+        height: 58px;
+        background: linear-gradient(180deg, #ffd59e 0%, #e8a863 100%);
+        border-radius: 55px 55px 28px 28px;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+      }
+
+      .plant-ground::before,
+      .plant-ground::after {
+        content: "";
+        position: absolute;
+        bottom: 20px;
+        width: 70px;
+        height: 58px;
+        background: #ffd59e;
+        border-radius: 50%;
+      }
+
+      .plant-ground::before {
+        left: 24px;
+      }
+
+      .plant-ground::after {
+        right: 24px;
+      }
+
+      .plant-sprout {
+        position: absolute;
+        bottom: 82px;
+        font-size: 118px;
+        line-height: 1;
+        filter: drop-shadow(0 14px 22px rgba(0,0,0,.16));
+        transform-origin: bottom center;
+        animation: sproutFloat 3s ease-in-out infinite;
+      }
+
+      .plant-caption {
+        position: absolute;
+        bottom: -4px;
+        width: 100%;
+        text-align: center;
+        color: rgba(255,255,255,.92);
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .hero-plant-stage.grow .plant-sprout {
+        animation: growPop 0.7s ease, sproutFloat 3s ease-in-out infinite 0.7s;
+      }
+
+      @keyframes growPop {
+        0% {
+          opacity: 0;
+          transform: scale(0.35) translateY(35px);
+        }
+        70% {
+          opacity: 1;
+          transform: scale(1.12) translateY(-4px);
+        }
+        100% {
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes sproutFloat {
+        0%, 100% {
+          transform: translateY(0) rotate(-1deg);
+        }
+        50% {
+          transform: translateY(-8px) rotate(1deg);
+        }
+      }
+    }
+    .rf-topbar {
+      height: 62px !important;
+      background: #ffffff !important;
+      border-bottom: 1px solid rgba(17, 24, 39, 0.08) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 28px 0 38px !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 9999 !important;
+      box-sizing: border-box !important;
+    }
+
+    .rf-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-weight: 800 !important;
+      font-size: 20px !important;
+      color: #101828 !important;
+      text-decoration: none !important;
+    }
+
+    .rf-brand-icon {
+      width: 23px !important;
+      height: 23px !important;
+      border-radius: 50% !important;
+      border: 6px solid #14b858 !important;
+      border-top-color: transparent !important;
+      position: relative !important;
+      transform: rotate(-35deg) !important;
+      flex: 0 0 auto !important;
+    }
+
+    .rf-brand-icon::before {
+      content: "" !important;
+      position: absolute !important;
+      width: 6px !important;
+      height: 6px !important;
+      background: #14b858 !important;
+      border-radius: 999px !important;
+      right: -4px !important;
+      top: -7px !important;
+    }
+
+    .rf-brand-icon::after {
+      content: "" !important;
+      position: absolute !important;
+      width: 8px !important;
+      height: 5px !important;
+      background: #14b858 !important;
+      border-radius: 999px 999px 0 999px !important;
+      right: -3px !important;
+      top: -14px !important;
+      transform: rotate(35deg) !important;
+    }
+
+    .rf-nav {
+      display: flex !important;
+      align-items: center !important;
+      gap: 27px !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      color: #374151 !important;
+      white-space: nowrap !important;
+    }
+
+    .rf-nav a {
+      color: #374151 !important;
+      text-decoration: none !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+    }
+
+    .rf-nav a:hover {
+      color: #049b3b !important;
+    }
+
+    .rf-nav .rf-signup-link {
+      color: #ffffff !important;
+      background: #049b3b !important;
+      padding: 11px 17px !important;
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+    }
+    @media (max-width: 760px) {
+    .crop-grid {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+    }
+
+    .crop-card {
+      width: 100% !important;
+    }
+
+    .crop-body h3 {
+      font-size: 24px !important;
+      line-height: 1.3 !important;
+      word-break: keep-all !important;
+    }
+
+    .crop-body p {
+      font-size: 16px !important;
+      line-height: 1.65 !important;
+      word-break: keep-all !important;
+    }
+
+    .crop-image::after {
+      white-space: nowrap !important;
+    }
+  }
+
+
+    /* ===== 모바일 최종 보정: 카드가 세로로 길게 찢어지는 문제 해결 ===== */
+    @media (max-width: 760px) {
+      html,
+      body {
+        width: 100% !important;
+        overflow-x: hidden !important;
+      }
+
+      .section {
+        padding: 56px 20px !important;
+      }
+
+      .container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .section-heading {
+        margin-bottom: 32px !important;
+      }
+
+      .section-heading h2 {
+        font-size: 34px !important;
+        line-height: 1.22 !important;
+        word-break: keep-all !important;
+      }
+
+      .section-heading p {
+        font-size: 18px !important;
+        line-height: 1.5 !important;
+        word-break: keep-all !important;
+      }
+
+      .feature-grid,
+      .why-grid,
+      .crop-grid,
+      .tip-grid,
+      .dashboard-grid,
+      .footer-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+
+      .feature-card,
+      .why-card,
+      .crop-card,
+      .tip-card,
+      .dashboard-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .feature-card,
+      .tip-card,
+      .dashboard-card {
+        padding: 28px 24px !important;
+        min-height: auto !important;
+      }
+
+      .feature-card h3,
+      .why-card h3,
+      .crop-body h3,
+      .tip-card h3,
+      .analysis-item strong {
+        font-size: 24px !important;
+        line-height: 1.35 !important;
+        word-break: keep-all !important;
+        overflow-wrap: normal !important;
+      }
+
+      .feature-card p,
+      .why-card p,
+      .crop-body p,
+      .tip-card p,
+      .analysis-item p {
+        font-size: 16px !important;
+        line-height: 1.7 !important;
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+      }
+
+      .crop-image {
+        height: 220px !important;
+      }
+
+      .crop-image::after {
+        white-space: nowrap !important;
+      }
+
+      .why-grid {
+        text-align: center !important;
+      }
+
+      .why-card {
+        padding: 22px 12px !important;
+      }
+
+      .tip-section {
+        padding-top: 56px !important;
+        padding-bottom: 56px !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+
+  <div id="commonHeader"></div>
+
+  <main>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="hero-title">AI와 함께하는<br />스마트 농업의 시작</h1>
+          <p class="hero-subtitle">초보자부터 전문가까지,<br /> 성공적인 작물 재배를 위한 모든 정보</p>
+
+          <div class="hero-actions">
+            <a class="hero-btn primary" href="#predictCard">시작하기</a>
+            <a class="hero-btn" href="#services">서비스 소개보기</a>
+          </div>
+        </div>
+
+        <section class="predict-card" id="predictCard" aria-label="작물 예측 입력 영역">
+          <h2 class="card-title"><span class="sparkle">✣</span>스마트한 AI 작물 질병 진단</h2>
+          <p class="card-desc">AI가 업로드한 작물 이미지를 분석해 질병과 관리 정보를 알려드립니다.</p>
+
+          <div class="auth-menu">
+            <span id="userStatus">로그인이 필요해요 🌱</span>
+            <div class="auth-buttons">
+              <button id="logoutBtn" type="button" onclick="logout()" style="display:none;">로그아웃</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="imageInput"><span class="icon">◎</span>작물 이미지</label>
+            <div class="file-box">
+              <input type="file" id="imageInput" accept="image/*" />
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cropSelect">
+              <span class="icon">🌱</span>작물 선택
+            </label>
+
+            <select id="cropSelect">
+              <option value="">작물을 선택하세요</option>
+
+              <option value="사과">사과</option>
+              <option value="블루베리">블루베리</option>
+              <option value="체리">체리</option>
+              <option value="옥수수">옥수수</option>
+              <option value="포도">포도</option>
+              <option value="오렌지">오렌지</option>
+              <option value="복숭아">복숭아</option>
+              <option value="파프리카">파프리카</option>
+              <option value="감자">감자</option>
+              <option value="라즈베리">라즈베리</option>
+              <option value="콩">콩</option>
+              <option value="호박">호박</option>
+              <option value="딸기">딸기</option>
+              <option value="토마토">토마토</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label"><span class="icon">▣</span>분석 방식</label>
+            <div class="result-card" style="min-height:auto; padding:12px 14px;">
+              🤖 모든 AI 모델을 자동으로 실행한 뒤<br>
+              가장 신뢰도 높은 1순위 결과를 보여드려요.
+            </div>
+          </div>
+
+          <button class="predict-button" onclick="predictImage()">✣ AI 예측하기</button>
+
+          <div class="divider"></div>
+
+          <div class="result-card" id="result">
+            <span class="result-title">🌱 예측 결과가 여기에 표시돼요</span>
+            <span class="result-line">🤖 사용 모델: -</span>
+            <span class="result-line">📄 파일명: -</span>
+            <span class="result-line">🍅 예측 결과: <strong>-</strong></span>
+            <span class="result-line">📊 확률: <strong class="green">-</strong></span>
+          </div>
+
+          <a class="history-link" href="history.html">📋 저장 기록 보러가기</a>
+          <p class="tip">💡 AI 예측은 작물 이미지와 모델 데이터를 기반으로 합니다</p>
+
+        </section>
+      </div>
+    </section>
+
+
+    <section class="section gray" id="analysis">
+      <div class="container">
+        <div class="dashboard-grid">
+          <article class="dashboard-card">
+            <h2 class="dashboard-title"><span style="color:#2f7cff">🏆</span>AI 예측 후보 TOP 5</h2>
+            <p class="dashboard-sub">AI가 가능성이 높다고 판단한 질병 후보 순위</p>
+
+            <div class="chart-wrap" style="height:auto;" aria-label="AI 예측 질병 후보 TOP 5">
+              <div class="top-prediction-list" id="topPredictionList">
+                <div class="top-prediction-empty">
+                  <strong>AI 예측 후보 대기중</strong><br>
+                  작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.
+                </div>
+              </div>
+
+              <div class="top-prediction-guide" id="topPredictionGuide">
+                <strong>TOP 5 해석 안내</strong>
+                1순위 결과만 단정하지 않고, AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
+              </div>
+            </div>
+          </article>
+
+          <aside class="dashboard-card">
+            <h2 class="dashboard-title"><span style="color:#2f7cff">ⓘ</span>AI 분석 결과</h2>
+
+            <div class="analysis-list" id="aiAnalysisResult">
+              <div class="analysis-item good">
+                <span style="color:#00b94c; font-size:22px;">✓</span>
+                <div>
+                  <strong>AI 분석 대기중</strong>
+                  <p>작물 이미지를 업로드하면 예측 결과가 표시됩니다</p>
+                </div>
+              </div>
+
+              <div class="analysis-item info">
+                <span style="color:#2f7cff; font-size:22px;">📊</span>
+                <div>
+                  <strong>예측 신뢰도</strong>
+                  <p>분석 전입니다</p>
+                </div>
+              </div>
+
+              <div class="analysis-item warn">
+                <span style="color:#f5a400; font-size:22px;">⚠</span>
+                <div>
+                  <strong>관리 주의사항</strong>
+                  <p>예측 완료 후 관리법이 표시됩니다</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section white" id="services">
+      <div class="container">
+        <div class="feature-grid">
+          <article class="feature-card red">
+            <div class="feature-icon">☼</div>
+            <h3>AI병해충 진단</h3>
+            <p>작물 사진을 업로드하면 AI가 즉시 병해충을 진단하고 해결책을 제시합니다</p>
+          </article>
+
+          <article class="feature-card green">
+            <div class="feature-icon">♧</div>
+            <h3>생육환경관리</h3>
+            <p>온도, 습도, 토양 상태를 실시간으로 모니터링하고 최적의 환경을 유지합니다</p>
+          </article>
+
+          <article class="feature-card blue">
+            <div class="feature-icon">◷</div>
+            <h3>수확시기예측</h3>
+            <p>AI가 작물의 성장 데이터를 분석하여 최적의 수확 시기를 알려드립니다</p>
+          </article>
+
+          <article class="feature-card purple">
+            <div class="feature-icon">♙</div>
+            <h3>농가커뮤니티</h3>
+            <p>전국 농부들과 재배 노하우를 공유하고 실시간으로 소통할 수 있습니다</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white">
+      <div class="container">
+        <div class="section-heading">
+          <h2>왜 Re:af를 선택해야 할까요?</h2>
+          <p>농업 전문가들이 신뢰하는 스마트 농업 플랫폼</p>
+        </div>
+
+        <div class="why-grid">
+          <article class="why-card">
+            <div class="why-icon">▣</div>
+            <h3>신뢰할 수 있는 데이터</h3>
+            <p>농촌진흥청 및 기상청의 공식 데이터를 기반으로 정확한 정보를 제공합니다</p>
+          </article>
+
+          <article class="why-card">
+            <div class="why-icon">♙</div>
+            <h3>AI기반분석</h3>
+            <p>최신 머신러닝 기술로 작물 상태를 정밀하게 분석하고 예측합니다</p>
+          </article>
+
+          <article class="why-card">
+            <div class="why-icon">◉</div>
+            <h3>전문가지원</h3>
+            <p>농업 전문가의 실시간 상담과 맞춤형 솔루션을 제공합니다</p>
+          </article>
+
+          <article class="why-card">
+            <div class="why-icon">♢</div>
+            <h3>안전한 서비스</h3>
+            <p>개인정보 보호와 데이터 보안을 최우선으로 하는 안전한 플랫폼입니다</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section green-tint" id="crops">
+      <div class="container">
+        <div class="section-heading">
+          <h2>주요 작물</h2>
+          <p>계절별로 재배할 수 있는 다양한 작물을 알아보세요</p>
+        </div>
+
+        <div class="crop-grid">
+          <article class="crop-card">
+            <div class="crop-image leaf"></div>
+            <div class="crop-body">
+              <h3>잎채소</h3>
+              <p>상추, 배추 등 잎채소류의 생육 상태와 병해를 확인합니다.</p>
+            </div>
+          </article>
+
+          <article class="crop-card">
+            <div class="crop-image fruit"></div>
+            <div class="crop-body">
+              <h3>과채류</h3>
+              <p>토마토, 오이 등 과채류의 병해충 진단과 관리법을 제공합니다.</p>
+            </div>
+          </article>
+
+          <article class="crop-card">
+            <div class="crop-image root"></div>
+            <div class="crop-body">
+              <h3>근채류</h3>
+              <p>감자, 고구마 등 뿌리 작물의 상태를 확인할 수 있습니다.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tip-section">
+      <div class="container">
+        <div class="section-heading">
+          <h2>재배 팁</h2>
+        </div>
+
+        <div class="tip-grid">
+          <article class="tip-card">
+            <div class="tip-icon">☻</div>
+            <h3>토양 준비</h3>
+            <p>건강한 작물을 위해서는 배수가 잘 되고 영양분이 풍부한 토양이 필요합니다. 퇴비와 유기물을 추가하여 토양을 개선하세요.</p>
+          </article>
+
+          <article class="tip-card">
+            <div class="tip-icon">♢</div>
+            <h3>적절한 관수</h3>
+            <p>과도한 물주기는 뿌리 썩음을 유발할 수 있습니다. 토양이 마르면 충분히 물을 주되, 배수가 잘 되도록 관리하세요.</p>
+          </article>
+
+          <article class="tip-card">
+            <div class="tip-icon">☼</div>
+            <h3>햇빛 관리</h3>
+            <p>대부분의 채소는 하루 6-8시간의 직사광선이 필요합니다. 작물별 햇빛 요구량을 확인하여 적절한 위치에 심으세요.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <section>
+        <div class="footer-brand">
+          <span class="brand-icon" aria-hidden="true"></span>
+          <span>Re:af</span>
+        </div>
+        <p>성공적인 작물 재배를 위한 전문 정보를 제공합니다.</p>
+      </section>
+
+      <section>
+        <h3>빠른 링크</h3>
+        <div class="footer-links">
+          <a href="#">홈</a>
+          <a href="#crops">작물 정보</a>
+          <a href="#services">재배 가이드</a>
+        </div>
+      </section>
+
+      <section>
+        <h3>문의</h3>
+        <p>이메일: info@cropguide.kr<br />전화: 02-1234-5678</p>
+      </section>
+    </div>
+
+    <div class="footer-bottom">© 2026 작물 재배 가이드. All rights reserved.</div>
+  </footer>
+
+  <script>
+  async function handleOAuthLogin() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const oauthToken = urlParams.get("token");
+    const name = urlParams.get("name");
+
+    // 소셜 로그인으로 token 넘어온 경우
+    if (oauthToken) {
+
+      localStorage.setItem("token", oauthToken);
+      localStorage.setItem("access_token", oauthToken);
+
+      if (name) {
+        localStorage.setItem(
+          "username",
+          decodeURIComponent(name)
+        );
+      }
+
+      try {
+        const response = await fetch("/me", {
+          headers: {
+            "Authorization": `Bearer ${oauthToken}`
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+
+          localStorage.setItem(
+            "username",
+            userData.username || name || "회원"
+          );
+        }
+
+      } catch (error) {
+        console.error("사용자 정보 조회 실패:", error);
+      }
+
+      // URL에서 token 제거
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+    }
+  }
+
+  let currentPlotIndex = 0;
+
+  function plantCropVisual(emoji, cropName) {
+    const hero = document.querySelector(".hero");
+
+    if (!hero) return;
+
+    hero.classList.remove("planted");
+    void hero.offsetWidth;
+    hero.classList.add("planted");
+  }
+
+  function checkLoginStatus() {
+    const savedToken =
+      localStorage.getItem("token") ||
+      localStorage.getItem("access_token");
+
+    const username =
+      localStorage.getItem("username") ||
+      localStorage.getItem("name") ||
+      localStorage.getItem("email") ||
+      "회원";
+
+    const userStatus = document.getElementById("userStatus");
+    const loginBtn = document.getElementById("loginBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (savedToken) {
+      if (userStatus) userStatus.textContent = `${username}님, 환영합니다 🌱`;
+      if (loginBtn) loginBtn.style.display = "none";
+      if (registerBtn) registerBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "flex";
+    } else {
+      if (userStatus) userStatus.textContent = "로그인이 필요해요 🌱";
+      if (loginBtn) loginBtn.style.display = "inline-flex";
+      if (registerBtn) registerBtn.style.display = "inline-flex";
+      if (logoutBtn) logoutBtn.style.display = "none";
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    checkLoginStatus();
+
+    const hero = document.querySelector(".hero");
+    if (hero) hero.classList.remove("planted");
+
+    resetTopPredictions();
+
+    renderResult({
+      title: "👋 로그아웃 되었어요!",
+      model: "-",
+      filename: "-",
+      predictedClass: "다시 로그인하면 진단할 수 있어요",
+      confidence: "-",
+      emoji: "🌱"
+    });
+  }
+
+  function getCropEmoji(className) {
+    const name = String(className || "").toLowerCase();
+
+    if (name.includes("토마토") || name.includes("tomato")) return "🍅";
+    if (name.includes("피망") || name.includes("pepper")) return "🌶️";
+    if (name.includes("감자") || name.includes("potato")) return "🥔";
+    if (name.includes("옥수수") || name.includes("corn")) return "🌽";
+    if (name.includes("사과") || name.includes("apple")) return "🍎";
+    if (name.includes("포도") || name.includes("grape")) return "🍇";
+    if (name.includes("딸기") || name.includes("strawberry")) return "🍓";
+    if (name.includes("체리") || name.includes("cherry")) return "🍒";
+    if (name.includes("오렌지") || name.includes("orange")) return "🍊";
+    if (name.includes("복숭아") || name.includes("peach")) return "🍑";
+    if (name.includes("콩") || name.includes("soybean")) return "🫘";
+    if (name.includes("호박") || name.includes("squash")) return "🎃";
+    if (name.includes("블루베리") || name.includes("blueberry")) return "🫐";
+
+    return "🌱";
+  }
+
+  function getModelLabel(value) {
+    const selectedOption = document.querySelector(`#modelSelect option[value="${value}"]`);
+    return selectedOption ? selectedOption.textContent : value;
+  }
+
+  function renderResult({
+    title,
+    model,
+    filename,
+    predictedClass,
+    confidence,
+    emoji,
+    description = "",
+    care = [],
+    warning = [],
+    source = ""
+  }) {
+    const result = document.getElementById("result");
+    if (!result) return;
+
+    const careList = Array.isArray(care)
+      ? care.map(item => `<li>${item}</li>`).join("")
+      : "";
+
+    const warningList = Array.isArray(warning)
+      ? warning.map(item => `<li>${item}</li>`).join("")
+      : "";
+
+    result.innerHTML = `
+      <span class="result-title">${title}</span>
+      <span class="result-line">🤖 사용 모델: ${model}</span>
+      <span class="result-line">📄 파일명: ${filename}</span>
+      <span class="result-line">${emoji} 예측 결과: <strong>${predictedClass}</strong></span>
+      <span class="result-line">📊 확률: <strong class="green">${confidence}</strong></span>
+
+      ${
+        description
+          ? `
+            <div class="info-block">
+              <h3>🌿 어떤 병인가요?</h3>
+              <p>${description}</p>
+
+              <h3>🧑‍🌾 관리법</h3>
+              <ul>${careList || "<li>등록된 관리법이 없습니다.</li>"}</ul>
+
+              <h3>⚠️ 주의사항</h3>
+              <ul>${warningList || "<li>등록된 주의사항이 없습니다.</li>"}</ul>
+
+              <p class="source-text">📚 출처: ${source || "출처 정보 없음"}</p>
+            </div>
+          `
+          : ""
+      }
+    `;
+  }
+
+  function renderAIAnalysis({
+    predictedClass = "-",
+    confidence = "-",
+    description = "",
+    care = [],
+    warning = [],
+    source = ""
+  }) {
+    const analysisBox = document.getElementById("aiAnalysisResult");
+    if (!analysisBox) return;
+
+    const careText = Array.isArray(care) && care.length > 0
+      ? care[0]
+      : description || "예측 결과를 바탕으로 작물 상태를 확인해 주세요.";
+
+    const warningText = Array.isArray(warning) && warning.length > 0
+      ? warning[0]
+      : "현재 표시할 추가 주의사항은 없습니다.";
+
+    analysisBox.innerHTML = `
+      <div class="analysis-item good">
+        <span style="color:#00b94c; font-size:22px;">✓</span>
+        <div>
+          <strong>AI 예측 결과</strong>
+          <p>${predictedClass}</p>
+        </div>
+      </div>
+
+      <div class="analysis-item info">
+        <span style="color:#2f7cff; font-size:22px;">📊</span>
+        <div>
+          <strong>AI 확신 점수</strong>
+          <p>${confidence}</p>
+        </div>
+      </div>
+
+      <div class="analysis-item warn">
+        <span style="color:#f5a400; font-size:22px;">⚠</span>
+        <div>
+          <strong>관리 주의사항</strong>
+          <p>${warningText}</p>
+        </div>
+      </div>
+
+      <div class="analysis-item info">
+        <span style="color:#2f7cff; font-size:22px;">🌿</span>
+        <div>
+          <strong>추천 관리</strong>
+          <p>${careText}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function makeAIScore(rawConfidence, classCount = 38) {
+    const confidence = Number(rawConfidence || 0);
+    const randomBase = 100 / classCount;
+    const strengthRatio = confidence / randomBase;
+    const score = Math.min(98, 70 + strengthRatio * 1.2);
+
+    return {
+      rawConfidence: confidence,
+      randomBase,
+      strengthRatio,
+      score
+    };
+  }
+
+  function renderTopPredictions(results = []) {
+    const list = document.getElementById("topPredictionList");
+    const guide = document.getElementById("topPredictionGuide");
+
+    if (!list) return;
+
+    const topResults = Array.isArray(results)
+      ? results
+          .filter(item => item && (item.predicted_class || item.name_ko || item.model_label))
+          .sort((a, b) => Number(b.confidence || 0) - Number(a.confidence || 0))
+          .slice(0, 5)
+      : [];
+
+    if (topResults.length === 0) {
+      list.innerHTML = `
+        <div class="top-prediction-empty">
+          <strong>AI 예측 후보 대기중</strong><br>
+          작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.
+        </div>
+      `;
+
+      if (guide) {
+        guide.innerHTML = `
+          <strong>TOP 5 해석 안내</strong>
+          1순위 결과만 단정하지 않고, AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
+        `;
+      }
+      return;
+    }
+
+    list.innerHTML = topResults.map((item, index) => {
+      const rank = index + 1;
+      const rawConfidence = Number(item.confidence || 0);
+      const scoreInfo = makeAIScore(rawConfidence, 38);
+      const score = scoreInfo.score;
+      const displayName = item.name_ko || item.class_name || item.predicted_class || "알 수 없음";
+      const modelLabel = item.model_label || item.selected_model_label || item.model_name || "AI 모델";
+
+      return `
+        <div class="top-prediction-item rank-${rank}">
+          <div class="top-rank-badge">${rank}위</div>
+          <div>
+            <div class="top-prediction-head">
+              <span class="top-prediction-name">${displayName}</span>
+              <span class="top-prediction-score">${score.toFixed(1)}점</span>
+            </div>
+            <div class="top-prediction-bar">
+              <div class="top-prediction-fill" style="width:${Math.max(5, Math.min(98, score))}%;"></div>
+            </div>
+            <p class="top-prediction-desc">
+              원본 예측값 ${rawConfidence.toFixed(2)}% · ${modelLabel}
+            </p>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    const first = topResults[0];
+    const firstConfidence = Number(first.confidence || 0);
+    const firstScoreInfo = makeAIScore(firstConfidence, 38);
+
+    if (guide) {
+      guide.innerHTML = `
+        <strong>AI 예측 후보 해석</strong>
+        1순위 후보는 38개 후보 기준 랜덤 추정보다 약 ${firstScoreInfo.strengthRatio.toFixed(1)}배 강하게 선택되었습니다.
+        TOP 5는 보조 판단용이며, 실제 잎 상태와 함께 확인해주세요.
+      `;
+    }
+  }
+
+  function resetTopPredictions(message = "작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.") {
+    const list = document.getElementById("topPredictionList");
+    const guide = document.getElementById("topPredictionGuide");
+
+    if (list) {
+      list.innerHTML = `
+        <div class="top-prediction-empty">
+          <strong>AI 예측 후보 대기중</strong><br>
+          ${message}
+        </div>
+      `;
+    }
+
+    if (guide) {
+      guide.innerHTML = `
+        <strong>TOP 5 해석 안내</strong>
+        1순위 결과만 단정하지 않고, AI가 함께 고려한 후보들을 비교해 더 안전하게 판단할 수 있습니다.
+      `;
+    }
+  }
+
+    async function predictImage() {
+      const input = document.getElementById("imageInput");
+      const crop = document.getElementById("cropSelect").value;
+      const savedToken = localStorage.getItem("token");
+
+      if (!savedToken) {
+        renderResult({
+          title: "🔐 로그인이 필요해요!",
+          model: "자동 최적 모델 선택",
+          filename: "-",
+          predictedClass: "로그인 후 예측할 수 있어요",
+          confidence: "-",
+          emoji: "🌱"
+        });
+        return;
+      }
+
+      if (!input || input.files.length === 0) {
+        renderResult({
+          title: "🌱 이미지를 먼저 선택해주세요!",
+          model: "자동 최적 모델 선택",
+          filename: "-",
+          predictedClass: "-",
+          confidence: "-",
+          emoji: "🌱"
+        });
+        return;
+      }
+
+      if (!crop) {
+        renderResult({
+          title: "🌱 작물을 먼저 선택해주세요!",
+          model: "자동 최적 모델 선택",
+          filename: input.files[0].name,
+          predictedClass: "-",
+          confidence: "-",
+          emoji: "🌱"
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", input.files[0]);
+      formData.append("crop", crop);
+
+      renderResult({
+        title: "🔍 모든 AI 모델이 작물을 분석하는 중이에요!",
+        model: "자동 최적 모델 선택 중...",
+        filename: input.files[0].name,
+        predictedClass: "분석 중...",
+        confidence: "계산 중...",
+        emoji: "✣"
+      });
+
+      resetTopPredictions("AI가 예측 후보를 계산하는 중입니다...");
+
+      try {
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${savedToken}`
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail?.message ||
+            data.detail ||
+            "서버 응답 오류"
+          );
+        }
+
+        const aiScoreInfo = makeAIScore(data.confidence, 38);
+        const aiScore = aiScoreInfo.score;
+
+        const displayName = data.name_ko || data.predicted_class || "알 수 없음";
+        const cropEmoji = getCropEmoji(displayName);
+
+        plantCropVisual(cropEmoji, displayName);
+
+        renderResult({
+          title: "🌱 최종 1순위 진단 결과가 나왔어요!",
+          model: data.selected_model_label || "자동 선택된 모델",
+          filename: data.filename || input.files[0].name,
+          predictedClass: displayName,
+          confidence: `${aiScore.toFixed(1)}점`,
+          emoji: cropEmoji,
+          description: data.description,
+          care: data.care,
+          warning: data.warning,
+          source: data.source
+        });
+
+        renderAIAnalysis({
+          predictedClass: displayName,
+          confidence: `${aiScore.toFixed(1)}점`,
+          description: data.description,
+          care: data.care,
+          warning: data.warning,
+          source: data.source
+        });
+
+        renderTopPredictions(data.top5_predictions || data.top_predictions || data.all_model_results || []);
+
+      } catch (error) {
+        renderResult({
+          title: "⚠️ 서버 연결 오류입니다!",
+          model: "자동 최적 모델 선택",
+          filename: input.files[0].name,
+          predictedClass: error.message || "FastAPI 연결 확인 필요",
+          confidence: "-",
+          emoji: "🤖"
+        });
+
+        renderAIAnalysis({
+          predictedClass: "분석 실패",
+          confidence: "-",
+          warning: [error.message || "FastAPI 연결 상태를 확인해 주세요."]
+        });
+
+        resetTopPredictions("분석에 실패했습니다. 서버 연결 상태를 확인해주세요.");
+
+        resetModelScores("실패");
+      }
+    }
+
+  async function initPage() {
+    await handleOAuthLogin();
+    checkLoginStatus();
+  }
+
+  initPage();
+    async function loadModelOptions() {
+  const modelSelect = document.getElementById("modelSelect");
+
+  if (!modelSelect) return;
+
+  try {
+    const response = await fetch("/models");
+    const data = await response.json();
+
+    if (!response.ok || !data.models) {
+      throw new Error("모델 목록 로드 실패");
+    }
+
+    modelSelect.innerHTML = "";
+
+    data.models.forEach(model => {
+      const option = document.createElement("option");
+      option.value = model.value;
+      option.textContent = model.label;
+      modelSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    modelSelect.innerHTML = `
+      <option value="b2_38">EfficientNet B2 (38 클래스)</option>
+    `;
+  }
+}
+loadModelOptions();
+</script>
+
+<script src="components/header.js"></script>
+</body>
+</html>

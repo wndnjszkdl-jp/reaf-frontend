@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <link rel="stylesheet" href="css/common.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원관리 | Re:Leaf AI</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Pretendard, "Noto Sans KR", sans-serif;
+      background:
+        linear-gradient(
+          135deg,
+          #e8fff0 0%,
+          #d8ffe5 35%,
+          #c7f5d5 70%,
+          #b7edc8 100%
+        );
+      color: #1f2937;
+    }
+
+    .page-wrap {
+      padding: 48px 24px 70px;
+    }
+
+    .admin-shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .admin-hero {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.16);
+      border: 1px solid rgba(15, 157, 88, 0.12);
+      margin-bottom: 24px;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .badge-admin {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #f0fdf4;
+      color: #15803d;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 34px;
+      color: #123524;
+      letter-spacing: -0.05em;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      color: #5f6f66;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    a {
+      font-family: inherit;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 157, 88, 0.18);
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #34c759, #0f9d58);
+      color: white;
+    }
+
+    .btn-dark {
+      background: #111827;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .summary-card {
+      background: #f8fff9;
+      border: 1px solid #d7f3df;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .summary-card strong {
+      display: block;
+      color: #14532d;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .summary-card span {
+      font-size: 28px;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    .table-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.13);
+      border: 1px solid rgba(15, 157, 88, 0.12);
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .table-header h2 {
+      color: #123524;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th,
+    td {
+      padding: 15px 14px;
+      border-bottom: 1px solid #eef2f7;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f0fdf4;
+      color: #14532d;
+      font-weight: 900;
+    }
+
+    td {
+      color: #374151;
+      font-weight: 600;
+    }
+
+    tr:hover td {
+      background: #fbfffc;
+    }
+
+    .role {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .role.admin {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .role.user {
+      background: #eef2ff;
+      color: #4338ca;
+    }
+
+    .delete {
+      padding: 9px 13px;
+      border-radius: 10px;
+      border: none;
+      background: #dc3545;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .empty {
+      text-align: center;
+      color: #6b7280;
+      padding: 28px;
+    }
+
+    @media (max-width: 760px) {
+      .page-wrap {
+        padding: 32px 16px 50px;
+      }
+
+      .admin-hero,
+      .table-card {
+        padding: 24px;
+        border-radius: 22px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="commonHeader"></div>
+
+  <main class="page-wrap">
+    <div class="admin-shell">
+
+      <section class="admin-hero">
+        <div class="hero-top">
+          <div>
+            <div class="badge-admin">👑 관리자 전용</div>
+            <h1>회원관리 대시보드</h1>
+            <p class="desc">
+              Re:Leaf AI 전체 회원 목록, 진단 횟수, 권한 정보를 확인하고 관리할 수 있습니다.
+            </p>
+          </div>
+
+          <div class="actions">
+            <a href="index.html" class="btn btn-main">← 메인으로</a>
+            <button onclick="loadUsers()" class="btn btn-dark">새로고침</button>
+            <button onclick="adminLogout()" class="btn btn-danger">관리자 로그아웃</button>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <strong>전체 회원</strong>
+            <span id="totalUsers">0</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>관리자 계정</strong>
+            <span id="adminUsers">0</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>전체 진단 횟수</strong>
+            <span id="totalDiagnosis">0</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div class="table-header">
+          <h2>회원 목록</h2>
+          <p class="desc">일반 회원은 삭제할 수 있으며, 관리자 본인은 보호됩니다.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>아이디</th>
+                <th>가입 날짜</th>
+                <th>심은 작물</th>
+                <th>진단 횟수</th>
+                <th>권한</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="userBody">
+              <tr>
+                <td colspan="7" class="empty">회원 정보를 불러오는 중입니다...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    const adminToken = localStorage.getItem("adminToken");
+
+    if (!adminToken) {
+      alert("관리자 로그인이 필요합니다.");
+      location.href = "admin_login.html";
+    }
+
+    async function loadUsers() {
+      try {
+        const res = await fetch("/admin/users", {
+          headers: {
+            Authorization: `Bearer ${adminToken}`
+          }
+        });
+
+        if (res.status === 403) {
+          alert("관리자만 접근할 수 있습니다.");
+          localStorage.removeItem("adminToken");
+          location.href = "admin_login.html";
+          return;
+        }
+
+        if (res.status === 401) {
+          alert("관리자 로그인이 만료되었습니다.");
+          localStorage.removeItem("adminToken");
+          location.href = "admin_login.html";
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error("회원 목록 로드 실패");
+        }
+
+        const data = await res.json();
+        const users = data.users || [];
+        const body = document.getElementById("userBody");
+
+        body.innerHTML = "";
+
+        document.getElementById("totalUsers").textContent = users.length;
+        document.getElementById("adminUsers").textContent =
+          users.filter(user => user.is_admin === 1).length;
+        document.getElementById("totalDiagnosis").textContent =
+          users.reduce((sum, user) => sum + Number(user.diagnosis_count || 0), 0);
+
+        if (users.length === 0) {
+          body.innerHTML = `
+            <tr>
+              <td colspan="7" class="empty">등록된 회원이 없습니다.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        users.forEach(user => {
+          body.innerHTML += `
+            <tr>
+              <td>${user.id}</td>
+              <td>${user.nickname || user.username || "-"}</td>
+              <td>${user.created_at || "-"}</td>
+              <td>${user.planted_crop || "-"}</td>
+              <td>${user.diagnosis_count || 0}</td>
+              <td>
+                ${user.is_admin === 1
+                  ? `<span class="role admin">👑 관리자</span>`
+                  : `<span class="role user">🌱 일반회원</span>`}
+              </td>
+              <td>
+                ${user.is_admin === 1
+                  ? "-"
+                  : `<button class="delete" onclick="deleteUser(${user.id})">삭제</button>`}
+              </td>
+            </tr>
+          `;
+        });
+
+      } catch (error) {
+        console.error(error);
+        alert("회원 목록을 불러오지 못했습니다.");
+      }
+    }
+
+    async function deleteUser(userId) {
+      const ok = confirm("정말 이 회원을 삭제하시겠습니까?");
+
+      if (!ok) return;
+
+      try {
+        const res = await fetch(`/admin/users/${userId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${adminToken}`
+          }
+        });
+
+        if (res.ok) {
+          alert("회원이 삭제되었습니다.");
+          loadUsers();
+        } else {
+          const data = await res.json();
+          alert(data.detail || "회원 삭제 실패");
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert("서버 연결 오류");
+      }
+    }
+
+    function adminLogout() {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminEmail");
+      localStorage.removeItem("adminName");
+      localStorage.removeItem("adminLoginTime");
+
+      alert("관리자 로그아웃 완료");
+      location.href = "admin_login.html";
+    }
+
+    loadUsers();
+  </script>
+
+  <script src="components/header.js"></script>
+</body>
+</html>

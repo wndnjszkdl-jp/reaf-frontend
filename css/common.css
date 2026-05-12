@@ -1,0 +1,118 @@
+#commonHeader {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  min-height: 62px !important;
+  z-index: 99999 !important;
+}
+
+.rf-topbar {
+  width: 100% !important;
+  min-height: 62px !important;
+  background: #fff !important;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 38px !important;
+  box-sizing: border-box !important;
+}
+
+.rf-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #101828 !important;
+  text-decoration: none !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.rf-brand-icon {
+  width: 23px !important;
+  height: 23px !important;
+  border-radius: 50% !important;
+  border: 6px solid #14b858 !important;
+  border-top-color: transparent !important;
+  transform: rotate(-35deg) !important;
+  flex-shrink: 0 !important;
+}
+
+.rf-nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 27px !important;
+  white-space: nowrap !important;
+}
+
+.rf-nav a {
+  color: #101828 !important;
+  text-decoration: none !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+.rf-nav .rf-signup-link {
+  color: #fff !important;
+  background: #049b3b !important;
+  padding: 11px 17px !important;
+  border-radius: 10px !important;
+}
+
+body {
+  padding-top: 62px !important;
+}
+
+@media (max-width: 768px) {
+  #commonHeader {
+    height: auto !important;
+    min-height: 104px !important;
+  }
+
+  .rf-topbar {
+    height: auto !important;
+    min-height: 104px !important;
+    padding: 12px 14px 8px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+
+  .rf-brand {
+    font-size: 21px !important;
+  }
+
+  .rf-nav {
+    width: 100% !important;
+    gap: 22px !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .rf-nav a {
+    font-size: 14px !important;
+  }
+
+  .rf-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  body {
+    padding-top: 104px !important;
+  }
+  .hero-farm-stage {
+      margin-top: 34px;
+      max-width: 100%;
+      height: 260px;
+  }
+
+    .hero-farm-visual {
+      object-fit: cover;
+  }
+}

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <link rel="stylesheet" href="css/common.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인 | Re:Leaf AI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(
+          135deg,
+          #e8fff0 0%,
+          #d8ffe5 35%,
+          #c7f5d5 70%,
+          #b7edc8 100%
+        );
+    }
+
+    .page-wrap {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 46px 34px;
+      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.16);
+      border: 1px solid rgba(15, 157, 88, 0.12);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .logo {
+      font-size: 56px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #123524;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #5f6f66;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #14532d;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #cfe8d6;
+      border-radius: 14px;
+      padding: 0 16px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #f8fff9;
+      color: #1f2937;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus {
+      background: white;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      margin-top: 26px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #34c759, #0f9d58);
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 26px rgba(15, 157, 88, 0.22);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(15, 157, 88, 0.3);
+    }
+
+    .message {
+      min-height: 24px;
+      margin-top: 18px;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .divider {
+      margin: 30px 0 22px;
+      position: relative;
+      text-align: center;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider-text {
+      position: relative;
+      background: white;
+      padding: 0 12px;
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .social-buttons {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .social-btn {
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      color: #1f2937;
+    }
+
+    .kakao {
+      background: #fee500;
+      border-color: #fee500;
+      color: #191919;
+    }
+
+    .naver {
+      background: #03c75a;
+      border-color: #03c75a;
+      color: white;
+    }
+
+    .link-group {
+      text-align: center;
+      line-height: 2;
+    }
+
+    .link {
+      display: inline-block;
+      margin: 0 8px;
+      font-size: 14px;
+      color: #0f9d58;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .btn-submit.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 36px 24px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .logo {
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="commonHeader"></div>
+
+  <main class="page-wrap">
+    <div class="container">
+      <div class="auth-card">
+        <div class="header">
+          <div class="logo">🌿</div>
+          <h1>로그인</h1>
+          <p class="subtitle">Re:Leaf AI와 함께 작물을 돌봐보세요</p>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="example@email.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="비밀번호를 입력하세요"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="btn-submit">로그인하기</button>
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div class="divider">
+          <span class="divider-text">또는</span>
+        </div>
+
+        <div class="social-buttons">
+          <a class="social-btn kakao" href="/auth/kakao/login">카카오로 시작하기</a>
+          <a class="social-btn naver" href="/auth/naver/login">네이버로 시작하기</a>
+        </div>
+
+        <div class="link-group">
+          <a class="link" href="register.html">회원가입</a>
+          <span style="color: #ddd;">|</span>
+          <a class="link" href="reset_password.html">비밀번호 찾기</a>
+          <span style="color: #ddd;">|</span>
+          <a class="link" href="index.html">← 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const submitBtn = loginForm.querySelector(".btn-submit");
+
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email) {
+        showMessage("이메일을 입력해주세요.", "error");
+        return;
+      }
+
+      if (!password) {
+        showMessage("비밀번호를 입력해주세요.", "error");
+        return;
+      }
+
+      const formData = new FormData();
+
+      // FastAPI OAuth2PasswordRequestForm은 필드명이 username이어야 합니다.
+      // 우리는 이메일 로그인으로 쓰되, 서버에는 username 필드로 보냅니다.
+      formData.append("username", email);
+      formData.append("password", password);
+
+      try {
+        submitBtn.classList.add("loading");
+        submitBtn.disabled = true;
+
+        const response = await fetch("/login", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "로그인에 실패했습니다.");
+        }
+
+
+        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("username", data.name || data.email || email);
+        localStorage.setItem("email", data.email || email);
+        localStorage.setItem("loginTime", new Date().toISOString());
+
+        showMessage("✓ 로그인 성공!", "success");
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 500);
+
+        showMessage("✓ 로그인 성공!", "success");
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+
+      } catch (error) {
+        showMessage(error.message, "error");
+      } finally {
+        submitBtn.classList.remove("loading");
+        submitBtn.disabled = false;
+      }
+    });
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = `message show ${type}`;
+
+      if (type === "error") {
+        setTimeout(() => {
+          message.classList.remove("show");
+        }, 5000);
+      }
+    }
+
+    document.getElementById("password").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        loginForm.dispatchEvent(new Event("submit"));
+      }
+    });
+  </script>
+
+  <script src="components/header.js"></script>
+</body>
+</html>
