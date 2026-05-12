@@ -1820,6 +1820,8 @@
   </footer>
 
   <script>
+  const API_BASE = "https://plant-fastapi.onrender.com";
+
   async function handleOAuthLogin() {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -1840,7 +1842,7 @@
       }
 
       try {
-        const response = await fetch("/me", {
+        const response = await fetch(`${API_BASE}/me`, {
           headers: {
             "Authorization": `Bearer ${oauthToken}`
           }
@@ -2221,7 +2223,7 @@
       resetTopPredictions("AI가 예측 후보를 계산하는 중입니다...");
 
       try {
-        const response = await fetch("/predict", {
+        const response = await fetch(`${API_BASE}/predict`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${savedToken}`
@@ -2305,7 +2307,7 @@
   if (!modelSelect) return;
 
   try {
-    const response = await fetch("/models");
+    const response = await fetch(`${API_BASE}/models`);
     const data = await response.json();
 
     if (!response.ok || !data.models) {
