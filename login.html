@@ -304,8 +304,8 @@
         </div>
 
         <div class="social-buttons">
-          <a class="social-btn kakao" href="/auth/kakao/login">카카오로 시작하기</a>
-          <a class="social-btn naver" href="/auth/naver/login">네이버로 시작하기</a>
+          <a class="social-btn kakao" id="kakaoLoginBtn" href="#">카카오로 시작하기</a>
+          <a class="social-btn naver" id="naverLoginBtn" href="#">네이버로 시작하기</a>
         </div>
 
         <div class="link-group">
@@ -320,6 +320,12 @@
   </main>
 
   <script>
+    const API_BASE =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://plant-fastapi.onrender.com";
+
     const loginForm = document.getElementById("loginForm");
     const message = document.getElementById("message");
     const submitBtn = loginForm.querySelector(".btn-submit");
@@ -351,7 +357,7 @@
         submitBtn.classList.add("loading");
         submitBtn.disabled = true;
 
-        const response = await fetch("/login", {
+        const response = await fetch(`${API_BASE}/login`, {
           method: "POST",
           body: formData,
           headers: {
@@ -377,12 +383,6 @@
           window.location.href = "index.html";
         }, 500);
 
-        showMessage("✓ 로그인 성공!", "success");
-
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 1000);
-
       } catch (error) {
         showMessage(error.message, "error");
       } finally {
@@ -400,6 +400,17 @@
           message.classList.remove("show");
         }, 5000);
       }
+    }
+
+    const kakaoLoginBtn = document.getElementById("kakaoLoginBtn");
+    const naverLoginBtn = document.getElementById("naverLoginBtn");
+
+    if (kakaoLoginBtn) {
+      kakaoLoginBtn.href = `${API_BASE}/auth/kakao/login`;
+    }
+
+    if (naverLoginBtn) {
+      naverLoginBtn.href = `${API_BASE}/auth/naver/login`;
     }
 
     document.getElementById("password").addEventListener("keypress", function(event) {

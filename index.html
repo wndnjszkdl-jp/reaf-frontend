@@ -1820,7 +1820,20 @@
   </footer>
 
   <script>
-  const API_BASE = "https://plant-fastapi.onrender.com";
+
+  const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "http://127.0.0.1:8000"
+      : "https://plant-fastapi.onrender.com";
+
+  async function login() {
+    // 기존 로그인 코드
+    const response = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      body: formData
+    });
+  }
 
   async function handleOAuthLogin() {
     const urlParams = new URLSearchParams(window.location.search);

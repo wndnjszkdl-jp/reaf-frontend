@@ -467,6 +467,12 @@
   </div>
 
   <script>
+    const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "http://127.0.0.1:8000"
+      : "https://plant-fastapi.onrender.com";
+
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -496,7 +502,7 @@
 
     async function loadMyPage() {
       try {
-        const res = await fetch("/me/detail", {
+        const res = await fetch(`${API_BASE}/me/detail`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -594,7 +600,7 @@
       formData.append("planted_crop", crop);
 
       try {
-        const res = await fetch("/me/planted-crop", {
+        const res = await fetch(`${API_BASE}/me/planted-crop`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`

@@ -201,6 +201,12 @@
   </div>
 
   <script>
+    const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "http://127.0.0.1:8000"
+      : "https://plant-fastapi.onrender.com";
+
     async function loadHistory() {
       const tbody = document.getElementById("historyBody");
       tbody.innerHTML = "";
@@ -213,7 +219,7 @@
           return;
         }
 
-        const response = await fetch("/history", {
+        const response = await fetch(`${API_BASE}/history`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
