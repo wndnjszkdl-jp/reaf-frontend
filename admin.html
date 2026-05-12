@@ -365,7 +365,7 @@
 
     async function loadUsers() {
       try {
-        const res = await fetch(`${API_BASE}/admin/users`, {
+        const res = await fetch(`${API_BASE}/admin/`, {
           headers: {
             Authorization: `Bearer ${adminToken}`
           }

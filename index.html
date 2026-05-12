@@ -1587,6 +1587,16 @@
           </div>
 
           <button class="predict-button" onclick="predictImage()">✣ AI 예측하기</button>
+          <button
+            class="predict-button"
+            style="
+              margin-top:12px;
+              background:#111827;
+            "
+            onclick="predictPreciseImage()"
+          >
+            🔬 정밀 AI 분석하기
+          </button>
 
           <div class="divider"></div>
 
@@ -2304,7 +2314,116 @@
 
         resetTopPredictions("분석에 실패했습니다. 서버 연결 상태를 확인해주세요.");
 
-        resetModelScores("실패");
+
+      }
+    }
+
+    async function predictPreciseImage() {
+
+      const input = document.getElementById("imageInput");
+      const crop = document.getElementById("cropSelect").value;
+      const savedToken = localStorage.getItem("token");
+
+      if (!savedToken) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      if (!input || input.files.length === 0) {
+        alert("이미지를 선택해주세요.");
+        return;
+      }
+
+      if (!crop) {
+        alert("작물을 선택해주세요.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", input.files[0]);
+      formData.append("crop", crop);
+
+      renderResult({
+        title: "🔬 모든 AI 모델이 정밀 분석 중입니다!",
+        model: "전체 모델 분석",
+        filename: input.files[0].name,
+        predictedClass: "정밀 분석 중...",
+        confidence: "계산 중...",
+        emoji: "🔬"
+      });
+
+      resetTopPredictions("정밀 AI 분석 진행 중입니다...");
+
+      try {
+
+        const response = await fetch(`${API_BASE}/predict-precise`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${savedToken}`
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail?.message ||
+            data.detail ||
+            "정밀 분석 실패"
+          );
+        }
+
+        const aiScoreInfo = makeAIScore(data.confidence, 38);
+        const aiScore = aiScoreInfo.score;
+
+        const displayName =
+          data.name_ko ||
+          data.predicted_class ||
+          "알 수 없음";
+
+        const cropEmoji = getCropEmoji(displayName);
+
+        renderResult({
+          title: "🏆 정밀 AI 분석 완료!",
+          model: data.selected_model_label || "전체 모델 분석",
+          filename: data.filename || input.files[0].name,
+          predictedClass: displayName,
+          confidence: `${aiScore.toFixed(1)}점`,
+          emoji: cropEmoji,
+          description: data.description,
+          care: data.care,
+          warning: data.warning,
+          source: data.source
+        });
+
+        renderAIAnalysis({
+          predictedClass: displayName,
+          confidence: `${aiScore.toFixed(1)}점`,
+          description: data.description,
+          care: data.care,
+          warning: data.warning,
+          source: data.source
+        });
+
+        renderTopPredictions(
+          data.all_model_results || []
+        );
+
+      } catch (error) {
+
+        renderResult({
+          title: "⚠️ 정밀 분석 실패",
+          model: "전체 모델 분석",
+          filename: input.files[0].name,
+          predictedClass: error.message,
+          confidence: "-",
+          emoji: "⚠️"
+        });
+
+        resetTopPredictions(
+          "정밀 분석 중 오류가 발생했습니다."
+        );
       }
     }
 
