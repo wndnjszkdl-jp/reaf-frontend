@@ -1515,10 +1515,112 @@
       }
     }
 
+    .ai-loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(6px);
+    }
+
+    .ai-loading-overlay.show {
+      display: flex;
+    }
+
+    .ai-loading-box {
+      width: min(380px, calc(100% - 40px));
+      padding: 30px 26px;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+      text-align: center;
+    }
+
+    .ai-loading-icon {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 8px solid #eaf8ef;
+      border-top-color: #049b3b;
+      animation: aiSpin 1s linear infinite;
+    }
+
+    @keyframes aiSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .ai-loading-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .ai-loading-message {
+      margin: 0 0 18px;
+      color: #475467;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .ai-progress-track {
+      width: 100%;
+      height: 13px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e5e7eb;
+    }
+
+    .ai-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #049b3b, #2f7cff);
+      transition: width 0.35s ease;
+    }
+
+    .ai-progress-percent {
+      margin-top: 11px;
+      color: #049b3b;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .ai-loading-sub {
+      margin-top: 12px;
+      color: #6b7280;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
   </style>
 </head>
 
 <body>
+  <div class="ai-loading-overlay" id="aiLoadingOverlay">
+    <div class="ai-loading-box">
+      <div class="ai-loading-icon"></div>
+      <h3 class="ai-loading-title" id="aiLoadingTitle">AI가 분석 중이에요</h3>
+      <p class="ai-loading-message" id="aiLoadingMessage">
+        이미지를 업로드하고 작물 상태를 확인하고 있어요.
+      </p>
+
+      <div class="ai-progress-track">
+        <div class="ai-progress-fill" id="aiProgressFill"></div>
+      </div>
+
+      <div class="ai-progress-percent" id="aiProgressPercent">0%</div>
+      <div class="ai-loading-sub" id="aiLoadingSub">
+        첫 분석은 모델 준비 때문에 조금 더 걸릴 수 있어요.
+      </div>
+    </div>
+  </div>
 
 
   <div id="commonHeader"></div>
@@ -1586,7 +1688,7 @@
             </div>
           </div>
 
-          <button class="predict-button" onclick="predictImage()">✣ AI 예측하기</button>
+          <button class="predict-button" onclick="predictImage()">✣ 간단 AI 분석하기</button>
           <button
             class="predict-button"
             style="
@@ -1836,6 +1938,67 @@
     window.location.hostname === "127.0.0.1"
       ? "http://127.0.0.1:8000"
       : "https://plant-fastapi.onrender.com";
+      let aiLoadingTimer = null;
+      let aiLoadingProgress = 0;
+
+      function setAILoadingProgress(percent, message = "") {
+        aiLoadingProgress = Math.max(0, Math.min(100, percent));
+
+        const fill = document.getElementById("aiProgressFill");
+        const percentText = document.getElementById("aiProgressPercent");
+        const messageBox = document.getElementById("aiLoadingMessage");
+
+        if (fill) fill.style.width = `${aiLoadingProgress}%`;
+        if (percentText) percentText.textContent = `${Math.round(aiLoadingProgress)}%`;
+        if (messageBox && message) messageBox.textContent = message;
+      }
+
+      function showAILoading({
+        title = "AI가 분석 중이에요",
+        message = "이미지를 업로드하고 작물 상태를 확인하고 있어요.",
+        sub = "첫 분석은 모델 준비 때문에 조금 더 걸릴 수 있어요.",
+        maxBeforeDone = 92
+      } = {}) {
+        const overlay = document.getElementById("aiLoadingOverlay");
+        const titleBox = document.getElementById("aiLoadingTitle");
+        const subBox = document.getElementById("aiLoadingSub");
+
+        if (titleBox) titleBox.textContent = title;
+        if (subBox) subBox.textContent = sub;
+        if (overlay) overlay.classList.add("show");
+
+        setAILoadingProgress(5, message);
+
+        clearInterval(aiLoadingTimer);
+
+        aiLoadingTimer = setInterval(() => {
+          if (aiLoadingProgress < 30) {
+            setAILoadingProgress(aiLoadingProgress + 4, "이미지를 서버로 보내는 중이에요.");
+          } else if (aiLoadingProgress < 65) {
+            setAILoadingProgress(aiLoadingProgress + 2, "AI 모델이 잎의 특징을 살펴보는 중이에요.");
+          } else if (aiLoadingProgress < maxBeforeDone) {
+            setAILoadingProgress(aiLoadingProgress + 1, "결과 후보를 비교하고 있어요.");
+          }
+        }, 450);
+      }
+
+      function finishAILoading(message = "분석이 완료되었어요!") {
+        clearInterval(aiLoadingTimer);
+        setAILoadingProgress(100, message);
+
+        setTimeout(() => {
+          hideAILoading();
+        }, 500);
+      }
+
+      function hideAILoading() {
+        clearInterval(aiLoadingTimer);
+
+        const overlay = document.getElementById("aiLoadingOverlay");
+        if (overlay) overlay.classList.remove("show");
+
+        setAILoadingProgress(0);
+      }
 
   async function login() {
     // 기존 로그인 코드
@@ -2244,6 +2407,12 @@
       });
 
       resetTopPredictions("AI가 예측 후보를 계산하는 중입니다...");
+      showAILoading({
+        title: "간단 AI 분석 중이에요",
+        message: "이미지를 업로드하고 있어요.",
+        sub: "기본 모델 1개로 빠르게 분석합니다.",
+        maxBeforeDone: 90
+      });
 
       try {
         const response = await fetch(`${API_BASE}/predict`, {
@@ -2295,8 +2464,10 @@
         });
 
         renderTopPredictions(data.top5_predictions || data.top_predictions || data.all_model_results || []);
+        finishAILoading("간단 분석이 완료되었어요!");
 
       } catch (error) {
+        hideAILoading();
         renderResult({
           title: "⚠️ 서버 연결 오류입니다!",
           model: "자동 최적 모델 선택",
@@ -2353,6 +2524,12 @@
       });
 
       resetTopPredictions("정밀 AI 분석 진행 중입니다...");
+      showAILoading({
+        title: "정밀 AI 분석 중이에요",
+        message: "두 개의 AI 모델이 순서대로 분석하고 있어요.",
+        sub: "정밀 분석은 일반 분석보다 시간이 더 걸릴 수 있어요.",
+        maxBeforeDone: 94
+      });
 
       try {
 
@@ -2409,8 +2586,10 @@
         renderTopPredictions(
           data.all_model_results || []
         );
+        finishAILoading("정밀 분석이 완료되었어요!");
 
       } catch (error) {
+        hideAILoading();
 
         renderResult({
           title: "⚠️ 정밀 분석 실패",
@@ -2464,6 +2643,23 @@
   }
 }
 loadModelOptions();
+async function startWarmupInBackground() {
+  try {
+    await fetch(`${API_BASE}/warmup`, {
+      method: "POST"
+    });
+
+    console.log("모델 사전 다운로드 요청 완료");
+  } catch (error) {
+    console.warn("모델 사전 다운로드 요청 실패:", error);
+  }
+}
+
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    startWarmupInBackground();
+  }, 1200);
+});
 </script>
 
 <script src="components/header.js"></script>
