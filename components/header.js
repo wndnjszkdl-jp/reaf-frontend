@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", renderHeader);
 
 function renderHeader() {
   const token = localStorage.getItem("token");
-  const username = localStorage.getItem("username");
   const headerArea = document.getElementById("commonHeader");
 
   if (!headerArea) return;
@@ -11,9 +10,12 @@ function renderHeader() {
 
   headerArea.innerHTML = `
     <header class="rf-topbar">
-      <a class="rf-brand" href="index.html">
-        <span class="rf-brand-icon" aria-hidden="true"></span>
-        <span>Re:af</span>
+      <a class="rf-brand" href="index.html" aria-label="Re:af 홈으로 이동">
+        <img
+          src="images/reaf-logo.png"
+          class="rf-brand-logo"
+          alt="Re:af 로고"
+        />
       </a>
 
       <nav class="rf-nav">
@@ -21,7 +23,6 @@ function renderHeader() {
         <a href="index.html#services">서비스소개</a>
         <a href="index.html#analysis">AI분석</a>
         <a href="index.html#crops">작물정보</a>
-        <a href="history.html">진단기록</a>
         <a href="mypage.html">마이페이지</a>
         <a href="admin_login.html">회원관리</a>
 
@@ -42,9 +43,18 @@ function renderHeader() {
   if (logoutLink) {
     logoutLink.addEventListener("click", (e) => {
       e.preventDefault();
+
       localStorage.removeItem("token");
       localStorage.removeItem("username");
+      localStorage.removeItem("email");
+      localStorage.removeItem("loginTime");
+      localStorage.removeItem("autoLogin");
+
       location.href = "index.html";
     });
+  }
+
+  if (typeof updateNavbar === "function") {
+    updateNavbar();
   }
 }

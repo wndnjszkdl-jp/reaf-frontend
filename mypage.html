@@ -4,140 +4,181 @@
   <link rel="stylesheet" href="css/common.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>마이페이지 | Re:Leaf AI</title>
+  <title>마이페이지 | Re:af</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /*
+      마이페이지 전용 스타일
+      - common.css/header.js와 충돌하지 않도록 모든 주요 선택자를 .mypage-wrap 아래로 제한했습니다.
+      - 공통 헤더가 fixed일 가능성이 있어 본문에 상단 여백을 줍니다.
+    */
+    :root {
+      --green: #049b3b;
+      --green-dark: #007f34;
+      --green-soft: #eaf8ef;
+      --blue: #1769e8;
+      --text: #101828;
+      --sub: #475467;
+      --line: #e5e7eb;
+      --bg: #f3f7f4;
+      --white: #ffffff;
+      --shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+      --radius: 24px;
     }
 
     body {
-      font-family: Pretendard, "Noto Sans KR", sans-serif;
-      background: #eef3ef;
-      color: #1f2937;
+      margin: 0;
       min-height: 100vh;
+      font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: -0.035em;
     }
 
-    .layout {
-      display: flex;
-      min-height: calc(100vh - 62px);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .sidebar {
-      width: 280px;
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    .mypage-wrap {
+      min-height: 100vh;
+      padding-top: 82px;
+    }
+
+    .mypage-layout {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      min-height: calc(100vh - 82px);
+    }
+
+    .mypage-sidebar {
       background: #ffffff;
-      border-right: 1px solid #e5e7eb;
+      border-right: 1px solid var(--line);
       padding: 30px 24px;
+      position: sticky;
+      top: 82px;
+      height: calc(100vh - 82px);
+      overflow-y: auto;
     }
 
     .side-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
     }
 
-    .side-brand-icon {
-      width: 48px;
-      height: 48px;
+    .side-logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
       border-radius: 16px;
-      background: linear-gradient(135deg, #4ade80, #16a34a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
+      background: #fff;
     }
 
-    .side-brand-text {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
+    .side-brand-text strong {
+      display: block;
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      color: #111827;
+      line-height: 1;
+    }
+
+    .side-brand-text span {
+      display: block;
+      margin-top: 4px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0;
     }
 
     .user-card {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      border-radius: 24px;
-      padding: 24px;
+      background:
+        radial-gradient(circle at 85% 12%, rgba(255,255,255,.3), transparent 30%),
+        linear-gradient(135deg, #049b3b, #047333);
+      border-radius: 26px;
+      padding: 25px;
       color: white;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 18px 36px rgba(4, 155, 59, 0.18);
     }
 
     .avatar {
       width: 72px;
       height: 72px;
-      border-radius: 50%;
+      border-radius: 24px;
       background: rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 34px;
       margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,.25);
     }
 
     .user-name {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 6px;
+      font-size: 23px;
+      font-weight: 900;
+      margin-bottom: 7px;
       word-break: break-all;
     }
 
     .user-email {
       font-size: 14px;
-      opacity: 0.88;
+      opacity: 0.9;
       word-break: break-all;
+      line-height: 1.45;
     }
 
     .crop-edit-box {
       background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 17px;
+      margin-bottom: 22px;
     }
 
     .crop-edit-box label {
       display: block;
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 900;
       color: #14532d;
       margin-bottom: 10px;
     }
 
-    input {
+    .crop-edit-box input {
       width: 100%;
       padding: 13px 14px;
-      border-radius: 12px;
+      border-radius: 13px;
       border: 1px solid #cfe8d6;
       font-size: 15px;
       outline: none;
       background: #ffffff;
     }
 
-    input:focus {
+    .crop-edit-box input:focus {
       border-color: #22c55e;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14);
-    }
-
-    button,
-    .menu a {
-      font-family: inherit;
     }
 
     .crop-btn {
       width: 100%;
       margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 12px;
+      padding: 13px 14px;
+      border-radius: 13px;
       border: none;
       background: linear-gradient(135deg, #34c759, #0f9d58);
       color: white;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.2s ease;
     }
 
     .crop-btn:hover {
@@ -145,92 +186,100 @@
       box-shadow: 0 10px 24px rgba(15, 157, 88, 0.22);
     }
 
-    .menu {
+    .side-menu {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .menu a {
-      text-decoration: none;
+    .side-menu a {
       color: #374151;
       padding: 14px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      transition: 0.2s;
+      border-radius: 15px;
+      font-weight: 800;
+      transition: 0.2s ease;
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .menu a:hover {
+    .side-menu a:hover {
       background: #f3f4f6;
+      transform: translateX(2px);
     }
 
-    .menu .active {
-      background: #16a34a;
+    .side-menu .active {
+      background: #111827;
       color: white;
     }
 
-    .menu .danger-link {
+    .side-menu .danger-link {
       color: #dc2626;
     }
 
-    .main {
-      flex: 1;
-      padding: 40px;
+    .mypage-main {
+      padding: 42px;
+      min-width: 0;
     }
 
-    .header {
+    .page-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       margin-bottom: 30px;
-      gap: 16px;
+      gap: 18px;
     }
 
-    .header h1 {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: -0.05em;
+    .page-header h1 {
+      margin: 0;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -0.07em;
       color: #111827;
     }
 
-    .header p {
-      margin-top: 8px;
-      color: #6b7280;
-      font-weight: 500;
+    .page-header p {
+      margin: 9px 0 0;
+      color: var(--sub);
+      font-weight: 600;
+      line-height: 1.55;
     }
 
-    .edit-btn {
+    .primary-action {
       background: #111827;
       color: white;
       border: none;
-      padding: 14px 22px;
-      border-radius: 14px;
-      font-weight: 700;
+      padding: 15px 22px;
+      border-radius: 15px;
+      font-weight: 900;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.2s ease;
       white-space: nowrap;
     }
 
-    .edit-btn:hover {
+    .primary-action:hover {
       transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(17,24,39,.18);
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
 
     .stat-card {
       background: white;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border-radius: 26px;
+      padding: 25px;
+      box-shadow: var(--shadow);
       border: 1px solid rgba(22, 163, 74, 0.06);
+      transition: .18s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
     }
 
     .stat-top {
@@ -244,33 +293,34 @@
     .stat-title {
       font-size: 15px;
       color: #6b7280;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
       background: #dcfce7;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 21px;
       flex: 0 0 auto;
     }
 
     .stat-value {
       font-size: 30px;
-      font-weight: 800;
+      font-weight: 900;
       color: #111827;
       word-break: keep-all;
+      line-height: 1.25;
     }
 
     .activity {
       background: white;
-      border-radius: 28px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border-radius: 30px;
+      padding: 31px;
+      box-shadow: var(--shadow);
       border: 1px solid rgba(22, 163, 74, 0.06);
     }
 
@@ -283,28 +333,37 @@
     }
 
     .activity-header h2 {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
+      margin: 0;
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
     }
 
     .view-all {
-      color: #16a34a;
-      font-weight: 800;
-      text-decoration: none;
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 12px;
     }
 
     .activity-item {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 16px;
-      padding: 18px 0;
-      border-bottom: 1px solid #f1f5f9;
+      padding: 17px;
+      border: 1px solid #edf0f3;
+      border-radius: 18px;
+      background: #fff;
+      transition: .18s ease;
     }
 
-    .activity-item:last-child {
-      border: none;
+    .activity-item:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
     }
 
     .activity-left {
@@ -331,23 +390,26 @@
     }
 
     .activity-info h4 {
-      margin-bottom: 5px;
+      margin: 0 0 6px;
       font-size: 17px;
       color: #111827;
+      font-weight: 900;
       word-break: break-word;
     }
 
     .activity-info p {
+      margin: 0;
       color: #6b7280;
       font-size: 14px;
       word-break: break-word;
+      line-height: 1.45;
     }
 
     .badge {
       padding: 8px 16px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
     }
 
@@ -366,22 +428,37 @@
       color: #b91c1c;
     }
 
-    @media (max-width: 900px) {
-      .layout {
-        flex-direction: column;
+    @media (max-width: 980px) {
+      .mypage-wrap {
+        padding-top: 70px;
       }
 
-      .sidebar {
+      .mypage-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mypage-sidebar {
+        position: relative;
+        top: auto;
+        height: auto;
         width: 100%;
       }
 
-      .main {
+      .mypage-main {
         padding: 25px;
       }
 
-      .header {
+      .page-header {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-item {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -390,90 +467,104 @@
 <body>
   <div id="commonHeader"></div>
 
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="side-brand">
-        <div class="side-brand-icon">🌿</div>
-        <div class="side-brand-text">Re:Leaf</div>
-      </div>
-
-      <div class="user-card">
-        <div class="avatar">👨‍🌾</div>
-        <div class="user-name" id="sidebarUsername">로딩중...</div>
-        <div class="user-email" id="sidebarEmail">-</div>
-      </div>
-
-      <div class="crop-edit-box">
-        <label for="cropInput">심은 작물 수정</label>
-        <input id="cropInput" placeholder="예: 토마토, 상추, 고추">
-        <button class="crop-btn" onclick="updateCrop()">🌱 작물 수정</button>
-      </div>
-
-      <nav class="menu">
-        <a href="#" class="active">🏠 대시보드</a>
-        <a href="index.html">🌿 메인페이지</a>
-        <a href="history.html">📈 진단 기록</a>
-        <a href="account_delete.html" class="danger-link">🗑 회원탈퇴</a>
-      </nav>
-    </aside>
-
-    <main class="main">
-      <div class="header">
-        <div>
-          <h1>마이페이지</h1>
-          <p>내 작물 정보와 AI 진단 기록을 확인할 수 있습니다.</p>
-        </div>
-
-        <button class="edit-btn" onclick="location.href='index.html#predictCard'">
-          AI 진단하러 가기
-        </button>
-      </div>
-
-      <section class="stats">
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-title">심은 작물</div>
-            <div class="icon">🌱</div>
+  <div class="mypage-wrap">
+    <div class="mypage-layout">
+      <aside class="mypage-sidebar">
+        <div class="side-brand">
+          <img class="side-logo" src="assets/logo.png" alt="Re:af 로고" onerror="this.style.display='none'">
+          <div class="side-brand-text">
+            <strong>Re:af</strong>
+            <span>SMART FARM AI</span>
           </div>
-          <div class="stat-value" id="plantedCrop">-</div>
         </div>
 
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-title">AI 분석 횟수</div>
-            <div class="icon">🤖</div>
+        <div class="user-card">
+          <div class="avatar">👨‍🌾</div>
+          <div class="user-name" id="sidebarUsername">로딩중...</div>
+          <div class="user-email" id="sidebarEmail">-</div>
+        </div>
+
+        <div class="crop-edit-box">
+          <label for="cropInput">심은 작물 수정</label>
+          <input id="cropInput" placeholder="예: 토마토, 상추, 고추">
+          <button class="crop-btn" type="button" onclick="updateCrop()">🌱 작물 수정</button>
+        </div>
+
+        <nav class="side-menu">
+          <a href="#" class="active">🏠 대시보드</a>
+          <a href="index.html">🌿 메인페이지</a>
+          <a href="history.html">📈 진단 기록</a>
+          <a href="account_delete.html" class="danger-link">🗑 회원탈퇴</a>
+        </nav>
+      </aside>
+
+      <main class="mypage-main">
+        <div class="page-header">
+          <div>
+            <h1>마이페이지</h1>
+            <p>내 작물 정보와 AI 진단 기록을 한눈에 확인할 수 있습니다.</p>
           </div>
-          <div class="stat-value" id="diagnosisCount">0회</div>
+
+          <button class="primary-action" type="button" onclick="location.href='index.html#predictCard'">
+            AI 진단하러 가기
+          </button>
         </div>
 
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-title">가입일</div>
-            <div class="icon">📅</div>
+        <section class="stats">
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-title">심은 작물</div>
+              <div class="icon">🌱</div>
+            </div>
+            <div class="stat-value" id="plantedCrop">-</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-title">AI 분석 횟수</div>
+              <div class="icon">🤖</div>
+            </div>
+            <div class="stat-value" id="diagnosisCount">0회</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <div class="stat-title">가입일</div>
+              <div class="icon">📅</div>
+            </div>
+            <div class="stat-value" id="createdAt" style="font-size:18px;">-</div>
+          </article>
+        </section>
+
+        <section class="activity">
+          <div class="activity-header">
+            <h2>최근 진단 기록</h2>
+            <a class="view-all" href="history.html">전체보기</a>
           </div>
-          <div class="stat-value" id="createdAt" style="font-size:18px;">-</div>
-        </div>
-      </section>
 
-      <section class="activity">
-        <div class="activity-header">
-          <h2>최근 진단 기록</h2>
-          <a class="view-all" href="history.html">전체보기</a>
-        </div>
-
-        <div id="historyList"></div>
-      </section>
-    </main>
+          <div class="activity-list" id="historyList"></div>
+        </section>
+      </main>
+    </div>
   </div>
 
   <script>
+    /*
+      백엔드 주소 자동 선택
+      - 로컬: FastAPI 개발 서버
+      - 배포: Render 서버
+    */
     const API_BASE =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:8000"
-      : "https://plant-fastapi.onrender.com";
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://plant-fastapi.onrender.com";
 
-    const token = localStorage.getItem("token");
+    /*
+      token/access_token 둘 다 지원
+      - OAuth 로그인과 일반 로그인이 서로 다른 키를 쓸 수 있어 둘 다 확인합니다.
+    */
+    const token = localStorage.getItem("token") || localStorage.getItem("access_token");
 
     if (!token) {
       alert("로그인이 필요합니다.");
@@ -484,7 +575,7 @@
       const name = String(className || "").toLowerCase();
 
       if (name.includes("토마토") || name.includes("tomato")) return "🍅";
-      if (name.includes("피망") || name.includes("pepper")) return "🌶️";
+      if (name.includes("피망") || name.includes("pepper") || name.includes("파프리카")) return "🌶️";
       if (name.includes("감자") || name.includes("potato")) return "🥔";
       if (name.includes("옥수수") || name.includes("corn")) return "🌽";
       if (name.includes("사과") || name.includes("apple")) return "🍎";
@@ -498,6 +589,24 @@
       if (name.includes("블루베리") || name.includes("blueberry")) return "🫐";
 
       return "🌱";
+    }
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+
+      return date.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
     }
 
     async function loadMyPage() {
@@ -525,71 +634,81 @@
           user.email ||
           "회원";
 
-        document.getElementById("sidebarUsername").textContent = username;
-        document.getElementById("sidebarEmail").textContent = user.email || user.username || "-";
-        document.getElementById("createdAt").textContent = user.created_at || "-";
-        document.getElementById("plantedCrop").textContent = user.planted_crop || "미등록";
-        document.getElementById("diagnosisCount").textContent = (user.diagnosis_count || 0) + "회";
+        setText("sidebarUsername", username);
+        setText("sidebarEmail", user.email || user.username || "-");
+        setText("createdAt", formatDate(user.created_at));
+        setText("plantedCrop", user.planted_crop || "미등록");
+        setText("diagnosisCount", `${user.diagnosis_count || 0}회`);
 
-        const historyList = document.getElementById("historyList");
-        historyList.innerHTML = "";
-
-        if (!data.history || data.history.length === 0) {
-          historyList.innerHTML = `
-            <div class="activity-item">
-              <div class="activity-left">
-                <div class="activity-icon">🌱</div>
-                <div class="activity-info">
-                  <h4>아직 진단 기록이 없습니다</h4>
-                  <p>AI 분석을 시작해보세요!</p>
-                </div>
-              </div>
-              <div class="badge waiting">대기중</div>
-            </div>
-          `;
-          return;
-        }
-
-        data.history.slice(0, 6).forEach(item => {
-          const emoji = getCropEmoji(item.predicted_class);
-
-          historyList.innerHTML += `
-            <div class="activity-item">
-              <div class="activity-left">
-                <div class="activity-icon">${emoji}</div>
-                <div class="activity-info">
-                  <h4>${item.predicted_class || "알 수 없음"}</h4>
-                  <p>${item.filename || "-"} · ${item.created_at || "-"}</p>
-                </div>
-              </div>
-              <div class="badge success">${item.confidence ?? "-"}%</div>
-            </div>
-          `;
-        });
-
+        renderHistory(data.history || []);
       } catch (error) {
         console.error(error);
-
-        const historyList = document.getElementById("historyList");
-        if (historyList) {
-          historyList.innerHTML = `
-            <div class="activity-item">
-              <div class="activity-left">
-                <div class="activity-icon">⚠️</div>
-                <div class="activity-info">
-                  <h4>마이페이지 정보를 불러오지 못했습니다</h4>
-                  <p>FastAPI 서버 연결 상태를 확인해주세요.</p>
-                </div>
-              </div>
-              <div class="badge error">오류</div>
-            </div>
-          `;
-        }
+        renderHistoryError();
       }
     }
 
+    function renderHistory(history) {
+      const historyList = document.getElementById("historyList");
+      if (!historyList) return;
+
+      historyList.innerHTML = "";
+
+      if (!history || history.length === 0) {
+        historyList.innerHTML = `
+          <div class="activity-item">
+            <div class="activity-left">
+              <div class="activity-icon">🌱</div>
+              <div class="activity-info">
+                <h4>아직 진단 기록이 없습니다</h4>
+                <p>AI 분석을 시작해보세요!</p>
+              </div>
+            </div>
+            <div class="badge waiting">대기중</div>
+          </div>
+        `;
+        return;
+      }
+
+      history.slice(0, 6).forEach(item => {
+        const emoji = getCropEmoji(item.predicted_class);
+        const confidence = item.confidence ?? "-";
+
+        historyList.innerHTML += `
+          <div class="activity-item">
+            <div class="activity-left">
+              <div class="activity-icon">${emoji}</div>
+              <div class="activity-info">
+                <h4>${item.predicted_class || "알 수 없음"}</h4>
+                <p>${item.filename || "-"} · ${item.created_at || "-"}</p>
+              </div>
+            </div>
+            <div class="badge success">${confidence}%</div>
+          </div>
+        `;
+      });
+    }
+
+    function renderHistoryError() {
+      const historyList = document.getElementById("historyList");
+      if (!historyList) return;
+
+      historyList.innerHTML = `
+        <div class="activity-item">
+          <div class="activity-left">
+            <div class="activity-icon">⚠️</div>
+            <div class="activity-info">
+              <h4>마이페이지 정보를 불러오지 못했습니다</h4>
+              <p>FastAPI 서버 연결 상태를 확인해주세요.</p>
+            </div>
+          </div>
+          <div class="badge error">오류</div>
+        </div>
+      `;
+    }
+
     async function updateCrop() {
-      const crop = document.getElementById("cropInput").value.trim();
+      const cropInput = document.getElementById("cropInput");
+      const crop = cropInput.value.trim();
 
       if (!crop) {
         alert("작물 이름을 입력해주세요.");
@@ -610,13 +729,13 @@
 
         if (res.ok) {
           alert("심은 작물이 수정되었습니다.");
-          document.getElementById("cropInput").value = "";
+          cropInput.value = "";
           loadMyPage();
-        } else {
-          const data = await res.json();
-          alert(data.detail || "수정에 실패했습니다.");
+          return;
         }
 
+        const data = await res.json();
+        alert(data.detail || "수정에 실패했습니다.");
       } catch (error) {
         console.error(error);
         alert("서버 연결 오류입니다.");
@@ -626,6 +745,8 @@
     loadMyPage();
   </script>
 
+  <!-- 공통 인증/헤더 스크립트는 마지막에 1회만 로드합니다. -->
+  <script src="components/auth.js"></script>
   <script src="components/header.js"></script>
 </body>
 </html>

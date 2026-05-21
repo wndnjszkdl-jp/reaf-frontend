@@ -199,6 +199,43 @@
       cursor: pointer;
       transition: 0.3s;
     }
+    .email-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .email-row input {
+      flex: 1;
+    }
+
+    .verify-btn {
+      white-space: nowrap;
+      padding: 0 16px;
+      border: none;
+      border-radius: 14px;
+      background: #0f9d58;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .verify-btn:disabled {
+      background: #b8d8c4;
+      cursor: not-allowed;
+    }
+
+    .sub-message {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .timer-text {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #777;
+      font-weight: 600;
+    }
 
     .signup-btn:hover {
       transform: translateY(-2px);
@@ -308,7 +345,21 @@
 
         <div class="input-group">
           <label>이메일</label>
-          <input type="email" id="email" placeholder="example@email.com" required />
+          <div class="email-row">
+            <input type="email" id="email" placeholder="example@email.com" required />
+            <button type="button" id="sendCodeBtn" class="verify-btn">인증번호 보내기</button>
+          </div>
+          <div id="emailCheckMessage" class="sub-message"></div>
+        </div>
+
+        <div class="input-group" id="verifyCodeBox" style="display:none;">
+          <label>이메일 인증번호</label>
+          <div class="email-row">
+            <input type="text" id="verificationCode" placeholder="6자리 인증번호 입력" maxlength="6" />
+            <button type="button" id="verifyCodeBtn" class="verify-btn">인증 확인</button>
+          </div>
+          <div id="verifyMessage" class="sub-message"></div>
+          <div id="timerText" class="timer-text"></div>
         </div>
 
         <div class="row">
@@ -381,6 +432,131 @@
 
     const registerForm = document.getElementById("registerForm");
     const message = document.getElementById("message");
+    const sendCodeBtn = document.getElementById("sendCodeBtn");
+    const verifyCodeBtn = document.getElementById("verifyCodeBtn");
+    const verifyCodeBox = document.getElementById("verifyCodeBox");
+    const verificationCode = document.getElementById("verificationCode");
+    const emailCheckMessage = document.getElementById("emailCheckMessage");
+    const verifyMessage = document.getElementById("verifyMessage");
+    const timerText = document.getElementById("timerText");
+
+    let emailVerified = false;
+    let verifiedEmail = "";
+    let timerId = null;
+    let remainSeconds = 180;
+
+    function startTimer() {
+      clearInterval(timerId);
+      remainSeconds = 180;
+
+      timerId = setInterval(() => {
+        const min = String(Math.floor(remainSeconds / 60)).padStart(2, "0");
+        const sec = String(remainSeconds % 60).padStart(2, "0");
+
+        timerText.textContent = `인증번호 유효시간 ${min}:${sec}`;
+
+        if (remainSeconds <= 0) {
+          clearInterval(timerId);
+          emailVerified = false;
+          verifyMessage.style.color = "#d84315";
+          verifyMessage.textContent = "인증 시간이 만료되었습니다. 다시 요청해주세요.";
+        }
+
+        remainSeconds--;
+      }, 1000);
+    }
+
+    sendCodeBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+
+      if (!email) {
+        emailCheckMessage.style.color = "#d84315";
+        emailCheckMessage.textContent = "이메일을 먼저 입력해주세요.";
+        return;
+      }
+
+      try {
+        sendCodeBtn.disabled = true;
+        sendCodeBtn.textContent = "전송 중...";
+
+        const formData = new FormData();
+        formData.append("email", email);
+
+        const response = await fetch(`${API_BASE}/email/send-verification`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "인증번호 전송에 실패했습니다.");
+        }
+
+        verifyCodeBox.style.display = "block";
+        emailCheckMessage.style.color = "#0f9d58";
+        emailCheckMessage.textContent = "인증번호를 전송했습니다. 이메일을 확인해주세요.";
+        verifyMessage.textContent = "";
+        startTimer();
+
+      } catch (error) {
+        emailCheckMessage.style.color = "#d84315";
+        emailCheckMessage.textContent = error.message;
+      } finally {
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "인증번호 보내기";
+      }
+    });
+
+    verifyCodeBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const code = verificationCode.value.trim();
+
+      if (!code) {
+        verifyMessage.style.color = "#d84315";
+        verifyMessage.textContent = "인증번호를 입력해주세요.";
+        return;
+      }
+
+      try {
+        verifyCodeBtn.disabled = true;
+        verifyCodeBtn.textContent = "확인 중...";
+
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("code", code);
+
+        const response = await fetch(`${API_BASE}/email/verify-code`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "인증번호가 올바르지 않습니다.");
+        }
+
+        emailVerified = true;
+        verifiedEmail = email;
+        clearInterval(timerId);
+
+        verifyMessage.style.color = "#0f9d58";
+        verifyMessage.textContent = "이메일 인증이 완료되었습니다.";
+        timerText.textContent = "인증 완료 ✅";
+
+        document.getElementById("email").readOnly = true;
+        verificationCode.readOnly = true;
+        sendCodeBtn.disabled = true;
+        verifyCodeBtn.disabled = true;
+
+      } catch (error) {
+        verifyMessage.style.color = "#d84315";
+        verifyMessage.textContent = error.message;
+      } finally {
+        verifyCodeBtn.textContent = "인증 확인";
+      }
+    });
 
     registerForm.addEventListener("submit", async function (event) {
       event.preventDefault();
@@ -409,6 +585,12 @@
       if (!agree) {
         message.style.color = "#d84315";
         message.textContent = "이용약관에 동의해주세요.";
+        return;
+      }
+
+      if (!emailVerified || verifiedEmail !== email) {
+        message.style.color = "#d84315";
+        message.textContent = "이메일 인증을 완료해주세요.";
         return;
       }
 
@@ -445,6 +627,8 @@
       }
     });
   </script>
+<script src="components/auth.js"></script>
 <script src="components/header.js"></script>
+
 </body>
 </html>

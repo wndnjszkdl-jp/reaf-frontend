@@ -163,6 +163,28 @@
       color: #991b1b;
       border: 1px solid #fecaca;
     }
+    .verify-link-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .verify-link-box.show {
+      display: block;
+    }
+
+    .verify-link-box a {
+      color: #0f9d58;
+      font-weight: 800;
+      text-decoration: none;
+    }
 
     .divider {
       margin: 30px 0 22px;
@@ -256,6 +278,29 @@
         font-size: 48px;
       }
     }
+    .auto-login-row {
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+
+    .auto-login-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      font-size: 14px;
+      font-weight: 700;
+      color: #14532d;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .auto-login-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: #0f9d58;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -293,11 +338,21 @@
               autocomplete="current-password"
             />
           </div>
+          <div class="auto-login-row">
+            <label class="auto-login-label">
+              <input type="checkbox" id="autoLoginCheck" />
+              <span>자동로그인</span>
+            </label>
+          </div>
 
           <button type="submit" class="btn-submit">로그인하기</button>
         </form>
 
         <div id="message" class="message"></div>
+        <div id="verifyLinkBox" class="verify-link-box">
+          이메일 인증이 아직 완료되지 않았어요.<br>
+          <a href="register.html">회원가입 페이지에서 이메일 인증하기</a>
+        </div>
 
         <div class="divider">
           <span class="divider-text">또는</span>
@@ -330,6 +385,8 @@
     const message = document.getElementById("message");
     const submitBtn = loginForm.querySelector(".btn-submit");
 
+    const verifyLinkBox = document.getElementById("verifyLinkBox");
+
     loginForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
@@ -353,6 +410,8 @@
       formData.append("username", email);
       formData.append("password", password);
 
+      verifyLinkBox.classList.remove("show");
+
       try {
         submitBtn.classList.add("loading");
         submitBtn.disabled = true;
@@ -372,10 +431,14 @@
         }
 
 
+        const autoLoginCheck = document.getElementById("autoLoginCheck");
+        const isAutoLogin = autoLoginCheck && autoLoginCheck.checked;
+
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("username", data.name || data.email || email);
         localStorage.setItem("email", data.email || email);
         localStorage.setItem("loginTime", new Date().toISOString());
+        localStorage.setItem("autoLogin", isAutoLogin ? "true" : "false");
 
         showMessage("✓ 로그인 성공!", "success");
 
@@ -384,7 +447,17 @@
         }, 500);
 
       } catch (error) {
-        showMessage(error.message, "error");
+        const errorText = error.message || "로그인에 실패했습니다.";
+
+        if (
+          errorText.includes("이메일 인증") ||
+          errorText.includes("인증")
+        ) {
+          showMessage("이메일 인증 후 로그인해주세요.", "error");
+          verifyLinkBox.classList.add("show");
+        } else {
+          showMessage(errorText, "error");
+        }
       } finally {
         submitBtn.classList.remove("loading");
         submitBtn.disabled = false;
@@ -419,7 +492,8 @@
       }
     });
   </script>
-
+  <script src="components/auth.js"></script>
   <script src="components/header.js"></script>
+
 </body>
 </html>
