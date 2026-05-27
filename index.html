@@ -8,6 +8,167 @@
   <title>Re:af | AI 작물 분석 플랫폼</title>
 
   <style>
+    /* ===== AI 재생성 카드 ===== */
+
+    .regen-card {
+      margin: 24px 0 18px;
+      padding: 24px;
+      border-radius: 24px;
+      background:
+        linear-gradient(145deg,
+          rgba(240,253,244,.95),
+          rgba(255,255,255,.96));
+      border: 1px solid rgba(34,197,94,.18);
+      box-shadow:
+        0 16px 40px rgba(22,163,74,.10);
+    }
+
+    .regen-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .regen-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .regen-header h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    .regen-header p {
+      margin: 0;
+      color: #475467;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .regen-upload {
+      display: block;
+      cursor: pointer;
+    }
+
+    .regen-upload-inner {
+      border: 2px dashed #86efac;
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      background: rgba(255,255,255,.85);
+      transition: .25s ease;
+    }
+
+    .regen-upload-inner:hover {
+      transform: translateY(-3px);
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+
+    .regen-upload-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .regen-upload-inner strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 900;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .regen-upload-inner span {
+      color: #667085;
+      font-size: 13px;
+    }
+
+    .regen-button {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 64px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 18px;
+
+      background:
+        linear-gradient(135deg,
+          #22c55e,
+          #15803d);
+
+      color: white;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 18px 34px rgba(22,163,74,.24);
+
+      transition:
+        transform .22s ease,
+        box-shadow .22s ease;
+    }
+
+    .regen-button:hover {
+      transform: translateY(-4px) scale(1.01);
+
+      box-shadow:
+        0 24px 42px rgba(22,163,74,.32);
+    }
+
+    .regen-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          120deg,
+          transparent,
+          rgba(255,255,255,.32),
+          transparent
+        );
+
+      transform: translateX(-130%) skewX(-18deg);
+      transition: transform .8s ease;
+    }
+
+    .regen-button:hover::after {
+      transform: translateX(130%) skewX(-18deg);
+    }
+
+    .regen-status {
+      margin-top: 16px;
+      text-align: center;
+      color: #15803d;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .regen-result-wrap {
+      margin-top: 18px;
+    }
+
+    #regenResultImage {
+      width: 100%;
+      border-radius: 18px;
+      display: none;
+      border: 1px solid #d1fae5;
+      box-shadow: 0 14px 28px rgba(15,23,42,.10);
+    }
     * { box-sizing: border-box; }
 
     :root {
@@ -1026,6 +1187,37 @@
               <option value="사과">사과</option><option value="블루베리">블루베리</option><option value="체리">체리</option><option value="옥수수">옥수수</option><option value="포도">포도</option><option value="오렌지">오렌지</option><option value="복숭아">복숭아</option><option value="파프리카">파프리카</option><option value="감자">감자</option><option value="라즈베리">라즈베리</option><option value="콩">콩</option><option value="호박">호박</option><option value="딸기">딸기</option><option value="토마토">토마토</option>
             </select>
           </div>
+          <div class="regen-card">
+
+            <div class="regen-header">
+              <div class="regen-badge">🌿 AI Leaf Recovery</div>
+              <h3>병든 잎을 건강하게 복원해보세요</h3>
+              <p>
+                AI가 병반 영역을 분석하고 건강한 잎 상태로 재생성합니다.
+              </p>
+            </div>
+
+            <label class="regen-upload">
+              <input type="file" id="regenImageInput" accept="image/*" hidden />
+
+              <div class="regen-upload-inner">
+                <div class="regen-upload-icon">📸</div>
+                <strong>잎 이미지 업로드</strong>
+                <span>클릭해서 이미지를 선택하세요</span>
+              </div>
+            </label>
+
+            <button id="regenBtn" class="regen-button">
+              ✨ 건강한 이미지로 재생성
+            </button>
+
+            <p id="regenStatus" class="regen-status"></p>
+
+            <div class="regen-result-wrap">
+              <img id="regenResultImage" />
+            </div>
+
+          </div>
 
           <button class="predict-button" onclick="predictImage()">AI 분석 시작</button>
           <button class="predict-button" style="margin-top:10px; background:linear-gradient(135deg,#111827,#1f2937); box-shadow:none;" onclick="predictPreciseImage()">정밀 AI 분석</button>
@@ -1140,6 +1332,57 @@
   </footer>
 
   <script>
+    const regenInput = document.getElementById("regenImageInput");
+    const regenResultImage = document.getElementById("regenResultImage");
+    const regenStatus = document.getElementById("regenStatus");
+
+    regenInput.addEventListener("change", () => {
+      const file = regenInput.files && regenInput.files[0];
+
+      if (!file) return;
+
+      const previewUrl = URL.createObjectURL(file);
+
+      regenResultImage.src = previewUrl;
+      regenResultImage.style.display = "block";
+      regenStatus.textContent = `선택한 이미지: ${file.name}`;
+    });
+    document.getElementById("regenBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("regenImageInput");
+    const status = document.getElementById("regenStatus");
+    const resultImage = document.getElementById("regenResultImage");
+
+    if (!fileInput.files.length) {
+      alert("이미지를 먼저 선택해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    status.textContent = "건강한 잎으로 재생성 중입니다... 시간이 조금 걸릴 수 있어요 🌱";
+
+    try {
+      const response = await fetch(`${API_BASE}/api/regenerate-leaf`, {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.detail || data.message || "재생성 실패");
+      }
+
+      resultImage.src = `${API_BASE}${data.result_url}?t=${Date.now()}`;
+      resultImage.style.display = "block";
+      status.textContent = "재생성 완료! 🌿";
+    } catch (error) {
+      console.error(error);
+      status.textContent = "재생성 중 오류가 발생했습니다.";
+      alert(error.message);
+    }
+  });
 
   /*
     기본 설정
