@@ -238,101 +238,94 @@
       font-weight: 700;
       color: #475467;
     }
+    /* ===== 헤더/메가메뉴 통일 정렬 ===== */
 
-    /* ===== 헤더 네비게이션 ===== */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 70;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(16px);
+      background: rgba(255,255,255,.96);
       border-bottom: 1px solid rgba(15,23,42,.06);
-      transition: box-shadow .25s ease, background .25s ease;
+    }
+    .hamburger {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      appearance: none;
+      -webkit-appearance: none;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 800;
+      color: #111827;
+      cursor: pointer;
     }
 
-    .site-header.scrolled {
-      background: rgba(255,255,255,.98);
-      box-shadow: 0 14px 36px rgba(15,23,42,.10);
+    .hamburger:hover {
+      color: var(--green);
     }
 
     .main-nav {
-      height: 78px;
+      --logo-col: 170px;
+      --menu-col: 1fr;
+      --hamburger-col: 48px;
+
+      height: 72px;
       width: min(1380px, calc(100% - 72px));
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 230px 1fr 48px;
+      grid-template-columns: var(--logo-col) var(--menu-col) var(--hamburger-col);
       align-items: center;
-      gap: 22px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
     }
 
     .brand-logo {
-      width: 166px;
+      width: 118px;
       height: 52px;
       object-fit: contain;
       object-position: left center;
-      display: block;
-    }
-
-    .brand-fallback {
-      font-size: 34px;
-      font-weight: 900;
-      color: var(--green);
     }
 
     .nav-menu {
       height: 100%;
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       align-items: center;
-      justify-content: center;
-      gap: clamp(28px, 4vw, 58px);
     }
 
     .nav-item {
       height: 100%;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       font-size: 18px;
       font-weight: 800;
-      color: #111827;
-      transition: color .22s ease;
+      position: relative;
     }
 
     .nav-item::after {
       content: "";
       position: absolute;
+      bottom: 16px;
       left: 50%;
-      bottom: 18px;
       width: 0;
       height: 4px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--green), var(--lime));
       transform: translateX(-50%);
-      transition: width .26s cubic-bezier(.25, 1, .5, 1);
+      transition: width .25s ease;
     }
 
-    .nav-item:hover,
-    .nav-item.active { color: var(--green-dark); }
-
     .nav-item:hover::after,
-    .nav-item.active::after { width: 100%; }
-
-    .hamburger {
-      width: 42px;
-      height: 42px;
-      border: 0;
-      background: transparent;
-      font-size: 30px;
-      cursor: pointer;
-      color: #111827;
+    .nav-item.active::after {
+      width: 64px;
     }
 
     .mega-panel {
@@ -343,26 +336,44 @@
       box-shadow: 0 20px 40px rgba(15,23,42,.08);
     }
 
-    .site-header:hover .mega-panel { display: block; }
+    .site-header:hover .mega-panel {
+      display: block;
+    }
 
     .mega-grid {
-      width: min(1180px, calc(100% - 72px));
+      width: min(1380px, calc(100% - 72px));
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      min-height: 220px;
+      grid-template-columns: 170px repeat(5, 1fr) 48px;
+      min-height: 190px;
     }
 
     .mega-col {
-      padding: 22px;
+      padding: 24px 18px;
+      text-align: center;
       border-right: 1px solid #edf0f3;
     }
 
-    .mega-col:first-child { border-left: 1px solid #edf0f3; background: #f8fafc; }
-    .mega-col h3 { margin: 0 0 14px; font-size: 17px; font-weight: 900; }
-    .mega-col a { display: block; margin: 10px 0; color: #667085; font-size: 14px; font-weight: 600; }
-    .mega-col a:hover { color: var(--green); }
+    .mega-col:first-child {
+      grid-column: 2;
+      border-left: 1px solid #edf0f3;
+      background: #f8fafc;
+    }
 
+    .mega-col h3 {
+      margin: 0 0 18px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .mega-col a {
+      display: block;
+      margin: 0 0 12px;
+      color: #667085;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
     /* ===== 히어로 ===== */
     .hero {
       position: relative;
@@ -1071,7 +1082,11 @@
 
     @media (max-width: 1080px) {
       .nav-menu { display: none; }
-      .main-nav { grid-template-columns: 1fr 48px; }
+      .main-nav {
+        padding: 0 20px;
+        grid-template-columns: 1fr 48px;
+      }
+      .mega-panel { display: none !important; }
       .hero { padding: 48px 20px 78px; }
       .hero-grid { grid-template-columns: 1fr; gap: 34px; }
       .hero-stats { grid-template-columns: 1fr; margin: 24px 20px 0; }
@@ -1083,6 +1098,7 @@
       .footer { padding: 34px 20px; }
       .footer-bottom { flex-direction: column; }
     }
+
   </style>
 </head>
 
@@ -1122,8 +1138,8 @@
         <a class="nav-item active" href="#predictCard">작물 분석</a>
         <a class="nav-item" href="#datasets">데이터셋</a>
         <a class="nav-item" href="#analysis">AI 통계</a>
-        <a class="nav-item" href="history.html">진단 기록</a>
-        <a class="nav-item" href="#guide">고객센터</a>
+        <a class="nav-item" href="mypage.html">내 서비스</a>
+        <a class="nav-item" href="#guide">이용안내</a>
       </div>
 
       <button class="hamburger" type="button" aria-label="전체 메뉴">☰</button>
@@ -1131,11 +1147,11 @@
 
     <div class="mega-panel" aria-label="전체 메뉴 펼침">
       <div class="mega-grid">
-        <div class="mega-col"><h3>작물 분석</h3><a href="#predictCard">간단 AI 분석</a><a href="#predictCard">정밀 AI 분석</a><a href="#analysis">분석 결과</a></div>
-        <div class="mega-col"><h3>데이터셋</h3><a href="#datasets">질병 도감</a><a href="#datasets">작물별 데이터</a><a href="#datasets">대처 가이드</a></div>
-        <div class="mega-col"><h3>AI 통계</h3><a href="#analysis">TOP5 예측 후보</a><a href="#analysis">분석 이력</a><a href="history.html">진단 기록</a></div>
-        <div class="mega-col"><h3>내 서비스</h3><a href="mypage.html">마이페이지</a><a href="history.html">내 진단 기록</a><a href="account_delete.html">회원탈퇴</a></div>
-        <div class="mega-col"><h3>이용안내</h3><a href="login.html">로그인</a><a href="register.html">회원가입</a><a href="admin.html">회원관리</a></div>
+        <div class="mega-col"><a href="#predictCard">간단 AI 분석</a><a href="#predictCard">정밀 AI 분석</a><a href="#analysis">분석 결과</a></div>
+        <div class="mega-col"><a href="#datasets">질병 도감</a><a href="#datasets">작물별 데이터</a><a href="#datasets">대처 가이드</a></div>
+        <div class="mega-col"><a href="#analysis">TOP5 예측 후보</a><a href="#analysis">분석 이력</a></div>
+        <div class="mega-col"><a href="mypage.html">마이페이지</a><a href="account_delete.html">회원탈퇴</a></div>
+        <div class="mega-col"><a href="login.html">로그인</a><a href="register.html">회원가입</a><a href="admin.html">회원관리</a></div>
       </div>
     </div>
   </header>

@@ -1,224 +1,586 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <link rel="stylesheet" href="css/common.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>회원관리 | Re:Leaf AI</title>
+  <title>회원관리 | Re:af</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --green: #2d6a4f;
+      --green-2: #52b788;
+      --green-3: #1f7a43;
+      --green-dark: #123524;
+      --green-soft: #edf7ed;
+      --green-soft-2: #f5faf3;
+      --cream: #f6f8ef;
+      --purple: #7c3aed;
+      --blue: #2563eb;
+      --red: #dc2626;
+      --orange: #ea580c;
+      --text: #102018;
+      --sub: #5c7257;
+      --line: rgba(45, 106, 79, 0.15);
+      --bg: #f4f7f2;
+      --white: #ffffff;
+      --danger: #c0392b;
+      --radius: 18px;
+      --shadow: 0 12px 30px rgba(45, 106, 79, 0.07);
+      --shadow-hover: 0 22px 50px rgba(45, 106, 79, 0.13);
     }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
+      margin: 0;
       min-height: 100vh;
-      font-family: Pretendard, "Noto Sans KR", sans-serif;
+      font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: -0.035em;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font-family: inherit; }
+
+    #commonHeader {
+      display: none !important;
+    }
+
+    .app-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
       background:
-        linear-gradient(
-          135deg,
-          #e8fff0 0%,
-          #d8ffe5 35%,
-          #c7f5d5 70%,
-          #b7edc8 100%
-        );
-      color: #1f2937;
+        radial-gradient(circle at 12% 10%, rgba(82, 183, 136, .10), transparent 26%),
+        radial-gradient(circle at 90% 8%, rgba(45, 106, 79, .08), transparent 28%),
+        var(--bg);
     }
 
-    .page-wrap {
-      padding: 48px 24px 70px;
-    }
-
-    .admin-shell {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-    }
-
-    .admin-hero {
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 36px;
-      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.16);
-      border: 1px solid rgba(15, 157, 88, 0.12);
-      margin-bottom: 24px;
-    }
-
-    .hero-top {
+    .side-panel {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.88);
+      border-right: 1px solid var(--line);
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
+      z-index: 10;
     }
 
-    .badge-admin {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: #f0fdf4;
-      color: #15803d;
-      font-weight: 800;
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
+    .side-top { padding: 22px 18px 18px; }
 
-    h1 {
-      font-size: 34px;
-      color: #123524;
-      letter-spacing: -0.05em;
-      margin-bottom: 10px;
-    }
-
-    .desc {
-      color: #5f6f66;
-      line-height: 1.6;
-      font-weight: 500;
-    }
-
-    .actions {
+    .side-brand {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 0 4px 22px;
+      border-bottom: 1px solid var(--line);
     }
 
-    button,
-    a {
-      font-family: inherit;
-    }
-
-    .btn {
-      border: none;
+    .brand-mark {
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
-      padding: 13px 18px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: white;
+      font-size: 20px;
+      box-shadow: 0 10px 22px rgba(45,106,79,.18);
+      overflow: hidden;
+    }
+
+    .brand-mark img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-title {
+      display: block;
+      color: #101828;
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .brand-sub {
+      display: block;
+      margin-top: 5px;
+      color: var(--sub);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .profile-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 4px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #d9f6df;
+      color: var(--green);
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .profile-name {
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 950;
+      color: #111827;
+      word-break: break-all;
+    }
+
+    .profile-email {
+      margin-top: 3px;
+      color: var(--sub);
+      font-size: 11px;
+      font-weight: 650;
+      word-break: break-all;
+    }
+
+    .side-menu {
+      display: grid;
+      gap: 7px;
+      padding-top: 18px;
+    }
+
+    .side-menu a,
+    .side-menu button {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      color: #38513d;
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .18s ease;
+      text-align: left;
+    }
+
+    .side-menu a:hover,
+    .side-menu button:hover {
+      background: rgba(232,240,228,.72);
+      transform: translateX(2px);
+    }
+
+    .side-menu .active {
+      background: var(--green);
+      color: white;
+      box-shadow: 0 12px 22px rgba(45, 106, 79, .16);
+    }
+
+    .side-bottom {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .system-card {
+      padding: 18px;
+      border: 1px solid rgba(45,106,79,.20);
+      border-radius: 17px;
+      background: linear-gradient(145deg, #effaf0, #ffffff);
+      color: #243b2a;
+    }
+
+    .system-card strong {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 13px;
+      font-weight: 950;
+      color: var(--green);
+    }
+
+    .system-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .system-main {
+      font-size: 22px;
+      font-weight: 950;
+      color: #111827;
+    }
+
+    .system-meta {
+      text-align: right;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .side-utility {
+      display: grid;
+      gap: 6px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    .side-utility a,
+    .side-utility button {
+      border: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      padding: 0 10px;
+      color: var(--sub);
+      font-size: 13px;
       font-weight: 800;
       cursor: pointer;
-      text-decoration: none;
-      transition: 0.2s ease;
-      display: inline-flex;
+      text-align: left;
+    }
+
+    .main-area { min-width: 0; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 9;
+      min-height: 74px;
+      padding: 0 28px;
+      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 7px;
+      justify-content: space-between;
+      gap: 20px;
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      color: #101828;
+      font-size: 21px;
+      font-weight: 950;
+      letter-spacing: -0.055em;
+    }
+
+    .topbar p {
+      margin: 5px 0 0;
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bell {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 19px;
+    }
+
+    .bell::after {
+      content: "";
+      position: absolute;
+      right: 9px;
+      top: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      border: 2px solid white;
+    }
+
+    .primary-action {
+      height: 42px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
       font-size: 14px;
+      font-weight: 950;
+      cursor: pointer;
+      transition: .2s ease;
+      box-shadow: 0 10px 22px rgba(45,106,79,.18);
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(15, 157, 88, 0.18);
+    .primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(45,106,79,.24);
     }
 
-    .btn-main {
-      background: linear-gradient(135deg, #34c759, #0f9d58);
-      color: white;
+    .danger-action {
+      background: #dc2626;
+      box-shadow: 0 10px 22px rgba(220,38,38,.16);
     }
 
-    .btn-dark {
-      background: #111827;
-      color: white;
-    }
-
-    .btn-danger {
-      background: #dc3545;
-      color: white;
+    .content {
+      padding: 26px 28px 42px;
     }
 
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(180px, 1fr));
-      gap: 18px;
-      margin-top: 28px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .summary-card,
+    .panel-card,
+    .table-card,
+    .filter-panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
     }
 
     .summary-card {
-      background: #f8fff9;
-      border: 1px solid #d7f3df;
-      border-radius: 20px;
-      padding: 20px;
+      min-height: 122px;
+      padding: 19px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .summary-card strong {
-      display: block;
-      color: #14532d;
+    .summary-title {
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .summary-icon {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .summary-value {
+      margin-top: 32px;
+      color: #111827;
+      font-size: 30px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .summary-value small {
+      margin-left: 5px;
+      color: var(--sub);
       font-size: 14px;
-      margin-bottom: 8px;
+      font-weight: 750;
     }
 
-    .summary-card span {
-      font-size: 28px;
-      font-weight: 900;
+    .summary-card.admin .summary-icon { background: #f3e8ff; color: var(--purple); }
+    .summary-card.total .summary-icon { background: #dbeafe; color: var(--blue); }
+    .summary-card.diagnosis .summary-icon { background: #fef3c7; color: #a16207; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .left-stack,
+    .right-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .filter-panel {
+      padding: 18px;
+    }
+
+    .search-box {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      border-radius: 16px;
+      background: #eff4ed;
+      color: var(--sub);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: 0;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
       color: #111827;
     }
 
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip-label {
+      width: 24px;
+      color: #38513d;
+      font-size: 16px;
+    }
+
+    .chip {
+      border: 0;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: #eef3e8;
+      color: #587052;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--green);
+      color: white;
+    }
+
     .table-card {
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 28px;
-      padding: 30px;
-      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.13);
-      border: 1px solid rgba(15, 157, 88, 0.12);
+      padding: 18px;
+      overflow: hidden;
     }
 
     .table-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
     .table-header h2 {
-      color: #123524;
-      font-size: 24px;
-      letter-spacing: -0.04em;
+      margin: 0;
+      color: #111827;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.055em;
+    }
+
+    .table-header p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 750;
     }
 
     .table-wrap {
       overflow-x: auto;
-      border-radius: 18px;
-      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      border: 1px solid var(--line);
       background: white;
     }
 
     table {
       width: 100%;
-      min-width: 900px;
+      min-width: 860px;
       border-collapse: collapse;
       background: white;
     }
 
     th,
     td {
-      padding: 15px 14px;
-      border-bottom: 1px solid #eef2f7;
+      padding: 14px 13px;
+      border-bottom: 1px solid #edf2ec;
       text-align: left;
-      font-size: 14px;
+      font-size: 13px;
       vertical-align: middle;
     }
 
     th {
-      background: #f0fdf4;
+      background: #f0f6ed;
       color: #14532d;
-      font-weight: 900;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
     td {
       color: #374151;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     tr:hover td {
-      background: #fbfffc;
+      background: #fbfdfb;
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #dcfce7;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .user-id {
+      color: #111827;
+      font-weight: 950;
     }
 
     .role {
       display: inline-flex;
-      padding: 7px 12px;
+      padding: 6px 11px;
       border-radius: 999px;
-      font-size: 13px;
-      font-weight: 900;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
     .role.admin {
@@ -232,12 +594,13 @@
     }
 
     .delete {
-      padding: 9px 13px;
+      padding: 8px 12px;
       border-radius: 10px;
       border: none;
-      background: #dc3545;
+      background: #dc2626;
       color: white;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 900;
       cursor: pointer;
     }
 
@@ -247,32 +610,115 @@
       padding: 28px;
     }
 
-    @media (max-width: 760px) {
-      .page-wrap {
-        padding: 32px 16px 50px;
-      }
+    .panel-card {
+      padding: 18px;
+    }
 
-      .admin-hero,
-      .table-card {
-        padding: 24px;
-        border-radius: 22px;
-      }
+    .panel-title {
+      margin: 0 0 4px;
+      color: #111827;
+      font-size: 15px;
+      font-weight: 950;
+    }
 
-      h1 {
-        font-size: 28px;
-      }
+    .panel-sub {
+      margin: 0 0 16px;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 750;
+    }
 
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
+    .admin-list {
+      display: grid;
+      gap: 10px;
+    }
 
-      .actions {
-        width: 100%;
-      }
+    .admin-row {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #f8fbf7;
+      color: #38513d;
+      font-size: 13px;
+      font-weight: 850;
+    }
 
-      .btn {
-        width: 100%;
-      }
+    .admin-row strong {
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    .dist-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .dist-row {
+      display: grid;
+      grid-template-columns: 82px 1fr 34px;
+      align-items: center;
+      gap: 10px;
+      color: #38513d;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .bar {
+      height: 7px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e9efe4;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .bar-fill.purple { background: var(--purple); }
+    .bar-fill.blue { background: var(--blue); }
+    .bar-fill.orange { background: var(--orange); }
+
+    .notice-card {
+      border-color: rgba(251,146,60,.45);
+      background: #fff7ed;
+    }
+
+    .notice-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #ea580c;
+      font-size: 12px;
+      line-height: 1.8;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1180px) {
+      .app-layout { grid-template-columns: 230px minmax(0, 1fr); }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .right-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 1fr; }
+      .side-panel { position: static; height: auto; }
+      .side-bottom { display: none; }
+      .side-menu { grid-template-columns: repeat(3, 1fr); }
+      .side-menu a, .side-menu button { justify-content: center; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .topbar { position: static; }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 18px 14px 30px; }
+      .topbar { padding: 14px; align-items: flex-start; flex-direction: column; }
+      .top-actions { width: 100%; justify-content: space-between; }
+      .right-stack { grid-template-columns: 1fr; }
+      .side-menu { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -280,87 +726,206 @@
 <body>
   <div id="commonHeader"></div>
 
-  <main class="page-wrap">
-    <div class="admin-shell">
-
-      <section class="admin-hero">
-        <div class="hero-top">
+  <div class="app-layout">
+    <aside class="side-panel">
+      <div class="side-top">
+        <div class="side-brand">
+          <div class="brand-mark">👑</div>
           <div>
-            <div class="badge-admin">👑 관리자 전용</div>
-            <h1>회원관리 대시보드</h1>
-            <p class="desc">
-              Re:Leaf AI 전체 회원 목록, 진단 횟수, 권한 정보를 확인하고 관리할 수 있습니다.
-            </p>
-          </div>
-
-          <div class="actions">
-            <a href="index.html" class="btn btn-main">← 메인으로</a>
-            <button onclick="loadUsers()" class="btn btn-dark">새로고침</button>
-            <button onclick="adminLogout()" class="btn btn-danger">관리자 로그아웃</button>
+            <span class="brand-title">Re:af</span>
+            <span class="brand-sub">ADMIN CONSOLE</span>
           </div>
         </div>
 
-        <div class="summary-grid">
-          <div class="summary-card">
-            <strong>전체 회원</strong>
-            <span id="totalUsers">0</span>
+        <div class="profile-mini">
+          <div class="avatar" id="adminAvatar">관</div>
+          <div>
+            <div class="profile-name" id="adminNameText">관리자</div>
+            <div class="profile-email" id="adminEmailText">-</div>
+          </div>
+        </div>
+
+        <nav class="side-menu" aria-label="관리자 메뉴">
+          <a href="#" class="active">▣ 대시보드</a>
+          <a href="index.html">🌿 메인페이지</a>
+          <button type="button" onclick="loadUsers()">↻ 새로고침</button>
+        </nav>
+      </div>
+
+      <div class="side-bottom">
+        <div class="system-card">
+          <strong>시스템 상태</strong>
+          <div class="system-row">
+            <div class="system-main">정상</div>
+            <div class="system-meta">API 연결<br>관리자 모드</div>
+          </div>
+        </div>
+
+        <div class="side-utility">
+          <a href="admin_login.html">⚙ 관리자 로그인</a>
+          <button type="button" onclick="adminLogout()">↪ 관리자 로그아웃</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <h1>회원관리 대시보드</h1>
+          <p>Re:af 전체 회원 목록, 진단 횟수, 권한 정보를 확인합니다.</p>
+        </div>
+
+        <div class="top-actions">
+          <button class="bell" type="button" aria-label="알림">♧</button>
+          <button class="primary-action" type="button" onclick="loadUsers()">새로고침</button>
+          <button class="primary-action danger-action" type="button" onclick="adminLogout()">로그아웃</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <section class="summary-grid" aria-label="관리자 요약 통계">
+          <article class="summary-card total">
+            <div class="summary-title">전체 회원</div>
+            <div class="summary-icon">▣</div>
+            <div class="summary-value"><span id="totalUsers">0</span><small>명</small></div>
+          </article>
+
+          <article class="summary-card admin">
+            <div class="summary-title">관리자 계정</div>
+            <div class="summary-icon">♛</div>
+            <div class="summary-value"><span id="adminUsers">0</span><small>명</small></div>
+          </article>
+
+          <article class="summary-card diagnosis">
+            <div class="summary-title">전체 진단 횟수</div>
+            <div class="summary-icon">♧</div>
+            <div class="summary-value"><span id="totalDiagnosis">0</span><small>회</small></div>
+          </article>
+        </section>
+
+        <div class="dashboard-grid">
+          <div class="left-stack">
+            <section class="filter-panel">
+              <div class="search-box">
+                🔍
+                <input id="userSearch" type="search" placeholder="아이디, 작물, 권한 검색..." />
+              </div>
+
+              <div class="chip-row">
+                <span class="chip-label">▽</span>
+                <button class="chip active" type="button" data-role="전체">전체</button>
+                <button class="chip" type="button" data-role="관리자">관리자</button>
+                <button class="chip" type="button" data-role="일반회원">일반회원</button>
+              </div>
+            </section>
+
+            <section class="table-card">
+              <div class="table-header">
+                <div>
+                  <h2>회원 목록</h2>
+                  <p id="tableSubText">회원 정보를 불러오는 중입니다.</p>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>아이디</th>
+                      <th>가입 날짜</th>
+                      <th>심은 작물</th>
+                      <th>진단 횟수</th>
+                      <th>권한</th>
+                      <th>관리</th>
+                    </tr>
+                  </thead>
+                  <tbody id="userBody">
+                    <tr>
+                      <td colspan="7" class="empty">회원 정보를 불러오는 중입니다...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
 
-          <div class="summary-card">
-            <strong>관리자 계정</strong>
-            <span id="adminUsers">0</span>
-          </div>
+          <aside class="right-stack">
+            <section class="panel-card">
+              <h2 class="panel-title">권한 분포</h2>
+              <p class="panel-sub">관리자/일반회원 비율</p>
+              <div class="dist-list" id="roleDistribution"></div>
+            </section>
 
-          <div class="summary-card">
-            <strong>전체 진단 횟수</strong>
-            <span id="totalDiagnosis">0</span>
-          </div>
+            <section class="panel-card">
+              <h2 class="panel-title">진단 상위 회원</h2>
+              <p class="panel-sub">진단 횟수가 많은 사용자</p>
+              <div class="admin-list" id="topUserList"></div>
+            </section>
+
+            <section class="panel-card">
+              <h2 class="panel-title">작물별 회원 수</h2>
+              <p class="panel-sub">등록된 대표 작물 기준</p>
+              <div class="dist-list" id="cropDistribution"></div>
+            </section>
+
+            <section class="panel-card notice-card">
+              <h2 class="panel-title">관리 안내</h2>
+              <ul class="notice-list">
+                <li>관리자 계정은 삭제할 수 없습니다.</li>
+                <li>회원 삭제 전 진단 기록 보존 여부를 확인하세요.</li>
+                <li>토큰 만료 시 관리자 로그인을 다시 진행하세요.</li>
+              </ul>
+            </section>
+          </aside>
         </div>
       </section>
-
-      <section class="table-card">
-        <div class="table-header">
-          <h2>회원 목록</h2>
-          <p class="desc">일반 회원은 삭제할 수 있으며, 관리자 본인은 보호됩니다.</p>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>아이디</th>
-                <th>가입 날짜</th>
-                <th>심은 작물</th>
-                <th>진단 횟수</th>
-                <th>권한</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody id="userBody">
-              <tr>
-                <td colspan="7" class="empty">회원 정보를 불러오는 중입니다...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     const API_BASE =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:8000"
-      : "https://plant-fastapi.onrender.com";
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://plant-fastapi.onrender.com";
 
     const adminToken = localStorage.getItem("adminToken");
+    let allUsers = [];
+    let activeRole = "전체";
 
     if (!adminToken) {
       alert("관리자 로그인이 필요합니다.");
       location.href = "admin_login.html";
+    }
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    }
+
+    function getInitial(user) {
+      const name = user.nickname || user.username || user.email || "-";
+      return String(name).substring(0, 1);
+    }
+
+    function updateAdminProfile() {
+      const email = localStorage.getItem("adminEmail") || "admin@reaf.kr";
+      const name = localStorage.getItem("adminName") || "관리자";
+      setText("adminEmailText", email);
+      setText("adminNameText", name || "관리자");
+      setText("adminAvatar", String(name || "관").substring(0, 1));
     }
 
     async function loadUsers() {
@@ -390,53 +955,149 @@
         }
 
         const data = await res.json();
-        const users = data.users || [];
-        const body = document.getElementById("userBody");
+        allUsers = data.users || [];
 
-        body.innerHTML = "";
-
-        document.getElementById("totalUsers").textContent = users.length;
-        document.getElementById("adminUsers").textContent =
-          users.filter(user => user.is_admin === 1).length;
-        document.getElementById("totalDiagnosis").textContent =
-          users.reduce((sum, user) => sum + Number(user.diagnosis_count || 0), 0);
-
-        if (users.length === 0) {
-          body.innerHTML = `
-            <tr>
-              <td colspan="7" class="empty">등록된 회원이 없습니다.</td>
-            </tr>
-          `;
-          return;
-        }
-
-        users.forEach(user => {
-          body.innerHTML += `
-            <tr>
-              <td>${user.id}</td>
-              <td>${user.nickname || user.username || "-"}</td>
-              <td>${user.created_at || "-"}</td>
-              <td>${user.planted_crop || "-"}</td>
-              <td>${user.diagnosis_count || 0}</td>
-              <td>
-                ${user.is_admin === 1
-                  ? `<span class="role admin">👑 관리자</span>`
-                  : `<span class="role user">🌱 일반회원</span>`}
-              </td>
-              <td>
-                ${user.is_admin === 1
-                  ? "-"
-                  : `<button class="delete" onclick="deleteUser(${user.id})">삭제</button>`}
-              </td>
-            </tr>
-          `;
-        });
+        renderStats(allUsers);
+        renderTable(allUsers);
+        renderSidePanels(allUsers);
 
       } catch (error) {
         console.error(error);
         alert("회원 목록을 불러오지 못했습니다.");
       }
     }
+
+    function renderStats(users) {
+      setText("totalUsers", users.length);
+      setText("adminUsers", users.filter(user => user.is_admin === 1).length);
+      setText("totalDiagnosis", users.reduce((sum, user) => sum + Number(user.diagnosis_count || 0), 0));
+    }
+
+    function renderTable(users) {
+      const body = document.getElementById("userBody");
+      body.innerHTML = "";
+
+      setText("tableSubText", `총 ${users.length}명의 회원을 표시하고 있습니다.`);
+
+      if (users.length === 0) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty">등록된 회원이 없습니다.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      users.forEach(user => {
+        const displayId = user.nickname || user.username || user.email || "-";
+        body.innerHTML += `
+          <tr>
+            <td>${user.id}</td>
+            <td>
+              <div class="user-cell">
+                <span class="user-avatar">${getInitial(user)}</span>
+                <span class="user-id">${displayId}</span>
+              </div>
+            </td>
+            <td>${formatDate(user.created_at)}</td>
+            <td>${user.planted_crop || "-"}</td>
+            <td>${user.diagnosis_count || 0}</td>
+            <td>
+              ${user.is_admin === 1
+                ? `<span class="role admin">👑 관리자</span>`
+                : `<span class="role user">🌱 일반회원</span>`}
+            </td>
+            <td>
+              ${user.is_admin === 1
+                ? "-"
+                : `<button class="delete" onclick="deleteUser(${user.id})">삭제</button>`}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderSidePanels(users) {
+      const adminCount = users.filter(user => user.is_admin === 1).length;
+      const normalCount = users.length - adminCount;
+      const maxRole = Math.max(adminCount, normalCount, 1);
+
+      document.getElementById("roleDistribution").innerHTML = `
+        <div class="dist-row">
+          <span>관리자</span>
+          <div class="bar"><div class="bar-fill purple" style="width:${adminCount / maxRole * 100}%"></div></div>
+          <strong>${adminCount}</strong>
+        </div>
+        <div class="dist-row">
+          <span>일반회원</span>
+          <div class="bar"><div class="bar-fill blue" style="width:${normalCount / maxRole * 100}%"></div></div>
+          <strong>${normalCount}</strong>
+        </div>
+      `;
+
+      const topUsers = [...users]
+        .sort((a, b) => Number(b.diagnosis_count || 0) - Number(a.diagnosis_count || 0))
+        .slice(0, 5);
+
+      document.getElementById("topUserList").innerHTML = topUsers.length
+        ? topUsers.map(user => `
+          <div class="admin-row">
+            <span class="user-avatar">${getInitial(user)}</span>
+            <span>${user.nickname || user.username || "-"}</span>
+            <strong>${user.diagnosis_count || 0}회</strong>
+          </div>
+        `).join("")
+        : `<div class="admin-row"><span class="user-avatar">-</span><span>기록 없음</span><strong>0회</strong></div>`;
+
+      const cropCounts = users.reduce((acc, user) => {
+        const crop = user.planted_crop || "미등록";
+        acc[crop] = (acc[crop] || 0) + 1;
+        return acc;
+      }, {});
+
+      const cropEntries = Object.entries(cropCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const maxCrop = Math.max(...cropEntries.map(item => item[1]), 1);
+
+      document.getElementById("cropDistribution").innerHTML = cropEntries.map(([crop, count], index) => `
+        <div class="dist-row">
+          <span>${crop}</span>
+          <div class="bar"><div class="bar-fill ${index === 0 ? "" : index === 1 ? "orange" : "blue"}" style="width:${count / maxCrop * 100}%"></div></div>
+          <strong>${count}</strong>
+        </div>
+      `).join("");
+    }
+
+    function applyFilters() {
+      const keyword = document.getElementById("userSearch").value.trim().toLowerCase();
+
+      let filtered = allUsers.filter(user => {
+        const roleText = user.is_admin === 1 ? "관리자" : "일반회원";
+        const text = `${user.id} ${user.nickname || ""} ${user.username || ""} ${user.email || ""} ${user.planted_crop || ""} ${roleText}`.toLowerCase();
+
+        const keywordMatch = !keyword || text.includes(keyword);
+        const roleMatch = activeRole === "전체" || roleText === activeRole;
+
+        return keywordMatch && roleMatch;
+      });
+
+      renderTable(filtered);
+    }
+
+    document.addEventListener("input", (event) => {
+      if (event.target && event.target.id === "userSearch") {
+        applyFilters();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-role]");
+      if (!button) return;
+
+      document.querySelectorAll("[data-role]").forEach(chip => chip.classList.remove("active"));
+      button.classList.add("active");
+      activeRole = button.dataset.role;
+      applyFilters();
+    });
 
     async function deleteUser(userId) {
       const ok = confirm("정말 이 회원을 삭제하시겠습니까?");
@@ -475,11 +1136,10 @@
       location.href = "admin_login.html";
     }
 
+    updateAdminProfile();
     loadUsers();
   </script>
+
   <script src="components/auth.js"></script>
-
-  <script src="components/header.js"></script>
-
 </body>
 </html>

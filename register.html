@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <link rel="stylesheet" href="css/common.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>스마트팜 회원가입</title>
+  <title>회원가입 | Re:af</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
   <style>
     * {
@@ -15,208 +14,331 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --green: #2d6a4f;
+      --green-dark: #123524;
+      --green-soft: #eef8f1;
+      --green-line: #d6e6db;
+      --text: #123524;
+      --sub: #66756b;
+      --white: #ffffff;
+      --error: #991b1b;
+      --success: #166534;
+      --shadow: 0 28px 80px rgba(18, 53, 36, 0.14);
+    }
+
+    html,
     body {
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(135deg, #e8fff0, #f6fff9);
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: #f7fbf8;
+      letter-spacing: -0.035em;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    .register-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(520px, 64%) minmax(480px, 36%);
+      background: #f7fbf8;
+    }
+
+    .brand-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding: 58px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      background:
+        linear-gradient(90deg, rgba(8, 48, 28, 0.82), rgba(8, 75, 39, 0.46)),
+        url("images/farm0.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 25%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 12%, rgba(187, 247, 208, 0.20), transparent 22%);
+      pointer-events: none;
+    }
+
+    .brand-inner,
+    .brand-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 31px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .brand-logo-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.24);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-logo-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      display: none;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 140px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.20);
+      color: rgba(255,255,255,.88);
+      font-size: 15px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-badge::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #52b788;
+      box-shadow: 0 0 18px rgba(82,183,136,.9);
+    }
+
+    .brand-title {
+      margin-top: 34px;
+      font-size: clamp(44px, 5vw, 70px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      color: #ffffff;
+      text-shadow: 0 20px 50px rgba(0,0,0,.22);
+    }
+
+    .brand-desc {
+      margin-top: 28px;
+      max-width: 680px;
+      color: rgba(255,255,255,.86);
+      font-size: 21px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .brand-features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 44px;
+      max-width: 740px;
+    }
+
+    .brand-feature {
+      padding: 18px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-feature strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .brand-feature span {
+      display: block;
+      color: rgba(255,255,255,.74);
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .brand-footer {
+      color: rgba(255,255,255,.52);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-panel {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 30px;
+      padding: 42px 56px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(82, 183, 136, .11), transparent 30%),
+        #f8fbf9;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: white;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    .form-shell {
+      width: min(100%, 560px);
+      max-height: calc(100vh - 56px);
+      overflow-y: auto;
+      padding-right: 4px;
     }
 
-    .left {
-      background: linear-gradient(160deg, #34c759, #0f9d58);
-      color: white;
-      padding: 60px;
-      position: relative;
-      overflow: hidden;
+    .form-shell::-webkit-scrollbar {
+      width: 6px;
     }
 
-    .left::before {
-      content: "";
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 50%;
-      top: -80px;
-      right: -80px;
+    .form-shell::-webkit-scrollbar-thumb {
+      background: #cfe2d5;
+      border-radius: 999px;
     }
 
-    .left::after {
-      content: "";
-      position: absolute;
-      width: 220px;
-      height: 220px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
-      bottom: -60px;
-      left: -60px;
+    .form-header {
+      margin-bottom: 30px;
     }
 
-    .logo {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 25px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .left h1 {
+    .form-header h1 {
       font-size: 42px;
-      line-height: 1.3;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 2;
+      line-height: 1.15;
+      font-weight: 900;
+      color: var(--green-dark);
+      letter-spacing: -0.07em;
     }
 
-    .left p {
-      font-size: 16px;
-      line-height: 1.7;
-      opacity: 0.95;
-      position: relative;
-      z-index: 2;
-    }
-
-    .feature-box {
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .feature {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 16px;
-      border-radius: 14px;
-      backdrop-filter: blur(8px);
-    }
-
-    .feature h3 {
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-
-    .feature p {
-      font-size: 14px;
-    }
-
-    .right {
-      padding: 60px;
-      background: #ffffff;
-    }
-
-    .form-title {
-      font-size: 34px;
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 10px;
-    }
-
-    .form-subtitle {
-      color: #777;
-      margin-bottom: 40px;
-      font-size: 15px;
-    }
-
-    .input-group {
-      margin-bottom: 22px;
-    }
-
-    .input-group label {
-      display: block;
-      margin-bottom: 8px;
+    .form-header p {
+      margin-top: 12px;
+      color: #55705d;
+      font-size: 17px;
       font-weight: 600;
-      color: #333;
-      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .input-group input,
-    .input-group select {
-      width: 100%;
-      padding: 15px 18px;
-      border-radius: 14px;
-      border: 1px solid #dcdcdc;
-      font-size: 15px;
-      transition: 0.3s;
-      background: #fafafa;
-    }
-
-    .input-group input:focus,
-    .input-group select:focus {
-      outline: none;
-      border-color: #28a745;
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(40,167,69,0.12);
-    }
-
-    .row {
+    .form-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
 
-    .checkbox {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      font-size: 14px;
-      color: #666;
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    .checkbox input {
-      width: 18px;
-      height: 18px;
-      accent-color: #28a745;
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--green-dark);
     }
 
-    .signup-btn {
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
       width: 100%;
-      margin-top: 28px;
-      padding: 16px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #34c759, #0f9d58);
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .email-row {
-      display: flex;
-      gap: 10px;
+      height: 56px;
+      border: 1px solid var(--green-line);
+      border-radius: 17px;
+      padding: 0 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f2937;
+      background: rgba(255,255,255,.72);
+      outline: none;
+      transition: all .22s ease;
     }
 
-    .email-row input {
-      flex: 1;
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #6b806f 50%),
+        linear-gradient(135deg, #6b806f 50%, transparent 50%);
+      background-position:
+        calc(100% - 22px) 24px,
+        calc(100% - 16px) 24px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    input::placeholder {
+      color: #9ca99e;
+      font-weight: 600;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #52b788;
+      background: #ffffff;
+      box-shadow: 0 0 0 5px rgba(82,183,136,.14);
+    }
+
+    input[readonly] {
+      background: #eef8f1;
+      color: #55705d;
+    }
+
+    .email-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 136px;
+      gap: 10px;
     }
 
     .verify-btn {
-      white-space: nowrap;
-      padding: 0 16px;
-      border: none;
-      border-radius: 14px;
-      background: #0f9d58;
-      color: white;
-      font-weight: 700;
+      height: 56px;
+      border: 0;
+      border-radius: 17px;
+      background: #2d6a4f;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
       cursor: pointer;
+      transition: all .22s ease;
+      white-space: nowrap;
+    }
+
+    .verify-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: #24583f;
+      box-shadow: 0 12px 24px rgba(45,106,79,.22);
     }
 
     .verify-btn:disabled {
@@ -224,211 +346,304 @@
       cursor: not-allowed;
     }
 
-    .sub-message {
+    .sub-message,
+    .timer-text {
+      min-height: 20px;
       margin-top: 8px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 800;
+      line-height: 1.5;
     }
 
     .timer-text {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #777;
-      font-weight: 600;
+      color: #66756b;
+    }
+
+    .agree-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 4px 0 24px;
+      color: #55705d;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .agree-row input {
+      width: 21px;
+      height: 21px;
+      margin-top: 1px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .signup-btn {
+      width: 100%;
+      height: 62px;
+      border: 0;
+      border-radius: 18px;
+      background: #2d6a4f;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all .24s ease;
+      box-shadow: 0 18px 34px rgba(45,106,79,.22);
     }
 
     .signup-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(15,157,88,0.25);
+      transform: translateY(-3px);
+      background: #24583f;
+      box-shadow: 0 22px 42px rgba(45,106,79,.30);
     }
 
-    .bottom-text {
-      text-align: center;
-      margin-top: 24px;
-      color: #777;
-      font-size: 14px;
-    }
-
-    .bottom-text a {
-      color: #0f9d58;
-      text-decoration: none;
-      font-weight: 600;
+    .signup-btn.loading {
+      pointer-events: none;
+      opacity: .76;
     }
 
     .message {
+      display: none;
+      min-height: 24px;
       margin-top: 18px;
+      padding: 13px 14px;
+      border-radius: 13px;
+      text-align: center;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 800;
+      line-height: 1.5;
     }
 
-    @media (max-width: 900px) {
-      .container {
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .link-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+      color: #8b9b90;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .link {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 1100px) {
+      .register-page {
         grid-template-columns: 1fr;
       }
 
-      .left {
+      .brand-panel {
         display: none;
       }
 
-      .right {
-        padding: 40px 30px;
+      .form-panel {
+        min-height: 100vh;
+        padding: 42px 24px;
       }
 
-      .row {
+      .form-shell {
+        max-height: none;
+        padding: 34px 26px;
+        border-radius: 26px;
+        background: rgba(255,255,255,.94);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(45,106,79,.10);
+      }
+
+      .form-header h1 {
+        font-size: 34px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .form-panel {
+        padding: 24px 16px;
+      }
+
+      .form-shell {
+        padding: 30px 22px;
+      }
+
+      .form-row,
+      .email-row {
         grid-template-columns: 1fr;
+      }
+
+      .form-header {
+        margin-bottom: 28px;
+      }
+
+      .form-header h1 {
+        font-size: 30px;
       }
     }
   </style>
 </head>
 
 <body>
-<div id="commonHeader"></div>
-  <div class="container">
+  <main class="register-page">
+    <section class="brand-panel" aria-label="Re:af 브랜드 소개">
+      <div class="brand-inner">
+        <a class="brand-logo-row" href="index.html" aria-label="Re:af 홈">
+          <span class="brand-logo-box">
+            <img class="brand-logo-img" src="" alt="Re:af 로고">
+            <span aria-hidden="true">🌿</span>
+          </span>
+          <span>Re:af</span>
+        </a>
 
-    <!-- LEFT -->
-    <div class="left">
-      <div class="logo">🌱 Re:ef AI</div>
+        <div class="brand-badge">AI 기반 농업 분석 플랫폼</div>
+        <h2 class="brand-title">스마트 농업을<br>함께 시작해요</h2>
+        <p class="brand-desc">
+          작물 건강 분석부터 병해충 감지, 진단 기록 관리까지.<br>
+          Re:af와 함께 데이터 기반 농업의 첫 걸음을 시작하세요.
+        </p>
 
-      <h1>
-        미래 농업을 위한<br>
-        스마트팜 플랫폼
-      </h1>
-
-      <p>
-        AI 기반 농작물 분석, 실시간 환경 모니터링,
-        자동화 관리 시스템을 한 번에 경험하세요.
-      </p>
-
-      <div class="feature-box">
-
-        <div class="feature">
-          <h3>📊 실시간 데이터 분석</h3>
-          <p>온도, 습도, 토양 상태를 AI가 자동 분석합니다.</p>
-        </div>
-
-        <div class="feature">
-          <h3>🤖 자동 농장 관리</h3>
-          <p>스마트 제어 시스템으로 효율적인 농장 운영이 가능합니다.</p>
-        </div>
-
-        <div class="feature">
-          <h3>🌾 생산량 예측</h3>
-          <p>AI 예측 시스템으로 농작물 수확량을 분석합니다.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="right">
-
-      <h2 class="form-title">회원가입</h2>
-      <p class="form-subtitle">
-        스마트팜 서비스를 시작해보세요 🚜
-      </p>
-
-      <form id="registerForm">
-
-        <div class="row">
-
-          <div class="input-group">
-            <label>이름</label>
-            <input type="text" id="name" placeholder="이름 입력" required />
+        <div class="brand-features" aria-label="서비스 특징">
+          <div class="brand-feature">
+            <strong>🌿 작물 진단</strong>
+            <span>이미지 기반으로 작물 상태를 빠르게 확인합니다.</span>
           </div>
-
-          <div class="input-group">
-            <label>농장 이름</label>
-            <input type="text" id="farm_name" placeholder="농장 이름 입력" />
+          <div class="brand-feature">
+            <strong>📊 기록 관리</strong>
+            <span>분석 이력을 저장하고 변화 흐름을 볼 수 있습니다.</span>
           </div>
-
+          <div class="brand-feature">
+            <strong>🤖 AI 활용</strong>
+            <span>농업 데이터를 더 쉽게 이해하도록 돕습니다.</span>
+          </div>
         </div>
-
-        <div class="input-group">
-          <label>이메일</label>
-          <div class="email-row">
-            <input type="email" id="email" placeholder="example@email.com" required />
-            <button type="button" id="sendCodeBtn" class="verify-btn">인증번호 보내기</button>
-          </div>
-          <div id="emailCheckMessage" class="sub-message"></div>
-        </div>
-
-        <div class="input-group" id="verifyCodeBox" style="display:none;">
-          <label>이메일 인증번호</label>
-          <div class="email-row">
-            <input type="text" id="verificationCode" placeholder="6자리 인증번호 입력" maxlength="6" />
-            <button type="button" id="verifyCodeBtn" class="verify-btn">인증 확인</button>
-          </div>
-          <div id="verifyMessage" class="sub-message"></div>
-          <div id="timerText" class="timer-text"></div>
-        </div>
-
-        <div class="row">
-
-          <div class="input-group">
-            <label>비밀번호</label>
-            <input type="password" id="password" placeholder="비밀번호 입력" required />
-          </div>
-
-          <div class="input-group">
-            <label>비밀번호 확인</label>
-            <input type="password" id="password_confirm" placeholder="비밀번호 재입력" required />
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="input-group">
-            <label>농장 규모</label>
-            <select id="farm_size">
-              <option value="">선택하세요</option>
-              <option value="소규모">소규모</option>
-              <option value="중규모">중규모</option>
-              <option value="대규모">대규모</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label>재배 작물</label>
-            <select id="crop">
-              <option value="">선택하세요</option>
-              <option value="토마토">토마토</option>
-              <option value="상추">상추</option>
-              <option value="딸기">딸기</option>
-              <option value="오이">오이</option>
-            </select>
-          </div>
-
-        </div>
-
-        <div class="checkbox">
-          <input type="checkbox" id="agree" required />
-          <span>개인정보 처리방침 및 이용약관에 동의합니다.</span>
-        </div>
-
-        <button type="submit" class="signup-btn">
-          스마트팜 시작하기
-        </button>
-
-      </form>
-
-      <div id="message" class="message"></div>
-
-      <div class="bottom-text">
-        이미 계정이 있으신가요?
-        <a href="login.html">로그인</a>
       </div>
 
-    </div>
+      <p class="brand-footer">© 2026 Re:af Inc. — 지속가능한 농업을 위한 기술</p>
+    </section>
 
-  </div>
+    <section class="form-panel" aria-label="회원가입 영역">
+      <div class="form-shell">
+        <div class="form-header">
+          <h1>회원가입</h1>
+          <p>Re:af AI와 함께 작물 관리를 시작하세요.</p>
+        </div>
+
+        <form id="registerForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">이름</label>
+              <input type="text" id="name" placeholder="이름 입력" required autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="farm_name">농장 이름</label>
+              <input type="text" id="farm_name" placeholder="농장 이름 입력" autocomplete="organization" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <div class="email-row">
+              <input type="email" id="email" placeholder="example@reaf.kr" required autocomplete="email" />
+              <button type="button" id="sendCodeBtn" class="verify-btn">인증번호 전송</button>
+            </div>
+            <div id="emailCheckMessage" class="sub-message"></div>
+          </div>
+
+          <div class="form-group" id="verifyCodeBox" style="display:none;">
+            <label for="verificationCode">이메일 인증번호</label>
+            <div class="email-row">
+              <input type="text" id="verificationCode" placeholder="6자리 인증번호" maxlength="6" inputmode="numeric" />
+              <button type="button" id="verifyCodeBtn" class="verify-btn">인증 확인</button>
+            </div>
+            <div id="verifyMessage" class="sub-message"></div>
+            <div id="timerText" class="timer-text"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">비밀번호</label>
+              <input type="password" id="password" placeholder="비밀번호 입력" required autocomplete="new-password" />
+            </div>
+
+            <div class="form-group">
+              <label for="password_confirm">비밀번호 확인</label>
+              <input type="password" id="password_confirm" placeholder="비밀번호 재입력" required autocomplete="new-password" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="farm_size">농장 규모</label>
+              <select id="farm_size">
+                <option value="">선택하세요</option>
+                <option value="소규모">소규모</option>
+                <option value="중규모">중규모</option>
+                <option value="대규모">대규모</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="crop">재배 작물</label>
+              <select id="crop">
+                <option value="">선택하세요</option>
+                <option value="토마토">토마토</option>
+                <option value="상추">상추</option>
+                <option value="딸기">딸기</option>
+                <option value="오이">오이</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="agree-row">
+            <input type="checkbox" id="agree" required />
+            <span>개인정보 처리방침 및 이용약관에 동의합니다.</span>
+          </label>
+
+          <button type="submit" class="signup-btn" id="signupBtn">회원가입 →</button>
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div class="link-group">
+          <span>이미 계정이 있으신가요?</span>
+          <a class="link" href="login.html">로그인</a>
+          <span>|</span>
+          <a class="link" href="index.html">← 돌아가기</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     const API_BASE =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? "http://127.0.0.1:8000"
-      : "https://plant-fastapi.onrender.com";
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://plant-fastapi.onrender.com";
 
     const registerForm = document.getElementById("registerForm");
     const message = document.getElementById("message");
@@ -439,11 +654,31 @@
     const emailCheckMessage = document.getElementById("emailCheckMessage");
     const verifyMessage = document.getElementById("verifyMessage");
     const timerText = document.getElementById("timerText");
+    const signupBtn = document.getElementById("signupBtn");
 
     let emailVerified = false;
     let verifiedEmail = "";
     let timerId = null;
     let remainSeconds = 180;
+
+    function setSubMessage(element, text, type = "normal") {
+      element.textContent = text;
+      element.style.color =
+        type === "success" ? "#166534" :
+        type === "error" ? "#991b1b" :
+        "#66756b";
+    }
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = `message show ${type}`;
+
+      if (type === "error") {
+        setTimeout(() => {
+          message.classList.remove("show");
+        }, 5000);
+      }
+    }
 
     function startTimer() {
       clearInterval(timerId);
@@ -458,8 +693,7 @@
         if (remainSeconds <= 0) {
           clearInterval(timerId);
           emailVerified = false;
-          verifyMessage.style.color = "#d84315";
-          verifyMessage.textContent = "인증 시간이 만료되었습니다. 다시 요청해주세요.";
+          setSubMessage(verifyMessage, "인증 시간이 만료되었습니다. 다시 요청해주세요.", "error");
         }
 
         remainSeconds--;
@@ -470,10 +704,12 @@
       const email = document.getElementById("email").value.trim();
 
       if (!email) {
-        emailCheckMessage.style.color = "#d84315";
-        emailCheckMessage.textContent = "이메일을 먼저 입력해주세요.";
+        setSubMessage(emailCheckMessage, "이메일을 먼저 입력해주세요.", "error");
         return;
       }
+
+      emailVerified = false;
+      verifiedEmail = "";
 
       try {
         sendCodeBtn.disabled = true;
@@ -494,17 +730,15 @@
         }
 
         verifyCodeBox.style.display = "block";
-        emailCheckMessage.style.color = "#0f9d58";
-        emailCheckMessage.textContent = "인증번호를 전송했습니다. 이메일을 확인해주세요.";
-        verifyMessage.textContent = "";
+        setSubMessage(emailCheckMessage, "인증번호를 전송했습니다. 이메일을 확인해주세요.", "success");
+        setSubMessage(verifyMessage, "");
         startTimer();
 
       } catch (error) {
-        emailCheckMessage.style.color = "#d84315";
-        emailCheckMessage.textContent = error.message;
+        setSubMessage(emailCheckMessage, error.message, "error");
       } finally {
         sendCodeBtn.disabled = false;
-        sendCodeBtn.textContent = "인증번호 보내기";
+        sendCodeBtn.textContent = "인증번호 전송";
       }
     });
 
@@ -513,8 +747,7 @@
       const code = verificationCode.value.trim();
 
       if (!code) {
-        verifyMessage.style.color = "#d84315";
-        verifyMessage.textContent = "인증번호를 입력해주세요.";
+        setSubMessage(verifyMessage, "인증번호를 입력해주세요.", "error");
         return;
       }
 
@@ -541,8 +774,7 @@
         verifiedEmail = email;
         clearInterval(timerId);
 
-        verifyMessage.style.color = "#0f9d58";
-        verifyMessage.textContent = "이메일 인증이 완료되었습니다.";
+        setSubMessage(verifyMessage, "이메일 인증이 완료되었습니다.", "success");
         timerText.textContent = "인증 완료 ✅";
 
         document.getElementById("email").readOnly = true;
@@ -551,8 +783,7 @@
         verifyCodeBtn.disabled = true;
 
       } catch (error) {
-        verifyMessage.style.color = "#d84315";
-        verifyMessage.textContent = error.message;
+        setSubMessage(verifyMessage, error.message, "error");
       } finally {
         verifyCodeBtn.textContent = "인증 확인";
       }
@@ -571,26 +802,22 @@
       const agree = document.getElementById("agree").checked;
 
       if (!name || !email || !password || !passwordConfirm) {
-        message.style.color = "#d84315";
-        message.textContent = "필수 항목을 모두 입력해주세요.";
+        showMessage("필수 항목을 모두 입력해주세요.", "error");
         return;
       }
 
       if (password !== passwordConfirm) {
-        message.style.color = "#d84315";
-        message.textContent = "비밀번호가 일치하지 않습니다.";
+        showMessage("비밀번호가 일치하지 않습니다.", "error");
         return;
       }
 
       if (!agree) {
-        message.style.color = "#d84315";
-        message.textContent = "이용약관에 동의해주세요.";
+        showMessage("이용약관에 동의해주세요.", "error");
         return;
       }
 
       if (!emailVerified || verifiedEmail !== email) {
-        message.style.color = "#d84315";
-        message.textContent = "이메일 인증을 완료해주세요.";
+        showMessage("이메일 인증을 완료해주세요.", "error");
         return;
       }
 
@@ -603,6 +830,10 @@
       formData.append("crop", crop);
 
       try {
+        signupBtn.classList.add("loading");
+        signupBtn.disabled = true;
+        signupBtn.textContent = "가입 처리 중...";
+
         const response = await fetch(`${API_BASE}/register`, {
           method: "POST",
           body: formData
@@ -614,21 +845,20 @@
           throw new Error(data.detail || "회원가입에 실패했습니다.");
         }
 
-        message.style.color = "#0f9d58";
-        message.textContent = "회원가입 완료! 로그인 페이지로 이동합니다.";
+        showMessage("회원가입 완료! 로그인 페이지로 이동합니다.", "success");
 
         setTimeout(() => {
           window.location.href = "login.html";
         }, 1200);
 
       } catch (error) {
-        message.style.color = "#d84315";
-        message.textContent = error.message;
+        showMessage(error.message, "error");
+      } finally {
+        signupBtn.classList.remove("loading");
+        signupBtn.disabled = false;
+        signupBtn.textContent = "회원가입 →";
       }
     });
   </script>
-<script src="components/auth.js"></script>
-<script src="components/header.js"></script>
-
 </body>
 </html>

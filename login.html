@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <link rel="stylesheet" href="css/common.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로그인 | Re:Leaf AI</title>
+  <title>로그인 | Re:af</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
   <style>
     * {
@@ -15,137 +14,338 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --green: #2d6a4f;
+      --green-dark: #123524;
+      --green-soft: #eef8f1;
+      --green-line: #d6e6db;
+      --kakao: #fee500;
+      --naver: #03c75a;
+      --text: #123524;
+      --sub: #66756b;
+      --white: #ffffff;
+      --shadow: 0 28px 80px rgba(18, 53, 36, 0.14);
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
     body {
       min-height: 100vh;
       font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        linear-gradient(
-          135deg,
-          #e8fff0 0%,
-          #d8ffe5 35%,
-          #c7f5d5 70%,
-          #b7edc8 100%
-        );
+      color: var(--text);
+      background: #f7fbf8;
+      letter-spacing: -0.035em;
+      overflow-x: hidden;
     }
 
-    .page-wrap {
-      min-height: calc(100vh - 72px);
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(520px, 64%) minmax(420px, 36%);
+      background: #f7fbf8;
+    }
+
+    .brand-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding: 58px 64px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      background:
+        linear-gradient(90deg, rgba(8, 48, 28, 0.80), rgba(8, 75, 39, 0.45)),
+        url("images/farm0.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 25%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 12%, rgba(187, 247, 208, 0.20), transparent 22%);
+      pointer-events: none;
+    }
+
+    .brand-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-logo-row{
+        display:flex;
+        align-items:center;
+    }
+
+    .brand-main-logo{
+        height:55px;
+        width:auto;
+        display:block;
+    }
+    .brand-logo-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
       align-items: center;
-      padding: 40px 20px;
+      justify-content: center;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.24);
+      backdrop-filter: blur(8px);
     }
 
-    .container {
-      width: 100%;
-      max-width: 430px;
-    }
 
-    .auth-card {
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 46px 34px;
-      box-shadow: 0 20px 55px rgba(15, 157, 88, 0.16);
-      border: 1px solid rgba(15, 157, 88, 0.12);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 38px;
-    }
-
-    .logo {
-      font-size: 56px;
-      margin-bottom: 16px;
-      display: inline-block;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-    }
-
-    h1 {
-      font-size: 30px;
-      font-weight: 800;
-      color: #123524;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 170px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.20);
+      color: rgba(255,255,255,.88);
       font-size: 15px;
-      color: #5f6f66;
-      font-weight: 400;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-badge::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #52b788;
+      box-shadow: 0 0 18px rgba(82,183,136,.9);
+    }
+
+    .brand-title {
+      margin-top: 34px;
+      font-size: clamp(48px, 5vw, 72px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      color: #ffffff;
+      text-shadow: 0 20px 50px rgba(0,0,0,.22);
+    }
+
+    .brand-desc {
+      margin-top: 28px;
+      max-width: 660px;
+      color: rgba(255,255,255,.86);
+      font-size: 21px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .brand-stats {
+      display: flex;
+      gap: 46px;
+      margin-top: 44px;
+    }
+
+    .brand-stat strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .brand-stat span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,255,255,.72);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-footer {
+      position: relative;
+      z-index: 1;
+      color: rgba(255,255,255,.52);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-panel {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 64px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(82, 183, 136, .11), transparent 30%),
+        #f8fbf9;
+    }
+
+    .form-shell {
+      width: min(100%, 500px);
+    }
+
+    .form-header {
+      margin-bottom: 42px;
+    }
+
+    .form-header h1 {
+      font-size: 43px;
+      line-height: 1.15;
+      font-weight: 900;
+      color: var(--green-dark);
+      letter-spacing: -0.07em;
+    }
+
+    .form-header p {
+      margin-top: 12px;
+      color: #55705d;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.6;
     }
 
     .form-group {
-      margin-bottom: 22px;
+      margin-bottom: 24px;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
 
     label {
       display: block;
-      font-size: 14px;
-      font-weight: 700;
-      color: #14532d;
-      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--green-dark);
     }
 
-    input {
+    .label-link {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--green);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
       width: 100%;
-      height: 52px;
-      border: 1px solid #cfe8d6;
-      border-radius: 14px;
-      padding: 0 16px;
-      font-size: 15px;
-      font-family: inherit;
-      background: #f8fff9;
+      height: 58px;
+      border: 1px solid var(--green-line);
+      border-radius: 17px;
+      padding: 0 20px;
+      font-size: 16px;
+      font-weight: 600;
       color: #1f2937;
-      transition: all 0.3s ease;
+      background: rgba(255,255,255,.72);
       outline: none;
+      transition: all .22s ease;
     }
 
     input::placeholder {
-      color: #9ca3af;
+      color: #9ca99e;
+      font-weight: 600;
     }
 
     input:focus {
-      background: white;
-      border-color: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14);
+      border-color: #52b788;
+      background: #ffffff;
+      box-shadow: 0 0 0 5px rgba(82,183,136,.14);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #6b806f;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .auto-login-row {
+      margin: -6px 0 24px;
+    }
+
+    .auto-login-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #55705d;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .auto-login-label input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--green);
+      cursor: pointer;
     }
 
     .btn-submit {
       width: 100%;
-      height: 54px;
-      margin-top: 26px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #34c759, #0f9d58);
-      color: white;
-      font-size: 16px;
-      font-weight: 800;
-      font-family: inherit;
+      height: 62px;
+      border: 0;
+      border-radius: 18px;
+      background: #2d6a4f;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 900;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 26px rgba(15, 157, 88, 0.22);
+      transition: all .24s ease;
+      box-shadow: 0 18px 34px rgba(45,106,79,.22);
     }
 
     .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 32px rgba(15, 157, 88, 0.3);
+      transform: translateY(-3px);
+      background: #24583f;
+      box-shadow: 0 22px 42px rgba(45,106,79,.30);
+    }
+
+    .btn-submit.loading {
+      pointer-events: none;
+      opacity: .76;
     }
 
     .message {
+      display: none;
       min-height: 24px;
       margin-top: 18px;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 10px;
+      padding: 13px 14px;
+      border-radius: 13px;
       text-align: center;
-      display: none;
+      font-size: 14px;
+      font-weight: 800;
     }
 
     .message.show {
@@ -163,17 +363,18 @@
       color: #991b1b;
       border: 1px solid #fecaca;
     }
+
     .verify-link-box {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 12px;
+      display: none;
+      margin-top: 12px;
+      padding: 13px 14px;
+      border-radius: 13px;
       background: #fff7ed;
       border: 1px solid #fed7aa;
       color: #9a3412;
       font-size: 13px;
-      font-weight: 700;
-      line-height: 1.6;
-      display: none;
+      font-weight: 800;
+      line-height: 1.65;
     }
 
     .verify-link-box.show {
@@ -181,171 +382,205 @@
     }
 
     .verify-link-box a {
-      color: #0f9d58;
-      font-weight: 800;
-      text-decoration: none;
+      color: var(--green);
+      font-weight: 900;
     }
 
     .divider {
-      margin: 30px 0 22px;
-      position: relative;
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      margin: 36px 0 26px;
+      color: #8b9b90;
+      font-size: 14px;
+      font-weight: 800;
     }
 
-    .divider::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
+    .divider::before,
+    .divider::after {
+      content: "";
       height: 1px;
-      background: #e5e7eb;
-    }
-
-    .divider-text {
-      position: relative;
-      background: white;
-      padding: 0 12px;
-      color: #9ca3af;
-      font-size: 13px;
-      font-weight: 600;
+      background: #dce8df;
     }
 
     .social-buttons {
       display: grid;
-      gap: 10px;
-      margin-bottom: 24px;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
     .social-btn {
-      height: 48px;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
+      height: 56px;
+      border-radius: 17px;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 14px;
-      color: #1f2937;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 900;
+      border: 1px solid #e5e7eb;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(15,23,42,.08);
     }
 
     .kakao {
-      background: #fee500;
-      border-color: #fee500;
+      background: var(--kakao);
+      border-color: var(--kakao);
       color: #191919;
     }
 
     .naver {
-      background: #03c75a;
-      border-color: #03c75a;
-      color: white;
+      background: var(--naver);
+      border-color: var(--naver);
+      color: #ffffff;
     }
 
     .link-group {
-      text-align: center;
-      line-height: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #d4ddd6;
     }
 
     .link {
-      display: inline-block;
-      margin: 0 8px;
-      font-size: 14px;
-      color: #0f9d58;
-      text-decoration: none;
-      font-weight: 700;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 900;
     }
 
     .link:hover {
       text-decoration: underline;
     }
 
-    .btn-submit.loading {
-      pointer-events: none;
-      opacity: 0.8;
-    }
-
-    @media (max-width: 480px) {
-      .auth-card {
-        padding: 36px 24px;
+    @media (max-width: 980px) {
+      .login-page {
+        grid-template-columns: 1fr;
       }
 
-      h1 {
-        font-size: 26px;
+      .brand-panel {
+        display: none;
       }
 
-      .logo {
-        font-size: 48px;
+      .form-panel {
+        min-height: 100vh;
+        padding: 42px 24px;
+      }
+
+      .form-shell {
+        padding: 34px 26px;
+        border-radius: 26px;
+        background: rgba(255,255,255,.94);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(45,106,79,.10);
+      }
+
+      .form-header h1 {
+        font-size: 34px;
       }
     }
-    .auto-login-row {
-      margin-top: -8px;
-      margin-bottom: 8px;
-    }
 
-    .auto-login-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      font-size: 14px;
-      font-weight: 700;
-      color: #14532d;
-      cursor: pointer;
-      user-select: none;
-    }
+    @media (max-width: 520px) {
+      .form-panel {
+        padding: 24px 16px;
+      }
 
-    .auto-login-label input {
-      width: 16px;
-      height: 16px;
-      accent-color: #0f9d58;
-      cursor: pointer;
+      .form-shell {
+        padding: 30px 22px;
+      }
+
+      .form-header {
+        margin-bottom: 30px;
+      }
+
+      .form-header h1 {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div id="commonHeader"></div>
+  <main class="login-page">
+    <section class="brand-panel" aria-label="Re:af 브랜드 소개">
+      <div class="brand-inner">
+        <a class="brand-logo-row" href="index.html">
+            <img
+                class="brand-main-logo"
+                src="assets/logo.png"
+                alt="Re:af 로고"
+            >
+        </a>
 
-  <main class="page-wrap">
-    <div class="container">
-      <div class="auth-card">
-        <div class="header">
-          <div class="logo">🌿</div>
+        <div class="brand-badge">AI 기반 농업 분석 플랫폼</div>
+        <h2 class="brand-title">스마트 농업의<br>새로운 기준</h2>
+        <p class="brand-desc">
+          AI가 작물 건강과 병해충 감지, 수확량 예측을 돕습니다.<br>
+          데이터 기반으로 농업의 미래를 만들어 가세요.
+        </p>
+
+        <div class="brand-stats" aria-label="서비스 지표">
+          <div class="brand-stat"><strong>12,400+</strong><span>분석 건수</span></div>
+          <div class="brand-stat"><strong>98.2%</strong><span>진단 정확도</span></div>
+          <div class="brand-stat"><strong>340+</strong><span>농가 파트너</span></div>
+        </div>
+      </div>
+
+      <p class="brand-footer">© 2026 Re:af Inc. — 지속가능한 농업을 위한 기술</p>
+    </section>
+
+    <section class="form-panel" aria-label="로그인 영역">
+      <div class="form-shell">
+        <div class="form-header">
           <h1>로그인</h1>
-          <p class="subtitle">Re:Leaf AI와 함께 작물을 돌봐보세요</p>
+          <p>Re:af AI와 함께 작물 관리를 시작하세요.</p>
         </div>
 
         <form id="loginForm">
           <div class="form-group">
             <label for="email">이메일</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="example@email.com"
-              required
-              autocomplete="email"
-            />
+            <div class="input-wrap">
+              <input
+                type="email"
+                id="email"
+                placeholder="example@reaf.kr"
+                required
+                autocomplete="email"
+              />
+            </div>
           </div>
 
           <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="비밀번호를 입력하세요"
-              required
-              autocomplete="current-password"
-            />
+            <div class="label-row">
+              <label for="password">비밀번호</label>
+              <a class="label-link" href="reset_password.html">비밀번호 찾기</a>
+            </div>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                placeholder="비밀번호를 입력하세요"
+                required
+                autocomplete="current-password"
+              />
+              <button class="password-toggle" type="button" id="passwordToggle" aria-label="비밀번호 보기">⌾</button>
+            </div>
           </div>
+
           <div class="auto-login-row">
             <label class="auto-login-label">
               <input type="checkbox" id="autoLoginCheck" />
-              <span>자동로그인</span>
+              <span>로그인 상태 유지</span>
             </label>
           </div>
 
-          <button type="submit" class="btn-submit">로그인하기</button>
+          <button type="submit" class="btn-submit">로그인 →</button>
         </form>
 
         <div id="message" class="message"></div>
@@ -354,24 +589,21 @@
           <a href="register.html">회원가입 페이지에서 이메일 인증하기</a>
         </div>
 
-        <div class="divider">
-          <span class="divider-text">또는</span>
-        </div>
+        <div class="divider"><span>또는</span></div>
 
         <div class="social-buttons">
-          <a class="social-btn kakao" id="kakaoLoginBtn" href="#">카카오로 시작하기</a>
-          <a class="social-btn naver" id="naverLoginBtn" href="#">네이버로 시작하기</a>
+          <a class="social-btn kakao" id="kakaoLoginBtn" href="#">💬 카카오로 계속하기</a>
+          <a class="social-btn naver" id="naverLoginBtn" href="#">N 네이버로 계속하기</a>
         </div>
 
         <div class="link-group">
+          <span>아직 계정이 없으신가요?</span>
           <a class="link" href="register.html">회원가입</a>
-          <span style="color: #ddd;">|</span>
-          <a class="link" href="reset_password.html">비밀번호 찾기</a>
-          <span style="color: #ddd;">|</span>
+          <span>|</span>
           <a class="link" href="index.html">← 돌아가기</a>
         </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <script>
@@ -384,8 +616,17 @@
     const loginForm = document.getElementById("loginForm");
     const message = document.getElementById("message");
     const submitBtn = loginForm.querySelector(".btn-submit");
-
     const verifyLinkBox = document.getElementById("verifyLinkBox");
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("passwordToggle");
+
+    if (passwordToggle) {
+      passwordToggle.addEventListener("click", function () {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        passwordToggle.textContent = isPassword ? "⊘" : "⌾";
+      });
+    }
 
     loginForm.addEventListener("submit", async function (event) {
       event.preventDefault();
@@ -404,9 +645,6 @@
       }
 
       const formData = new FormData();
-
-      // FastAPI OAuth2PasswordRequestForm은 필드명이 username이어야 합니다.
-      // 우리는 이메일 로그인으로 쓰되, 서버에는 username 필드로 보냅니다.
       formData.append("username", email);
       formData.append("password", password);
 
@@ -415,6 +653,7 @@
       try {
         submitBtn.classList.add("loading");
         submitBtn.disabled = true;
+        submitBtn.textContent = "로그인 중...";
 
         const response = await fetch(`${API_BASE}/login`, {
           method: "POST",
@@ -430,11 +669,11 @@
           throw new Error(data.detail || "로그인에 실패했습니다.");
         }
 
-
         const autoLoginCheck = document.getElementById("autoLoginCheck");
         const isAutoLogin = autoLoginCheck && autoLoginCheck.checked;
 
         localStorage.setItem("token", data.access_token);
+        localStorage.setItem("access_token", data.access_token);
         localStorage.setItem("username", data.name || data.email || email);
         localStorage.setItem("email", data.email || email);
         localStorage.setItem("loginTime", new Date().toISOString());
@@ -461,6 +700,7 @@
       } finally {
         submitBtn.classList.remove("loading");
         submitBtn.disabled = false;
+        submitBtn.textContent = "로그인 →";
       }
     });
 
@@ -486,14 +726,11 @@
       naverLoginBtn.href = `${API_BASE}/auth/naver/login`;
     }
 
-    document.getElementById("password").addEventListener("keypress", function(event) {
+    passwordInput.addEventListener("keypress", function(event) {
       if (event.key === "Enter") {
         loginForm.dispatchEvent(new Event("submit"));
       }
     });
   </script>
-  <script src="components/auth.js"></script>
-  <script src="components/header.js"></script>
-
 </body>
 </html>
