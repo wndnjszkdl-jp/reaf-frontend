@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/navbar.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
@@ -43,7 +44,7 @@
 
     .regen-header h3 {
       margin: 0 0 10px;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       color: #111827;
     }
@@ -198,182 +199,8 @@
       overflow-x: hidden;
     }
 
-    #commonHeader,
-    .common-header,
-    .rf-topbar {
-      display: none !important;
-    }
-
     a { color: inherit; text-decoration: none; }
     button, input, select { font-family: inherit; }
-
-    /* ===== 상단 미니바 ===== */
-    .utility-bar {
-      height: 34px;
-      padding: 0 8%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,.92);
-      border-bottom: 1px solid rgba(15,23,42,.06);
-      font-size: 13px;
-      color: #667085;
-      position: relative;
-      z-index: 80;
-    }
-
-    .utility-left,
-    .utility-right {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .utility-bar a,
-    .utility-bar button {
-      border: 0;
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      font-weight: 700;
-      color: #475467;
-    }
-    /* ===== 헤더/메가메뉴 통일 정렬 ===== */
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 70;
-      background: rgba(255,255,255,.96);
-      border-bottom: 1px solid rgba(15,23,42,.06);
-    }
-    .hamburger {
-      width: 48px;
-      height: 48px;
-      padding: 0;
-      margin: 0;
-      border: 0;
-      outline: none;
-      background: transparent;
-      appearance: none;
-      -webkit-appearance: none;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 30px;
-      line-height: 1;
-      font-weight: 800;
-      color: #111827;
-      cursor: pointer;
-    }
-
-    .hamburger:hover {
-      color: var(--green);
-    }
-
-    .main-nav {
-      --logo-col: 170px;
-      --menu-col: 1fr;
-      --hamburger-col: 48px;
-
-      height: 72px;
-      width: min(1380px, calc(100% - 72px));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: var(--logo-col) var(--menu-col) var(--hamburger-col);
-      align-items: center;
-    }
-
-    .brand-logo {
-      width: 118px;
-      height: 52px;
-      object-fit: contain;
-      object-position: left center;
-    }
-
-    .nav-menu {
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: center;
-    }
-
-    .nav-item {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      position: relative;
-    }
-
-    .nav-item::after {
-      content: "";
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      width: 0;
-      height: 4px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--green), var(--lime));
-      transform: translateX(-50%);
-      transition: width .25s ease;
-    }
-
-    .nav-item:hover::after,
-    .nav-item.active::after {
-      width: 64px;
-    }
-
-    .mega-panel {
-      display: none;
-      background: rgba(255,255,255,.98);
-      border-top: 1px solid #edf0f3;
-      border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 20px 40px rgba(15,23,42,.08);
-    }
-
-    .site-header:hover .mega-panel {
-      display: block;
-    }
-
-    .mega-grid {
-      width: min(1380px, calc(100% - 72px));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 170px repeat(5, 1fr) 48px;
-      min-height: 190px;
-    }
-
-    .mega-col {
-      padding: 24px 18px;
-      text-align: center;
-      border-right: 1px solid #edf0f3;
-    }
-
-    .mega-col:first-child {
-      grid-column: 2;
-      border-left: 1px solid #edf0f3;
-      background: #f8fafc;
-    }
-
-    .mega-col h3 {
-      margin: 0 0 18px;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .mega-col a {
-      display: block;
-      margin: 0 0 12px;
-      color: #667085;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-    }
     /* ===== 히어로 ===== */
     .hero {
       position: relative;
@@ -385,9 +212,9 @@
       background:
         linear-gradient(
           90deg,
-          rgba(5, 58, 28, .45) 0%,
-          rgba(8, 91, 38, .22) 46%,
-          rgba(7, 74, 34, .10) 100%
+          rgba(5, 58, 28, .18) 0%,
+          rgba(8, 91, 38, .08) 46%,
+          rgba(7, 74, 34, .03) 100%
         ),
         url("images/farm0.png");
 
@@ -396,13 +223,14 @@
     }
 
     .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
       background:
-        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, .30), transparent 18%),
-        radial-gradient(circle at 12% 70%, rgba(174, 255, 94, .16), transparent 24%);
-      pointer-events: none;
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.72) 0%,
+          rgba(255,255,255,.48) 38%,
+          rgba(255,255,255,.12) 68%,
+          rgba(255,255,255,.02) 100%
+        ) !important;
     }
 
     .hero::after {
@@ -461,21 +289,17 @@
       animation: fadeSlide .85s .08s ease both;
     }
 
-    .hero-title .highlight-green {
-      color: #4ade80;
-      text-shadow: 0 0 26px rgba(74,222,128,.34);
+    .hero-title {
+      color: #071b13 !important;
+      text-shadow:
+        0 2px 0 rgba(255,255,255,.75),
+        0 10px 28px rgba(255,255,255,.55) !important;
     }
 
     .hero-subtitle {
-      max-width: 700px;
-      margin: 0 0 34px;
-      font-size: 21px;
-      line-height: 1.55;
-      font-weight: 650;
-      color: rgba(255,255,255,.92);
-      animation: fadeSlide .85s .16s ease both;
+      color: rgba(7,27,19,.86) !important;
+      text-shadow: 0 1px 0 rgba(255,255,255,.65) !important;
     }
-
     .hero-actions {
       display: flex;
       gap: 14px;
@@ -497,7 +321,7 @@
       font-size: 16px;
       font-weight: 900;
       transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(4px);
       position: relative;
       overflow: hidden;
     }
@@ -771,6 +595,126 @@
     .source-text { margin:8px 0 0; color:#6b7280; font-size:12px; }
     .history-link { display:block; margin-top:13px; text-align:center; color:var(--green); font-size:14px; font-weight:900; }
     .tip { margin:18px 0 0; padding-top:16px; border-top:1px solid #e5e7eb; color:#6b7280; font-size:13px; line-height:1.7; text-align:center; }
+
+    /* ===== Re:af PNG 아이콘 적용 ===== */
+    .reaf-icon-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .inline-ui-icon {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: -5px;
+      margin-right: 6px;
+      filter: drop-shadow(0 4px 6px rgba(22, 163, 74, .14));
+    }
+
+    .hero-badge .inline-ui-icon,
+    .field-label .inline-ui-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+
+    .upload-icon,
+    .regen-upload-icon,
+    .stat-icon,
+    .dashboard-title-icon,
+    .analysis-icon {
+      overflow: hidden;
+    }
+
+    .upload-icon img,
+    .regen-upload-icon img,
+    .stat-icon img,
+    .dashboard-title-icon img,
+    .analysis-icon img {
+      width: 72%;
+      height: 72%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 7px 8px rgba(15, 23, 42, .10));
+    }
+
+    .regen-upload-icon,
+    .dashboard-title-icon,
+    .analysis-icon {
+      display: inline-grid;
+      place-items: center;
+      background: #ecfdf5;
+      color: var(--green);
+    }
+
+    .regen-upload-icon {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 12px;
+      border-radius: 24px;
+    }
+
+    .dashboard-title-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      vertical-align: middle;
+    }
+
+    .analysis-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: transparent;
+    }
+
+    .dataset-emoji {
+      position: absolute;
+      right: 18px;
+      bottom: 12px;
+      width: 74px;
+      height: 74px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #f0fdf4, #ffffff);
+      box-shadow: 0 14px 26px rgba(15, 23, 42, .08);
+      font-size: 34px;
+      overflow: hidden;
+    }
+
+    .dataset-emoji img {
+      width: 86%;
+      height: 86%;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 10px 10px rgba(22, 163, 74, .13));
+    }
+
+    .crop-option-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: inline-grid;
+      place-items: center;
+      background: #ecfdf5;
+      overflow: hidden;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .crop-option-icon img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      display: block;
+    }
+
 
     /* ===== 하단 섹션 ===== */
     .section { padding: 84px 76px; }
@@ -1081,12 +1025,6 @@
     }
 
     @media (max-width: 1080px) {
-      .nav-menu { display: none; }
-      .main-nav {
-        padding: 0 20px;
-        grid-template-columns: 1fr 48px;
-      }
-      .mega-panel { display: none !important; }
       .hero { padding: 48px 20px 78px; }
       .hero-grid { grid-template-columns: 1fr; gap: 34px; }
       .hero-stats { grid-template-columns: 1fr; margin: 24px 20px 0; }
@@ -1099,10 +1037,789 @@
       .footer-bottom { flex-direction: column; }
     }
 
-  </style>
+
+    /* ===== 최종 아이콘 오버라이드: 기존 CSS보다 뒤에서 적용 ===== */
+    .dataset-emoji {
+      position: absolute !important;
+      right: 18px !important;
+      bottom: 12px !important;
+      width: 74px !important;
+      height: 74px !important;
+      border-radius: 24px !important;
+      display: grid !important;
+      place-items: center !important;
+      background: linear-gradient(180deg, #f0fdf4, #ffffff) !important;
+      box-shadow: 0 14px 26px rgba(15, 23, 42, .08) !important;
+      font-size: 34px !important;
+      overflow: hidden !important;
+    }
+    .dataset-emoji img {
+      width: 86% !important;
+      height: 86% !important;
+      object-fit: contain !important;
+      display: block !important;
+      filter: drop-shadow(0 10px 10px rgba(22, 163, 74, .13)) !important;
+    }
+    .stat-icon,
+    .upload-icon,
+    .regen-upload-icon,
+    .dashboard-title-icon,
+    .analysis-icon {
+      display: grid !important;
+      place-items: center !important;
+    }
+    .stat-icon img,
+    .upload-icon img,
+    .regen-upload-icon img,
+    .dashboard-title-icon img,
+    .analysis-icon img {
+      max-width: 78% !important;
+      max-height: 78% !important;
+      width: 78% !important;
+      height: 78% !important;
+      object-fit: contain !important;
+      display: block !important;
+    }
+    .dashboard-title,
+    .stats-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+    .inline-ui-icon {
+      width: 22px !important;
+      height: 22px !important;
+      object-fit: contain !important;
+      display: inline-block !important;
+      vertical-align: -5px !important;
+      margin-right: 6px !important;
+    }
+
+
+    /* =========================================================
+       Re:af Emerald Light Glass Theme Override
+       - 기능 스크립트는 건드리지 않고 디자인만 1번 테마로 재정의
+       - 네비/메가메뉴 동일 그리드 정렬
+       - 재생성 업로드 박스와 질병진단 업로드 박스 디자인 통일
+    ========================================================= */
+
+    @font-face {
+      font-family: "GmarketSansMedium";
+      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --emerald: #14b86a;
+      --emerald-2: #22c55e;
+      --emerald-3: #7df0b0;
+      --emerald-dark: #0b5b37;
+      --leaf-ink: #09231a;
+      --leaf-sub: #385a48;
+      --glass-white: rgba(255, 255, 255, .68);
+      --glass-white-strong: rgba(255, 255, 255, .82);
+      --glass-line: rgba(32, 185, 111, .26);
+      --glass-line-strong: rgba(98, 232, 159, .45);
+      --glass-shadow: 0 22px 62px rgba(31, 122, 67, .14);
+      --glass-glow: 0 0 36px rgba(81, 255, 169, .20);
+      --nav-w: min(1380px, calc(100% - 72px));
+      --nav-logo-col: 170px;
+      --nav-menu-col: minmax(0, 1fr);
+      --nav-menu-btn-col: 54px;
+      --nav-pad: 30px;
+    }
+
+    body {
+      color: var(--leaf-ink) !important;
+      background:
+        radial-gradient(circle at 12% 6%, rgba(145, 255, 179, .34), transparent 30%),
+        radial-gradient(circle at 88% 9%, rgba(230, 255, 165, .35), transparent 32%),
+        linear-gradient(180deg, #eafff2 0%, #f8fff9 44%, #ffffff 100%) !important;
+      font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    }
+
+    /* ===== Hero: Emerald light glass ===== */
+    .hero {
+      margin-top: -120px !important;
+      padding: 214px 76px 96px !important;
+      min-height: 760px !important;
+      color: var(--leaf-ink) !important;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.72) 0%, rgba(240,255,247,.42) 46%, rgba(225,255,237,.20) 100%),
+        radial-gradient(circle at 16% 28%, rgba(255,255,255,.62), transparent 22%),
+        radial-gradient(circle at 82% 14%, rgba(195,255,151,.32), transparent 24%),
+        url("images/farm0.png") !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+
+    .hero::before {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.46)),
+        radial-gradient(circle at 78% 18%, rgba(255,255,255,.50), transparent 20%),
+        radial-gradient(circle at 18% 76%, rgba(125,240,176,.18), transparent 25%) !important;
+    }
+
+    .hero::after {
+      opacity: .16 !important;
+      background-image:
+        radial-gradient(circle, rgba(34,197,94,.34) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,255,255,.60) 0 1px, transparent 2px) !important;
+    }
+
+    .hero-badge {
+      color: #0b5b37 !important;
+      background: rgba(255,255,255,.62) !important;
+      border: 1px solid rgba(34,197,94,.30) !important;
+      box-shadow:
+        0 12px 28px rgba(22,163,74,.10),
+        inset 0 1px 0 rgba(255,255,255,.82) !important;
+      backdrop-filter: blur(14px) !important;
+    }
+
+    .hero-title {
+      color: #0b1813 !important;
+      text-shadow: 0 2px 0 rgba(255,255,255,.40) !important;
+    }
+
+    .hero-title .highlight-green {
+      color: #16a34a !important;
+      text-shadow: 0 0 24px rgba(34,197,94,.28) !important;
+    }
+
+    .hero-subtitle {
+      color: rgba(9,35,26,.80) !important;
+      font-weight: 750 !important;
+      text-shadow: 0 1px 0 rgba(255,255,255,.45) !important;
+    }
+
+    .hero-btn {
+      color: #0b5b37 !important;
+      background: rgba(255,255,255,.60) !important;
+      border: 1px solid rgba(34,197,94,.25) !important;
+      box-shadow:
+        0 14px 28px rgba(22,163,74,.10),
+        inset 0 1px 0 rgba(255,255,255,.85) !important;
+      backdrop-filter: blur(14px) !important;
+    }
+
+    .hero-btn.primary {
+      color: white !important;
+      background: linear-gradient(135deg, #20c878, #0f8f52) !important;
+      box-shadow: 0 18px 32px rgba(22,163,74,.26), 0 0 24px rgba(34,197,94,.22) !important;
+    }
+
+    /* ===== Unified glass cards ===== */
+    .predict-card,
+    .regen-card,
+    .stat-card,
+    .dataset-card,
+    .dashboard-card,
+    .stats-panel,
+    .ai-loading-box {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.78), rgba(241,255,247,.54)) !important;
+      border: 1px solid rgba(255,255,255,.80) !important;
+      box-shadow:
+        0 24px 66px rgba(31,122,67,.14),
+        0 0 26px rgba(81,255,169,.12),
+        inset 0 1px 0 rgba(255,255,255,.90),
+        inset 0 -1px 0 rgba(34,197,94,.12) !important;
+      backdrop-filter: blur(22px) saturate(150%) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
+      color: var(--leaf-ink) !important;
+    }
+
+    .predict-card {
+      border-radius: 30px !important;
+      max-height: 620px !important;
+    }
+
+    .card-title,
+    .regen-header h3,
+    .section-title,
+    .dashboard-title,
+    .stats-title,
+    .result-title,
+    .dataset-name,
+    .analysis-item strong,
+    .top-prediction-name {
+      color: var(--leaf-ink) !important;
+      letter-spacing: -0.055em !important;
+    }
+
+    .card-desc,
+    .section-desc,
+    .dashboard-sub,
+    .tip,
+    .result-card,
+    .top-prediction-desc,
+    .analysis-item p,
+    .stats-note {
+      color: var(--leaf-sub) !important;
+    }
+
+    .auth-menu,
+    .result-card,
+    .quality-panel,
+    .retake-guide,
+    .top-prediction-item,
+    .top-prediction-guide,
+    .stats-card,
+    .dataset-info,
+    .search-input,
+    select {
+      background: rgba(255,255,255,.56) !important;
+      border: 1px solid rgba(34,197,94,.20) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.75) !important;
+      color: rgba(9,35,26,.82) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    .field-label,
+    #userStatus,
+    .upload-zone p,
+    .regen-upload-inner span,
+    .dataset-line,
+    .dataset-tags span,
+    .stats-card span {
+      color: rgba(9,35,26,.66) !important;
+    }
+
+    .upload-icon,
+    .regen-upload-icon,
+    .stat-icon,
+    .dashboard-title-icon,
+    .analysis-icon,
+    .dataset-emoji {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.88), rgba(220,252,231,.66)) !important;
+      border: 1px solid rgba(34,197,94,.18) !important;
+      box-shadow:
+        0 12px 24px rgba(22,163,74,.12),
+        inset 0 1px 0 rgba(255,255,255,.92) !important;
+    }
+
+    /* ===== Upload box unified: disease diagnosis + leaf recovery ===== */
+    .upload-zone,
+    .regen-upload-inner {
+      border: 2px dashed rgba(34,197,94,.34) !important;
+      border-radius: 22px !important;
+      padding: 26px 18px !important;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.64), rgba(240,253,244,.46)) !important;
+      text-align: center !important;
+      transition:
+        transform .22s ease,
+        border-color .22s ease,
+        background .22s ease,
+        box-shadow .22s ease !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        0 12px 28px rgba(22,163,74,.07) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+
+    .upload-zone:hover,
+    .regen-upload-inner:hover {
+      transform: translateY(-3px) !important;
+      border-color: rgba(20,184,106,.70) !important;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.80), rgba(220,252,231,.66)) !important;
+      box-shadow:
+        0 18px 34px rgba(22,163,74,.13),
+        0 0 24px rgba(34,197,94,.14),
+        inset 0 1px 0 rgba(255,255,255,.92) !important;
+    }
+
+    .regen-card {
+      margin: 22px 0 18px !important;
+      padding: 22px !important;
+      border-radius: 26px !important;
+    }
+
+    .regen-header {
+      margin-bottom: 16px !important;
+    }
+
+    .regen-badge,
+    .year-badge {
+      background: rgba(220,252,231,.72) !important;
+      color: #0b7a45 !important;
+      border: 1px solid rgba(34,197,94,.24) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85) !important;
+    }
+
+    .regen-upload-inner strong {
+      color: var(--leaf-ink) !important;
+      font-weight: 900 !important;
+    }
+
+    .regen-upload-icon {
+      width: 68px !important;
+      height: 68px !important;
+      border-radius: 24px !important;
+      margin: 0 auto 12px !important;
+    }
+
+    .file-box,
+    input[type="file"] {
+      color: rgba(9,35,26,.72) !important;
+    }
+
+    .predict-button,
+    .regen-button {
+      background: linear-gradient(135deg, #20c878, #0e8f51) !important;
+      color: white !important;
+      border: 1px solid rgba(255,255,255,.42) !important;
+      box-shadow:
+        0 16px 32px rgba(22,163,74,.24),
+        0 0 20px rgba(34,197,94,.18),
+        inset 0 1px 0 rgba(255,255,255,.35) !important;
+    }
+
+    .predict-button:hover,
+    .regen-button:hover {
+      box-shadow:
+        0 22px 42px rgba(22,163,74,.30),
+        0 0 28px rgba(34,197,94,.23),
+        inset 0 1px 0 rgba(255,255,255,.45) !important;
+    }
+
+    .predict-button[style*="background:linear-gradient(135deg,#111827,#1f2937)"] {
+      background: linear-gradient(135deg, #0f3f2b, #10241d) !important;
+    }
+
+    .predict-card > div[style*="height:1px"] {
+      background: rgba(34,197,94,.16) !important;
+    }
+
+    .upload-preview img,
+    #regenResultImage {
+      background: rgba(9,35,26,.78) !important;
+      border: 1px solid rgba(34,197,94,.20) !important;
+      box-shadow: 0 16px 32px rgba(31,122,67,.12) !important;
+    }
+
+    .section.white,
+    .section.soft-green {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(145,255,179,.22), transparent 28%),
+        radial-gradient(circle at 88% 4%, rgba(229,255,180,.25), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(245,255,248,.88)) !important;
+    }
+
+    .footer {
+      background:
+        linear-gradient(135deg, rgba(240,253,244,.92), rgba(255,255,255,.92)) !important;
+      border-top: 1px solid rgba(34,197,94,.14) !important;
+      color: rgba(9,35,26,.70) !important;
+    }
+
+    .round-more {
+      background: rgba(255,255,255,.66) !important;
+      border: 1px solid rgba(34,197,94,.22) !important;
+      color: var(--emerald-dark) !important;
+      box-shadow: 0 12px 26px rgba(22,163,74,.10), inset 0 1px 0 rgba(255,255,255,.82) !important;
+      backdrop-filter: blur(12px) !important;
+    }
+
+    @media (max-width: 1080px) {
+      :root {
+        --nav-w: min(100% - 28px, 720px);
+        --nav-pad: 18px;
+      }
+
+      .hero {
+        margin-top: -112px !important;
+        padding: 192px 20px 78px !important;
+      }
+    }
+
+    @media (max-width: 680px) {
+
+      .hero-title {
+        font-size: 40px !important;
+      }
+
+      .predict-card,
+      .regen-card {
+        border-radius: 24px !important;
+      }
+    }
+
+
+    /* =========================================================
+       FINAL FIX - SUIT font / no top gap / clearer background /
+       icon-click upload only
+    ========================================================= */
+
+    html,
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: "SUIT", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    }
+
+    body *,
+    button,
+    input,
+    select,
+    textarea {
+      font-family: "SUIT", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    }
+
+    /* 배경 이미지 덜 흐리게: 흰/연두 오버레이 약화 */
+    .hero {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.34) 0%,
+          rgba(240,255,247,.18) 46%,
+          rgba(225,255,237,.06) 100%
+        ),
+        url("images/farm0.png") !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+
+    .hero::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.03),
+          rgba(255,255,255,.10)
+        ) !important;
+    }
+
+    .hero::after {
+      opacity: .06 !important;
+    }
+
+    /* 파일 선택 기본 버튼 숨기기 */
+    #imageInput,
+    #regenImageInput {
+      display: none !important;
+    }
+
+    .upload-zone,
+    .regen-upload,
+    .regen-upload-inner,
+    .upload-icon,
+    .regen-upload-icon {
+      cursor: pointer !important;
+    }
+
+    .file-box {
+      min-height: 0 !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /* 질병진단/재생성 업로드 박스 안내 문구 스타일 통일 */
+    .upload-zone .field-label,
+    .regen-upload-inner strong {
+      justify-content: center !important;
+      color: var(--leaf-ink, #09231a) !important;
+      font-size: 15px !important;
+      font-weight: 850 !important;
+    }
+
+    .upload-zone p,
+    .regen-upload-inner span {
+      margin-top: 4px !important;
+      color: rgba(9,35,26,.58) !important;
+      font-size: 13px !important;
+      font-weight: 650 !important;
+    }
+
+
+    /* =========================================================
+       FINAL TYPOGRAPHY FIX
+       - AI 목업 이미지에 가까운 부드러운 Pretendard 계열
+       - SUIT/Gmarket의 과한 두께감 제거
+       - 네비는 두껍게가 아니라 그림자/글로우로 존재감 부여
+    ========================================================= */
+
+    body,
+    button,
+    input,
+    select,
+    textarea {
+      font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+      font-weight: 500 !important;
+    }
+
+    /* 히어로 큰 제목: 900 제거, 선명하지만 촌스럽지 않게 */
+    .hero-title {
+      font-weight: 800 !important;
+      letter-spacing: -0.065em !important;
+      line-height: 1.11 !important;
+    }
+
+    .hero-subtitle {
+      font-weight: 600 !important;
+      letter-spacing: -0.035em !important;
+    }
+
+    /* 카드/섹션 제목 */
+    .card-title,
+    .regen-header h3,
+    .section-title,
+    .dashboard-title,
+    .stats-title,
+    .result-title,
+    .dataset-name,
+    .analysis-item strong,
+    .top-prediction-name {
+      font-weight: 750 !important;
+      letter-spacing: -0.045em !important;
+    }
+
+    /* 버튼 */
+    .hero-btn,
+    .predict-button,
+    .regen-button,
+    .round-more,
+    .history-link {
+      font-weight: 700 !important;
+      letter-spacing: -0.03em !important;
+    }
+
+    .field-label,
+    #userStatus,
+    .dataset-line strong,
+    .stats-card strong,
+    .year-badge,
+    .regen-badge,
+    .top-prediction-score {
+      font-weight: 700 !important;
+    }
+
+    /* 업로드 박스 안 문구도 너무 두껍지 않게 */
+    .regen-upload-inner strong,
+    .upload-zone .field-label {
+      font-weight: 700 !important;
+    }
+
+
+    /* =========================================================
+       FINAL TYPOGRAPHY OVERRIDE - Gmarket Sans 복귀
+       - 기존 기능/업로드/배경/네비 여백 수정은 유지
+       - SUIT/Pretendard 최종 오버라이드보다 뒤에서 적용
+    ========================================================= */
+
+    body,
+    button,
+    input,
+    select,
+    textarea,
+    a {
+      font-family: "GmarketSansMedium", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    }
+
+    body {
+      font-weight: 500 !important;
+      letter-spacing: -0.035em !important;
+    }
+
+    .hero-title {
+      font-family: "GmarketSansMedium", "Pretendard", sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.075em !important;
+      line-height: 1.12 !important;
+    }
+
+    .hero-subtitle {
+      font-family: "GmarketSansMedium", "Pretendard", sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.045em !important;
+    }
+
+    .hero-btn,
+    .predict-button,
+    .regen-button,
+    .round-more,
+    .history-link,
+    .field-label,
+    #userStatus,
+    .regen-upload-inner strong,
+    .year-badge,
+    .regen-badge,
+    .top-prediction-score,
+    .stats-card strong,
+    .dataset-line strong {
+      font-family: "GmarketSansMedium", "Pretendard", sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.04em !important;
+    }
+
+
+    /* =========================================================
+       External Navbar Layout Fix
+       - index 내부 네비바 제거 후 navbar.html/css/js 사용
+    ========================================================= */
+    #navbar-container {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      z-index: 9999 !important;
+      background: transparent !important;
+      pointer-events: none !important;
+    }
+
+    #navbar-container .top-mini-bar,
+    #navbar-container .reaf-navbar {
+      pointer-events: auto !important;
+    }
+
+    .hero {
+      margin-top: 0 !important;
+      padding-top: 180px !important;
+    }
+
+    @media (max-width: 1080px) {
+      .hero {
+        margin-top: 0 !important;
+        padding-top: 150px !important;
+      }
+    }
+
+    /* =========================================================
+       External Navbar Layout
+       - navbar.html / css/navbar.css 공통 네비바 사용
+    ========================================================= */
+    #navbar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    #navbar-container .top-mini-bar,
+    #navbar-container .reaf-navbar {
+      pointer-events: auto;
+    }
+
+    .hero {
+      padding-top: 180px;
+    }
+
+    @media (max-width: 1080px) {
+      .hero {
+        padding-top: 150px;
+      }
+    }
+
+
+    /* =========================================================
+       FINAL VIDEO BACKGROUND OVERRIDE
+       - 기존 farm0.png 배경 이미지를 index-bg.mp4 영상으로 대체
+       - 히어로 안에서만 영상이 재생되고, 카드/글씨는 위에 유지
+    ========================================================= */
+    .hero {
+      position: relative !important;
+      isolation: isolate !important;
+      overflow: hidden !important;
+      background: #effaf0 !important;
+    }
+
+    .hero-bg-video {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .hero-video-overlay {
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.46) 0%,
+          rgba(245,255,247,.24) 42%,
+          rgba(245,255,247,.10) 100%
+        ),
+        radial-gradient(circle at 18% 36%, rgba(255,255,255,.36), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(220,255,205,.18), transparent 24%);
+    }
+
+    .hero::before {
+      content: "" !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.02),
+          rgba(255,255,255,.08)
+        ) !important;
+    }
+
+    .hero::after {
+      z-index: 1 !important;
+      opacity: .045 !important;
+    }
+
+    .hero-grid,
+    .hero-leaf,
+    .hero-stats {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .hero-title,
+    .hero-subtitle {
+      position: relative !important;
+      z-index: 3 !important;
+    }
+
+    @media (max-width: 680px) {
+      .hero-bg-video {
+        object-position: center center !important;
+      }
+
+      .hero-video-overlay {
+        background: rgba(255,255,255,.42) !important;
+      }
+    }
+
+</style>
+
+<link rel="stylesheet" href="css/page-hero.css">
 </head>
 
+
 <body>
+
+
+  <!-- Re:af icon assets expected:
+    assets/icons/icon-ai-diagnosis.png, icon-leaf-recovery.png, icon-diary.png, icon-growth.png,
+    icon-water.png, icon-sun.png, icon-humidity.png, icon-temperature.png, icon-health.png,
+    icon-check.png, icon-camera.png, icon-stethoscope.png, icon-seedling.png,
+    icon-apple.png, icon-blueberry.png, icon-cherry.png, icon-corn.png, icon-grape.png,
+    icon-orange.png, icon-peach.png, icon-bell-pepper.png, icon-potato.png, icon-raspberry.png,
+    icon-soybean.png, icon-pumpkin.png, icon-strawberry.png, icon-tomato.png, icon-lettuce.png
+  -->
   <div class="ai-loading-overlay" id="aiLoadingOverlay">
     <div class="ai-loading-box">
       <div class="ai-loading-icon"></div>
@@ -1114,55 +1831,19 @@
     </div>
   </div>
 
-  <div class="utility-bar">
-    <div class="utility-left">
-      <a href="#guide">공지사항</a>
-      <a href="#guide">고객센터</a>
-      <a href="mypage.html">마이페이지</a>
-    </div>
-    <div class="utility-right">
-      <a id="registerBtn" href="register.html">회원가입</a>
-      <a id="loginBtn" href="login.html">로그인</a>
-      <button id="logoutBtn" type="button" onclick="logout()" style="display:none;">로그아웃</button>
-    </div>
-  </div>
-
-  <header class="site-header">
-    <nav class="main-nav">
-      <a class="brand" href="index.html" aria-label="Re:af 홈">
-        <img class="brand-logo" src="assets/logo.png" alt="Re:af 로고" onerror="this.style.display='none'; document.querySelector('.brand-fallback').style.display='inline-flex';">
-        <span class="brand-fallback" style="display:none;">🌱 Re:af</span>
-      </a>
-
-      <div class="nav-menu">
-        <a class="nav-item active" href="#predictCard">작물 분석</a>
-        <a class="nav-item" href="#datasets">데이터셋</a>
-        <a class="nav-item" href="#analysis">AI 통계</a>
-        <a class="nav-item" href="mypage.html">내 서비스</a>
-        <a class="nav-item" href="#guide">이용안내</a>
-      </div>
-
-      <button class="hamburger" type="button" aria-label="전체 메뉴">☰</button>
-    </nav>
-
-    <div class="mega-panel" aria-label="전체 메뉴 펼침">
-      <div class="mega-grid">
-        <div class="mega-col"><a href="#predictCard">간단 AI 분석</a><a href="#predictCard">정밀 AI 분석</a><a href="#analysis">분석 결과</a></div>
-        <div class="mega-col"><a href="#datasets">질병 도감</a><a href="#datasets">작물별 데이터</a><a href="#datasets">대처 가이드</a></div>
-        <div class="mega-col"><a href="#analysis">TOP5 예측 후보</a><a href="#analysis">분석 이력</a></div>
-        <div class="mega-col"><a href="mypage.html">마이페이지</a><a href="account_delete.html">회원탈퇴</a></div>
-        <div class="mega-col"><a href="login.html">로그인</a><a href="register.html">회원가입</a><a href="admin.html">회원관리</a></div>
-      </div>
-    </div>
-  </header>
+  <div id="navbar-container"></div>
 
   <main>
     <section class="hero" id="intro">
+      <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <source src="assets/video/index-bg.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-overlay" aria-hidden="true"></div>
       <span class="hero-leaf"></span><span class="hero-leaf"></span><span class="hero-leaf"></span><span class="hero-leaf"></span>
 
       <div class="hero-grid">
         <div class="hero-left">
-          <span class="hero-badge">🌱 AI 기반 작물 분석 플랫폼</span>
+          <span class="hero-badge"><img class="inline-ui-icon" src="assets/icons/icon-seedling.png" alt="">AI 기반 작물 분석 플랫폼</span>
           <h1 class="hero-title"><span class="highlight-green">A.I</span> 가 농업의 가능성을<br>새롭게 정의합니다</h1>
           <p class="hero-subtitle">작물 질병 진단부터 수확량 예측까지, 스마트한 농업의 시작을 Re:af가 함께합니다.</p>
           <div class="hero-actions">
@@ -1178,7 +1859,7 @@
           <div class="auth-menu"><span id="userStatus">로그인이 필요해요 🌱</span></div>
 
           <div class="field-group upload-zone">
-            <div class="upload-icon">☁️</div>
+            <div class="upload-icon"><img src="assets/icons/icon-ai-diagnosis.png" alt="작물 이미지 업로드 아이콘" onerror="this.style.display='none'; this.parentElement.textContent='☁️';"></div>
             <label class="field-label" for="imageInput" style="justify-content:center;">작물 이미지를 업로드하세요</label>
             <p style="margin:0 0 12px; color:#667085; font-size:13px; font-weight:650;">JPG, PNG 파일 선택 또는 모바일 카메라 촬영</p>
             <div class="file-box">
@@ -1197,16 +1878,16 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="cropSelect">🌱 작물 선택</label>
+            <label class="field-label" for="cropSelect"><img class="inline-ui-icon" src="assets/icons/icon-seedling.png" alt="">작물 선택</label>
             <select id="cropSelect">
               <option value="">작물을 선택하세요</option>
-              <option value="사과">사과</option><option value="블루베리">블루베리</option><option value="체리">체리</option><option value="옥수수">옥수수</option><option value="포도">포도</option><option value="오렌지">오렌지</option><option value="복숭아">복숭아</option><option value="파프리카">파프리카</option><option value="감자">감자</option><option value="라즈베리">라즈베리</option><option value="콩">콩</option><option value="호박">호박</option><option value="딸기">딸기</option><option value="토마토">토마토</option>
+              <option value="사과">사과</option><option value="블루베리">블루베리</option><option value="체리">체리</option><option value="옥수수">옥수수</option><option value="포도">포도</option><option value="오렌지">오렌지</option><option value="복숭아">복숭아</option><option value="파프리카">피망</option><option value="감자">감자</option><option value="라즈베리">라즈베리</option><option value="콩">콩</option><option value="호박">호박</option><option value="딸기">딸기</option><option value="토마토">토마토</option><option value="상추">상추</option>
             </select>
           </div>
           <div class="regen-card">
 
             <div class="regen-header">
-              <div class="regen-badge">🌿 AI Leaf Recovery</div>
+              <div class="regen-badge"><img class="inline-ui-icon" src="assets/icons/icon-leaf-recovery.png" alt="">AI Leaf Recovery</div>
               <h3>병든 잎을 건강하게 복원해보세요</h3>
               <p>
                 AI가 병반 영역을 분석하고 건강한 잎 상태로 재생성합니다.
@@ -1217,7 +1898,7 @@
               <input type="file" id="regenImageInput" accept="image/*" hidden />
 
               <div class="regen-upload-inner">
-                <div class="regen-upload-icon">📸</div>
+                <div class="regen-upload-icon"><img src="assets/icons/icon-camera.png" alt="잎 이미지 업로드 아이콘" onerror="this.style.display='none'; this.parentElement.textContent='📸';"></div>
                 <strong>잎 이미지 업로드</strong>
                 <span>클릭해서 이미지를 선택하세요</span>
               </div>
@@ -1241,7 +1922,7 @@
           <div style="height:1px; background:#e5e7eb; margin:22px 0 18px;"></div>
 
           <div class="result-card" id="result">
-            <span class="result-title">🌱 예측 결과가 여기에 표시돼요</span>
+            <span class="result-title"><img class="inline-ui-icon" src="assets/icons/icon-seedling.png" alt="">예측 결과가 여기에 표시돼요</span>
             <span class="result-line">🤖 사용 모델: -</span>
             <span class="result-line">📄 파일명: -</span>
             <span class="result-line">🍅 예측 결과: <strong>-</strong></span>
@@ -1253,49 +1934,25 @@
             분석 결과에 따라 촬영 개선 안내가 표시됩니다.
           </div>
 
-          <a class="history-link" href="history.html">📋 저장 기록 보러가기</a>
-          <p class="tip">💡 AI 예측은 작물 이미지와 모델 데이터를 기반으로 합니다</p>
+          <a class="history-link" href="history.html"><img class="inline-ui-icon" src="assets/icons/icon-diary.png" alt="">저장 기록 보러가기</a>
+          <p class="tip"><img class="inline-ui-icon" src="assets/icons/icon-health.png" alt="">AI 예측은 작물 이미지와 모델 데이터를 기반으로 합니다</p>
         </section>
       </div>
     </section>
 
     <div class="hero-stats">
-      <div class="stat-card"><div class="stat-icon">🌿</div><div><strong data-count="38">0</strong><span>지원 작물 질병 클래스</span></div></div>
-      <div class="stat-card"><div class="stat-icon">📈</div><div><strong data-count="2">0</strong><span>간단·정밀 분석 모델</span></div></div>
-      <div class="stat-card"><div class="stat-icon">👥</div><div><strong>UX</strong><span>촬영 품질·재촬영 가이드</span></div></div>
+      <div class="stat-card"><div class="stat-icon"><img src="assets/icons/icon-seedling.png" alt="지원 클래스 아이콘"></div><div><strong data-count="38">0</strong><span>지원 작물 질병 클래스</span></div></div>
+      <div class="stat-card"><div class="stat-icon"><img src="assets/icons/icon-growth.png" alt="분석 모델 아이콘"></div><div><strong data-count="2">0</strong><span>간단·정밀 분석 모델</span></div></div>
+      <div class="stat-card"><div class="stat-icon"><img src="assets/icons/icon-camera.png" alt="촬영 가이드 아이콘"></div><div><strong>UX</strong><span>촬영 품질·재촬영 가이드</span></div></div>
     </div>
 
-    <section class="section soft-green reveal" id="datasets">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">주요 작물 질병 <span class="blue">데이터셋</span></h2>
-            <p class="section-desc">예측하지 않아도 질병 정보를 검색하고 도감처럼 확인할 수 있습니다.</p>
-          </div>
-          <a class="round-more" href="#predictCard">더보기 →</a>
-        </div>
 
-        <div class="disease-tools">
-          <input class="search-input" id="diseaseSearch" type="search" placeholder="질병명/작물명 검색 예: 토마토, 역병, 세균반점">
-          <select id="diseaseCropFilter">
-            <option value="">전체 작물</option>
-            <option value="토마토">토마토</option>
-            <option value="사과">사과</option>
-            <option value="포도">포도</option>
-            <option value="감자">감자</option>
-            <option value="옥수수">옥수수</option>
-          </select>
-        </div>
-
-        <div class="dataset-grid" id="diseaseGrid"></div>
-      </div>
-    </section>
 
     <section class="section white reveal" id="analysis">
       <div class="container">
         <div class="dashboard-grid">
           <article class="dashboard-card">
-            <h2 class="dashboard-title"><span style="color:#16a34a">🏆</span>AI 예측 후보 TOP 5</h2>
+            <h2 class="dashboard-title"><span class="dashboard-title-icon"><img src="assets/icons/icon-growth.png" alt="TOP5 아이콘"></span>AI 예측 후보 TOP 5</h2>
             <p class="dashboard-sub">AI가 가능성이 높다고 판단한 질병 후보 순위</p>
             <div class="top-prediction-list" id="topPredictionList">
               <div class="top-prediction-empty"><strong>AI 예측 후보 대기중</strong><br>작물 이미지를 분석하면 질병 후보 1~5순위가 표시됩니다.</div>
@@ -1307,17 +1964,17 @@
           </article>
 
           <aside class="dashboard-card">
-            <h2 class="dashboard-title"><span style="color:#16a34a">ⓘ</span>AI 분석 결과</h2>
+            <h2 class="dashboard-title"><span class="dashboard-title-icon"><img src="assets/icons/icon-ai-diagnosis.png" alt="AI 분석 아이콘"></span>AI 분석 결과</h2>
             <div class="analysis-list" id="aiAnalysisResult">
-              <div class="analysis-item good"><span style="color:#00b94c; font-size:22px;">✓</span><div><strong>AI 분석 대기중</strong><p>작물 이미지를 업로드하면 예측 결과가 표시됩니다</p></div></div>
-              <div class="analysis-item info"><span style="color:#2f7cff; font-size:22px;">📊</span><div><strong>예측 신뢰도</strong><p>분석 전입니다</p></div></div>
-              <div class="analysis-item warn"><span style="color:#f5a400; font-size:22px;">⚠</span><div><strong>관리 주의사항</strong><p>예측 완료 후 관리법이 표시됩니다</p></div></div>
+              <div class="analysis-item good"><span class="analysis-icon"><img src="assets/icons/icon-check.png" alt="완료"></span><div><strong>AI 분석 대기중</strong><p>작물 이미지를 업로드하면 예측 결과가 표시됩니다</p></div></div>
+              <div class="analysis-item info"><span class="analysis-icon"><img src="assets/icons/icon-health.png" alt="신뢰도"></span><div><strong>예측 신뢰도</strong><p>분석 전입니다</p></div></div>
+              <div class="analysis-item warn"><span class="analysis-icon"><img src="assets/icons/icon-stethoscope.png" alt="주의사항"></span><div><strong>관리 주의사항</strong><p>예측 완료 후 관리법이 표시됩니다</p></div></div>
             </div>
           </aside>
         </div>
 
         <section class="stats-panel" id="statsPanel" aria-label="AI 분석 이력 통계">
-          <h2 class="stats-title">📈 AI 분석 이력 통계</h2>
+          <h2 class="stats-title"><span class="dashboard-title-icon"><img src="assets/icons/icon-diary.png" alt="이력 통계 아이콘"></span>AI 분석 이력 통계</h2>
           <div class="stats-grid">
             <article class="stats-card"><span>전체 분석 횟수</span><strong id="statTotal">-</strong></article>
             <article class="stats-card"><span>이번 달 분석</span><strong id="statMonth">-</strong></article>
@@ -1363,42 +2020,70 @@
       regenResultImage.style.display = "block";
       regenStatus.textContent = `선택한 이미지: ${file.name}`;
     });
+
     document.getElementById("regenBtn").addEventListener("click", async () => {
-    const fileInput = document.getElementById("regenImageInput");
-    const status = document.getElementById("regenStatus");
-    const resultImage = document.getElementById("regenResultImage");
+      const fileInput = document.getElementById("regenImageInput");
+      const status = document.getElementById("regenStatus");
+      const resultImage = document.getElementById("regenResultImage");
+      const regenBtn = document.getElementById("regenBtn");
 
-    if (!fileInput.files.length) {
-      alert("이미지를 먼저 선택해주세요.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
-
-    status.textContent = "건강한 잎으로 재생성 중입니다... 시간이 조금 걸릴 수 있어요 🌱";
-
-    try {
-      const response = await fetch(`${API_BASE}/api/regenerate-leaf`, {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.detail || data.message || "재생성 실패");
+      if (!fileInput.files.length) {
+        alert("이미지를 먼저 선택해주세요.");
+        return;
       }
 
-      resultImage.src = `${API_BASE}${data.result_url}?t=${Date.now()}`;
-      resultImage.style.display = "block";
-      status.textContent = "재생성 완료! 🌿";
-    } catch (error) {
-      console.error(error);
-      status.textContent = "재생성 중 오류가 발생했습니다.";
-      alert(error.message);
-    }
-  });
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      status.textContent = "건강한 잎으로 재생성 중입니다... 시간이 조금 걸릴 수 있어요 🌱";
+      if (regenBtn) {
+        regenBtn.disabled = true;
+        regenBtn.style.filter = "grayscale(.15) brightness(.95)";
+        regenBtn.style.cursor = "wait";
+      }
+
+      showAILoading({
+        title: "건강 이미지 재생성 중이에요",
+        message: "잎 이미지를 서버로 보내는 중이에요.",
+        sub: "병반 영역을 분석하고 건강한 잎 상태로 복원하고 있어요.",
+        maxBeforeDone: 96,
+        steps: [
+          { until: 28, add: 4, message: "잎 이미지를 서버로 보내는 중이에요." },
+          { until: 58, add: 2, message: "병든 영역 마스크를 생성하고 있어요." },
+          { until: 82, add: 1.5, message: "ComfyUI가 건강한 잎을 재생성하고 있어요." },
+          { until: 96, add: 0.8, message: "결과 이미지를 저장하고 불러오는 중이에요." }
+        ]
+      });
+
+      try {
+        const response = await fetch(`${API_BASE}/api/regenerate-leaf`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.detail || data.message || "재생성 실패");
+        }
+
+        resultImage.src = `${API_BASE}${data.result_url}?t=${Date.now()}`;
+        resultImage.style.display = "block";
+        status.textContent = "재생성 완료! 🌿";
+        finishAILoading("건강한 이미지가 완성되었어요!");
+      } catch (error) {
+        console.error(error);
+        hideAILoading();
+        status.textContent = "재생성 중 오류가 발생했습니다.";
+        alert(error.message);
+      } finally {
+        if (regenBtn) {
+          regenBtn.disabled = false;
+          regenBtn.style.filter = "";
+          regenBtn.style.cursor = "pointer";
+        }
+      }
+    });
 
   /*
     기본 설정
@@ -1445,7 +2130,8 @@
     title = "AI가 분석 중이에요",
     message = "이미지를 업로드하고 작물 상태를 확인하고 있어요.",
     sub = "첫 분석은 모델 준비 때문에 조금 더 걸릴 수 있어요.",
-    maxBeforeDone = 92
+    maxBeforeDone = 92,
+    steps = null
   } = {}) {
     const overlay = document.getElementById("aiLoadingOverlay");
     const titleBox = document.getElementById("aiLoadingTitle");
@@ -1458,10 +2144,17 @@
     setAILoadingProgress(5, message);
     clearInterval(aiLoadingTimer);
 
+    const loadingSteps = steps || [
+      { until: 30, add: 4, message: "이미지를 서버로 보내는 중이에요." },
+      { until: 65, add: 2, message: "AI 모델이 잎의 특징을 살펴보는 중이에요." },
+      { until: maxBeforeDone, add: 1, message: "결과 후보를 비교하고 있어요." }
+    ];
+
     aiLoadingTimer = setInterval(() => {
-      if (aiLoadingProgress < 30) setAILoadingProgress(aiLoadingProgress + 4, "이미지를 서버로 보내는 중이에요.");
-      else if (aiLoadingProgress < 65) setAILoadingProgress(aiLoadingProgress + 2, "AI 모델이 잎의 특징을 살펴보는 중이에요.");
-      else if (aiLoadingProgress < maxBeforeDone) setAILoadingProgress(aiLoadingProgress + 1, "결과 후보를 비교하고 있어요.");
+      const currentStep = loadingSteps.find(step => aiLoadingProgress < step.until);
+      if (currentStep && aiLoadingProgress < maxBeforeDone) {
+        setAILoadingProgress(aiLoadingProgress + currentStep.add, currentStep.message);
+      }
     }, 450);
   }
 
@@ -1546,6 +2239,59 @@
       confidence: "-",
       emoji: "🌱"
     });
+  }
+
+
+  const CROP_ICON_MAP = {
+    "사과": "assets/icons/icon-apple.png",
+    "블루베리": "assets/icons/icon-blueberry.png",
+    "체리": "assets/icons/icon-cherry.png",
+    "옥수수": "assets/icons/icon-corn.png",
+    "포도": "assets/icons/icon-grape.png",
+    "오렌지": "assets/icons/icon-orange.png",
+    "복숭아": "assets/icons/icon-peach.png",
+    "피망": "assets/icons/icon-bell-pepper.png",
+    "파프리카": "assets/icons/icon-bell-pepper.png",
+    "감자": "assets/icons/icon-potato.png",
+    "라즈베리": "assets/icons/icon-raspberry.png",
+    "콩": "assets/icons/icon-soybean.png",
+    "호박": "assets/icons/icon-pumpkin.png",
+    "딸기": "assets/icons/icon-strawberry.png",
+    "토마토": "assets/icons/icon-tomato.png",
+    "상추": "assets/icons/icon-lettuce.png"
+  };
+
+  function getCropIconPath(cropOrClassName = "") {
+    const raw = String(cropOrClassName || "");
+    if (CROP_ICON_MAP[raw]) return CROP_ICON_MAP[raw];
+
+    const name = raw.toLowerCase();
+    if (name.includes("토마토") || name.includes("tomato")) return CROP_ICON_MAP["토마토"];
+    if (name.includes("피망") || name.includes("pepper") || name.includes("파프리카")) return CROP_ICON_MAP["파프리카"];
+    if (name.includes("감자") || name.includes("potato")) return CROP_ICON_MAP["감자"];
+    if (name.includes("옥수수") || name.includes("corn") || name.includes("maize")) return CROP_ICON_MAP["옥수수"];
+    if (name.includes("사과") || name.includes("apple")) return CROP_ICON_MAP["사과"];
+    if (name.includes("포도") || name.includes("grape")) return CROP_ICON_MAP["포도"];
+    if (name.includes("딸기") || name.includes("strawberry")) return CROP_ICON_MAP["딸기"];
+    if (name.includes("체리") || name.includes("cherry")) return CROP_ICON_MAP["체리"];
+    if (name.includes("오렌지") || name.includes("orange")) return CROP_ICON_MAP["오렌지"];
+    if (name.includes("복숭아") || name.includes("peach")) return CROP_ICON_MAP["복숭아"];
+    if (name.includes("콩") || name.includes("soybean")) return CROP_ICON_MAP["콩"];
+    if (name.includes("호박") || name.includes("squash") || name.includes("pumpkin")) return CROP_ICON_MAP["호박"];
+    if (name.includes("블루베리") || name.includes("blueberry")) return CROP_ICON_MAP["블루베리"];
+    if (name.includes("라즈베리") || name.includes("raspberry")) return CROP_ICON_MAP["라즈베리"];
+    if (name.includes("상추") || name.includes("lettuce")) return CROP_ICON_MAP["상추"];
+
+    return "assets/icons/icon-seedling.png";
+  }
+
+  function cropIconHTML(cropOrClassName = "", alt = "작물 아이콘") {
+    const fallback = getCropEmoji(cropOrClassName);
+    return `<img src="${getCropIconPath(cropOrClassName)}" alt="${alt}" onerror="this.style.display='none'; this.parentElement.textContent='${fallback}';">`;
+  }
+
+  function inlineIconHTML(src, alt = "") {
+    return `<img class="inline-ui-icon" src="${src}" alt="${alt}" onerror="this.style.display='none';">`;
   }
 
   function getCropEmoji(className) {
@@ -1633,9 +2379,9 @@
       : "현재 표시할 추가 주의사항은 없습니다.";
 
     analysisBox.innerHTML = `
-      <div class="analysis-item good"><span style="color:#00b94c; font-size:22px;">✓</span><div><strong>AI 예측 결과</strong><p>${predictedClass}</p></div></div>
-      <div class="analysis-item info"><span style="color:#2f7cff; font-size:22px;">📊</span><div><strong>AI 확신 점수</strong><p>${confidence}</p></div></div>
-      <div class="analysis-item warn"><span style="color:#f5a400; font-size:22px;">⚠</span><div><strong>관리 주의사항</strong><p>${warningText}</p></div></div>
+      <div class="analysis-item good"><span class="analysis-icon"><img src="assets/icons/icon-check.png" alt="예측 결과"></span><div><strong>AI 예측 결과</strong><p>${predictedClass}</p></div></div>
+      <div class="analysis-item info"><span class="analysis-icon"><img src="assets/icons/icon-health.png" alt="확신 점수"></span><div><strong>AI 확신 점수</strong><p>${confidence}</p></div></div>
+      <div class="analysis-item warn"><span class="analysis-icon"><img src="assets/icons/icon-stethoscope.png" alt="관리 주의사항"></span><div><strong>관리 주의사항</strong><p>${warningText}</p></div></div>
       <div class="analysis-item info"><span style="color:#2f7cff; font-size:22px;">🌿</span><div><strong>추천 관리</strong><p>${careText}</p></div></div>
     `;
   }
@@ -1986,7 +2732,7 @@ function renderRetakeGuide(rawConfidence = 0, serverGuide = null) {
           <span class="year-badge">${item.crop}</span>
           <h3 class="dataset-name">${item.name}</h3>
           <div class="dataset-tags">${item.tags.map(tag => `<span>#${tag}</span>`).join("")}</div>
-          <div class="dataset-emoji">${item.emoji}</div>
+          <div class="dataset-emoji">${cropIconHTML(item.crop, item.crop + " 아이콘")}</div>
         </div>
         <div class="dataset-info">
           <div class="dataset-line"><span>클래스</span><b>${item.classes}</b><strong>AI</strong></div>
@@ -2112,7 +2858,7 @@ function renderRetakeGuide(rawConfidence = 0, serverGuide = null) {
       const rawConfidence = Number(data.confidence || 0);
       const aiScore = makeAIScore(rawConfidence, 38).score;
       const displayName = data.name_ko || data.predicted_class || "알 수 없음";
-      const cropEmoji = getCropEmoji(displayName);
+      const cropEmoji = cropIconHTML(displayName, "예측 작물 아이콘");
 
       renderResult({
         title: endpoint.includes("precise") ? "🏆 정밀 AI 분석 완료!" : "🌱 최종 진단 결과가 나왔어요!",
@@ -2186,8 +2932,8 @@ function renderRetakeGuide(rawConfidence = 0, serverGuide = null) {
       - 기존 분석 기능과 별개로 화면 연출만 담당합니다.
     */
     function setupVisualMotion() {
-      const header = document.querySelector(".site-header");
-      const navLinks = Array.from(document.querySelectorAll(".nav-item[href^='#']"));
+      const header = document.querySelector("#navbar-container .reaf-navbar");
+      const navLinks = Array.from(document.querySelectorAll("#navbar-container .reaf-nav-item[href^='#']"));
       const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
 
       const update = () => {
@@ -2249,5 +2995,46 @@ function renderRetakeGuide(rawConfidence = 0, serverGuide = null) {
 
     window.addEventListener("load", setupVisualMotion);
   </script>
+
+
+  <script>
+    /* FINAL FIX: 업로드 박스 전체 클릭으로 파일 선택 열기 */
+    (() => {
+      const imageInput = document.getElementById("imageInput");
+      const uploadZone = document.querySelector(".upload-zone");
+      const regenInput = document.getElementById("regenImageInput");
+      const regenBox = document.querySelector(".regen-upload-inner");
+
+      if (imageInput && uploadZone) {
+        uploadZone.addEventListener("click", (event) => {
+          if (event.target.closest("button, select, a")) return;
+          imageInput.click();
+        });
+      }
+
+      if (regenInput && regenBox) {
+        regenBox.addEventListener("click", (event) => {
+          event.preventDefault();
+          regenInput.click();
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    fetch("navbar.html")
+      .then((res) => res.text())
+      .then((html) => {
+        document.getElementById("navbar-container").innerHTML = html;
+
+        const script = document.createElement("script");
+        script.src = "components/navbar.js";
+        document.body.appendChild(script);
+      })
+      .catch((error) => {
+        console.error("navbar.html 로드 실패:", error);
+      });
+  </script>
+
 </body>
 </html>

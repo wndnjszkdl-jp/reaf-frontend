@@ -1,0 +1,79 @@
+/* =========================================================
+   Re:af Shared Page Hero Layout
+   모든 페이지의 navbar 아래 hero 시작 위치 통일용
+========================================================= */
+
+:root {
+  --reaf-hero-navbar-space: 118px;
+  --reaf-hero-x: 76px;
+  --reaf-hero-bottom: 88px;
+  --reaf-hero-min-height: 720px;
+}
+
+/* navbar가 fixed/absolute여도 hero가 항상 같은 위치에서 시작 */
+.hero {
+  margin-top: 0 !important;
+  padding-top: var(--reaf-hero-navbar-space) !important;
+  padding-left: var(--reaf-hero-x) !important;
+  padding-right: var(--reaf-hero-x) !important;
+  padding-bottom: var(--reaf-hero-bottom) !important;
+
+  min-height: var(--reaf-hero-min-height) !important;
+
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* hero 내부 컨텐츠 시작 위치 통일 */
+.hero-grid {
+  min-height: calc(
+    var(--reaf-hero-min-height) -
+    var(--reaf-hero-navbar-space) -
+    var(--reaf-hero-bottom)
+  ) !important;
+
+  display: grid !important;
+  align-items: center !important;
+}
+
+/* 기존 페이지별 강제 보정값 제거 */
+.hero-left {
+  padding-top: 0 !important;
+}
+
+/* floating stat 카드가 hero 아래에 걸치는 위치 통일 */
+.hero-stats,
+.stat-strip {
+  margin-top: -52px !important;
+}
+
+/* index에서 쓰던 음수 보정 제거 */
+body .hero {
+  transform: none !important;
+}
+
+/* 모바일 통일 */
+@media (max-width: 1080px) {
+  :root {
+    --reaf-hero-navbar-space: 132px;
+    --reaf-hero-x: 20px;
+    --reaf-hero-bottom: 66px;
+    --reaf-hero-min-height: auto;
+  }
+
+  .hero {
+    min-height: auto !important;
+  }
+
+  .hero-grid {
+    min-height: auto !important;
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+
+  .hero-stats,
+  .stat-strip {
+    margin-top: 24px !important;
+  }
+}
