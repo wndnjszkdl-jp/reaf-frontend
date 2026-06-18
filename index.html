@@ -254,11 +254,11 @@
     .hero-grid {
       position: relative;
       z-index: 2;
-      width: min(1320px, 100%);
+      width: min(1380px, 100% );
       margin: 0 auto;
       display: grid;
       grid-template-columns: minmax(540px, 1fr) 420px;
-      gap: 70px;
+      gap: 80px;
       align-items: center;
     }
 
@@ -1883,9 +1883,13 @@
               <option value="">작물을 선택하세요</option>
               <option value="사과">사과</option><option value="블루베리">블루베리</option><option value="체리">체리</option><option value="옥수수">옥수수</option><option value="포도">포도</option><option value="오렌지">오렌지</option><option value="복숭아">복숭아</option><option value="파프리카">피망</option><option value="감자">감자</option><option value="라즈베리">라즈베리</option><option value="콩">콩</option><option value="호박">호박</option><option value="딸기">딸기</option><option value="토마토">토마토</option><option value="상추">상추</option>
             </select>
+
+            <button class="predict-button" onclick="predictImage()">AI 분석 시작</button>
+            <button class="predict-button" style="margin-top:10px; background:linear-gradient(135deg,#111827,#1f2937); box-shadow:none;" onclick="predictPreciseImage()">정밀 AI 분석</button>
+
+
           </div>
           <div class="regen-card">
-
             <div class="regen-header">
               <div class="regen-badge"><img class="inline-ui-icon" src="assets/icons/icon-leaf-recovery.png" alt="">AI Leaf Recovery</div>
               <h3>병든 잎을 건강하게 복원해보세요</h3>
@@ -1902,6 +1906,8 @@
                 <strong>잎 이미지 업로드</strong>
                 <span>클릭해서 이미지를 선택하세요</span>
               </div>
+
+
             </label>
 
             <button id="regenBtn" class="regen-button">
@@ -1915,9 +1921,6 @@
             </div>
 
           </div>
-
-          <button class="predict-button" onclick="predictImage()">AI 분석 시작</button>
-          <button class="predict-button" style="margin-top:10px; background:linear-gradient(135deg,#111827,#1f2937); box-shadow:none;" onclick="predictPreciseImage()">정밀 AI 분석</button>
 
           <div style="height:1px; background:#e5e7eb; margin:22px 0 18px;"></div>
 
@@ -1933,8 +1936,6 @@
             <strong>📸 재촬영 가이드</strong>
             분석 결과에 따라 촬영 개선 안내가 표시됩니다.
           </div>
-
-          <a class="history-link" href="history.html"><img class="inline-ui-icon" src="assets/icons/icon-diary.png" alt="">저장 기록 보러가기</a>
           <p class="tip"><img class="inline-ui-icon" src="assets/icons/icon-health.png" alt="">AI 예측은 작물 이미지와 모델 데이터를 기반으로 합니다</p>
         </section>
       </div>

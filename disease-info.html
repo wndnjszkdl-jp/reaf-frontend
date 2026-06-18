@@ -9,31 +9,30 @@
   <title>Re:af | 작물별 질병정보</title>
 
   <style>
+
+    @font-face {
+      font-family: "GmarketSansMedium";
+      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; }
 
     :root {
       --green: #1f7a43;
       --green-2: #2f9e57;
-      --green-3: #4caf68;
       --green-dark: #123524;
       --green-soft: #edf7ed;
-      --green-soft-2: #f7fbf5;
-      --cream: #f7f8ef;
-      --mint: #dff3e4;
       --ink: #111827;
       --sub: #5f6f62;
       --line: rgba(31, 122, 67, .14);
-      --line-2: rgba(17, 24, 39, .07);
+      --line-strong: rgba(31, 122, 67, .26);
       --white: #ffffff;
       --soft-shadow: 0 16px 42px rgba(28, 83, 49, .08);
       --hover-shadow: 0 24px 58px rgba(28, 83, 49, .14);
       --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --blue: #2563eb;
-      --purple: #7c3aed;
     }
 
     html { scroll-behavior: smooth; }
@@ -42,15 +41,15 @@
       margin: 0 !important;
       padding: 0 !important;
       min-height: 100vh;
-      font-family: "GmarketSansMedium", "Noto Sans KR", sans-serif;
+      font-family: "GmarketSansMedium", "Pretendard", "Noto Sans KR", sans-serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 0%, rgba(111, 191, 126, .12), transparent 32%),
-        radial-gradient(circle at 90% 8%, rgba(31, 122, 67, .10), transparent 34%),
-        #fbfcf8;
+      background: #fff;
       letter-spacing: -0.035em;
       overflow-x: hidden;
     }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font-family: inherit; }
 
     #commonHeader,
     .common-header,
@@ -58,25 +57,47 @@
       display: none !important;
     }
 
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font-family: inherit; }
+    #navbar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    #navbar-container .top-mini-bar,
+    #navbar-container .reaf-navbar {
+      pointer-events: auto;
+    }
 
     .main-shell {
       width: min(1440px, calc(100% - 72px));
       margin: 0 auto;
+      background: #fff;
     }
 
+    /* ===== Hero ===== */
     .hero {
       position: relative;
-      min-height: 470px;
-      margin: 0 calc(50% - 50vw);
-      padding: 62px max(36px, calc((100vw - 1440px) / 2 + 36px)) 100px;
+      min-height: 860px;
+      margin: -70px calc(50% - 50vw) 0;
+      padding: 170px max(36px, calc((100vw - 1440px) / 2 + 36px)) 132px;
       overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.95) 0%, rgba(246,251,241,.86) 47%, rgba(230,242,225,.58) 100%),
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.74) 0%,
+          rgba(240,255,247,.44) 46%,
+          rgba(225,255,237,.20) 100%
+        ),
+        radial-gradient(circle at 16% 28%, rgba(255,255,255,.58), transparent 22%),
+        radial-gradient(circle at 82% 14%, rgba(195,255,151,.28), transparent 24%),
         url("images/farm2.png");
-      background-size: cover;
-      background-position: center;
+      background-size: 100% 100%, auto, auto, cover;
+      background-position: center center, 16% 28%, 82% 14%, center bottom;
+      background-repeat: no-repeat;
     }
 
     .hero::before {
@@ -84,8 +105,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 58% 42%, rgba(255,255,255,.72), transparent 20%),
-        radial-gradient(circle at 88% 26%, rgba(114,163,97,.22), transparent 26%);
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.46)),
+        radial-gradient(circle at 78% 18%, rgba(255,255,255,.50), transparent 20%),
+        radial-gradient(circle at 18% 76%, rgba(125,240,176,.18), transparent 25%);
       pointer-events: none;
     }
 
@@ -104,11 +126,11 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      height: 38px;
+      min-height: 38px;
       padding: 0 16px;
       border-radius: 999px;
       background: rgba(255,255,255,.72);
-      border: 1px solid rgba(31,122,67,.14);
+      border: 1px solid var(--line);
       color: var(--green);
       font-size: 13px;
       font-weight: 950;
@@ -173,7 +195,9 @@
     }
 
     .primary-btn:hover,
-    .ghost-btn:hover {
+    .ghost-btn:hover,
+    .disease-card:hover,
+    .cta-section:hover {
       transform: translateY(-3px);
       box-shadow: var(--hover-shadow);
     }
@@ -182,31 +206,6 @@
       min-height: 320px;
       display: grid;
       place-items: center;
-    }
-
-    .plant-orb {
-      width: min(340px, 100%);
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,.9), rgba(255,255,255,.38) 45%, rgba(255,255,255,.08) 68%),
-        linear-gradient(145deg, rgba(255,255,255,.60), rgba(217,238,214,.30));
-      border: 1px solid rgba(255,255,255,.75);
-      box-shadow:
-        inset 0 0 60px rgba(255,255,255,.50),
-        0 30px 80px rgba(32,89,47,.16);
-      backdrop-filter: blur(4px);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .plant-icon {
-      position: relative;
-      z-index: 2;
-      font-size: 126px;
-      filter: drop-shadow(0 18px 18px rgba(24,54,34,.18));
     }
 
     .hero-side-card {
@@ -251,23 +250,31 @@
       font-weight: 950;
     }
 
+    /* ===== Overview ===== */
     .overview-strip {
       position: relative;
       z-index: 3;
-      margin-top: -62px;
+      margin-top: -36px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
+    }
+
+    .stat-card,
+    .filter-panel,
+    .detail-panel,
+    .disease-card,
+    .empty-state {
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(31,122,67,.12);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(16px);
     }
 
     .stat-card {
       min-height: 136px;
       padding: 22px;
       border-radius: 24px;
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(31,122,67,.12);
-      box-shadow: var(--soft-shadow);
-      backdrop-filter: blur(16px);
     }
 
     .stat-card span {
@@ -285,12 +292,14 @@
       font-weight: 950;
     }
 
+    /* ===== Layout ===== */
     .guide-layout {
       margin-top: 76px;
       display: grid;
       grid-template-columns: 330px minmax(0, 1fr);
       gap: 22px;
       align-items: start;
+      background: #fff;
     }
 
     .filter-panel {
@@ -298,10 +307,6 @@
       top: 98px;
       padding: 22px;
       border-radius: var(--radius-xl);
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(31,122,67,.12);
-      box-shadow: var(--soft-shadow);
-      backdrop-filter: blur(16px);
     }
 
     .filter-title {
@@ -387,6 +392,7 @@
       min-width: 0;
       display: grid;
       gap: 22px;
+      background: #fff;
     }
 
     .section-head {
@@ -420,6 +426,11 @@
       white-space: nowrap;
     }
 
+    #diseaseList {
+      background: #fff;
+    }
+
+    /* ===== Disease Cards ===== */
     .disease-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -427,12 +438,9 @@
     }
 
     .disease-card {
-      min-height: 330px;
+      min-height: 368px;
       padding: 22px;
       border-radius: 24px;
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(31,122,67,.12);
-      box-shadow: var(--soft-shadow);
       transition: .22s ease;
       display: flex;
       flex-direction: column;
@@ -440,12 +448,6 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-    }
-
-    .disease-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--hover-shadow);
-      border-color: rgba(31,122,67,.26);
     }
 
     .disease-card::after {
@@ -458,6 +460,27 @@
       border-radius: 50%;
       background: rgba(31,122,67,.055);
       pointer-events: none;
+    }
+
+    .disease-card-visual {
+      position: relative;
+      z-index: 1;
+      height: 150px;
+      margin-bottom: 18px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #f6fcf3, #eef8eb);
+      border: 1px solid rgba(31,122,67,.10);
+      overflow: hidden;
+    }
+
+    .disease-card-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: none;
     }
 
     .card-top {
@@ -473,28 +496,29 @@
       margin-bottom: 17px;
     }
 
-    .crop-badge {
+    .crop-badge,
+    .type-badge,
+    .source-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      min-height: 30px;
-      padding: 0 11px;
+      justify-content: center;
       border-radius: 999px;
-      background: #edf7ed;
-      color: var(--green);
-      font-size: 12px;
       font-weight: 950;
     }
 
+    .crop-badge {
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 11px;
+      background: #edf7ed;
+      color: var(--green);
+      font-size: 12px;
+    }
+
     .type-badge {
-      display: inline-flex;
       min-height: 28px;
       padding: 0 10px;
-      border-radius: 999px;
-      align-items: center;
-      justify-content: center;
       font-size: 11px;
-      font-weight: 950;
       background: #f4f7f2;
       color: #687569;
     }
@@ -514,16 +538,20 @@
       letter-spacing: -0.055em;
     }
 
+    .disease-desc,
+    .care-preview span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .disease-desc {
       margin: 0;
       color: #657266;
       font-size: 14px;
       line-height: 1.62;
       font-weight: 700;
-      display: -webkit-box;
       -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
     }
 
     .care-preview {
@@ -539,10 +567,7 @@
       font-size: 12px;
       line-height: 1.45;
       font-weight: 760;
-      display: -webkit-box;
       -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
     }
 
     .more-button {
@@ -561,93 +586,42 @@
       font-weight: 950;
     }
 
+    /* ===== Detail ===== */
     .detail-panel {
       display: grid;
       grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
       gap: 18px;
       padding: 24px;
       border-radius: var(--radius-xl);
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(31,122,67,.12);
-      box-shadow: var(--soft-shadow);
-      backdrop-filter: blur(16px);
     }
 
     .detail-visual {
-      min-height: 360px;
+      min-height: 430px;
       border-radius: 24px;
-      background:
-        radial-gradient(circle at 50% 30%, rgba(255,255,255,.9), transparent 26%),
-        linear-gradient(180deg, #f7fbf5, #e8f4e5);
+      background: linear-gradient(180deg, #f7fbf5, #e8f4e5);
       display: grid;
       place-items: center;
-      padding: 26px;
+      padding: 0;
       position: relative;
       overflow: hidden;
-    }
-
-    .detail-emoji {
-      font-size: 142px;
-      filter: drop-shadow(0 20px 24px rgba(24,54,34,.16));
-    }
-
-    .plant-icon-img {
-      width: 58%;
-      height: 58%;
-      object-fit: contain;
-      filter: drop-shadow(0 22px 24px rgba(24,54,34,.16));
-    }
-
-    .inline-crop-icon {
-      width: 19px;
-      height: 19px;
-      object-fit: contain;
-      display: inline-block;
-      vertical-align: -4px;
-      margin-right: 3px;
-      filter: drop-shadow(0 4px 6px rgba(24,54,34,.10));
-    }
-
-    .disease-card-visual {
-      position: relative;
-      z-index: 1;
-      height: 112px;
-      margin-bottom: 18px;
-      border-radius: 20px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(180deg, #f6fcf3, #eef8eb);
-      border: 1px solid rgba(31,122,67,.10);
-      overflow: hidden;
-    }
-
-    .disease-card-visual img {
-      width: 88px;
-      height: 88px;
-      object-fit: contain;
-      filter: drop-shadow(0 14px 16px rgba(24,54,34,.14));
     }
 
     .detail-crop-img {
       position: relative;
       z-index: 2;
-      width: min(230px, 72%);
-      height: min(230px, 72%);
-      object-fit: contain;
-      filter: drop-shadow(0 22px 24px rgba(24,54,34,.16));
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: none;
     }
 
-    .detail-visual::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 58px;
-      transform: translateX(-50%);
-      width: 56%;
-      height: 20px;
-      border-radius: 50%;
-      background: rgba(31,122,67,.08);
-      filter: blur(8px);
+    .disease-card-visual img.is-fallback-icon,
+    .detail-crop-img.is-fallback-icon {
+      width: 58%;
+      height: 58%;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 24px rgba(24,54,34,.16));
     }
 
     .detail-content {
@@ -716,18 +690,26 @@
       gap: 14px;
     }
 
-    .info-card {
+    .info-card,
+    .warning-card {
       padding: 18px;
       border-radius: 18px;
+    }
+
+    .info-card {
       background: #f9fcf8;
       border: 1px solid rgba(31,122,67,.10);
     }
 
-    .info-card h4 {
+    .info-card h4,
+    .warning-card h4 {
       margin: 0 0 12px;
-      color: #111827;
       font-size: 15px;
       font-weight: 950;
+    }
+
+    .info-card h4 {
+      color: #111827;
     }
 
     .info-card ul {
@@ -741,22 +723,17 @@
 
     .warning-card {
       margin-top: 14px;
-      padding: 18px;
-      border-radius: 18px;
       background: #fff7ed;
       border: 1px solid rgba(217,119,6,.18);
     }
 
-    .warning-card h4 {
-      margin: 0 0 10px;
+    .warning-card h4,
+    .warning-card p {
       color: #9a3412;
-      font-size: 15px;
-      font-weight: 950;
     }
 
     .warning-card p {
       margin: 0;
-      color: #9a3412;
       font-size: 13px;
       line-height: 1.65;
       font-weight: 740;
@@ -772,21 +749,25 @@
     .source-chip {
       min-height: 30px;
       padding: 0 10px;
-      border-radius: 999px;
       background: #edf7ed;
       color: var(--green);
-      display: inline-flex;
-      align-items: center;
       font-size: 12px;
       font-weight: 900;
+    }
+
+    .inline-crop-icon {
+      width: 19px;
+      height: 19px;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: -4px;
+      margin-right: 3px;
+      filter: drop-shadow(0 4px 6px rgba(24,54,34,.10));
     }
 
     .empty-state {
       padding: 38px;
       border-radius: var(--radius-xl);
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(31,122,67,.12);
-      box-shadow: var(--soft-shadow);
       text-align: center;
       color: #657266;
       font-size: 15px;
@@ -794,6 +775,7 @@
       line-height: 1.6;
     }
 
+    /* ===== CTA / Footer ===== */
     .cta-section {
       margin: 76px 0 74px;
       padding: 42px;
@@ -901,198 +883,116 @@
       font-weight: 950;
     }
 
+    /* ===== Responsive ===== */
     @media (max-width: 1280px) {
-      .main-nav { grid-template-columns: 180px minmax(450px, 1fr) 170px; gap: 14px; }
-      .nav-item { font-size: 14.5px; }
-      .header-register { padding: 0 12px; }
       .hero-grid {
         grid-template-columns: 1fr 320px;
       }
+
       .hero-side-card {
         display: none;
       }
+
       .overview-strip {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .guide-layout {
         grid-template-columns: 1fr;
       }
+
       .filter-panel {
         position: static;
       }
+
       .disease-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
+    @media (max-width: 1080px) {
+      .hero {
+        min-height: 760px;
+        padding: 150px 20px 104px;
+        background-size: 100% 100%, auto, auto, auto 100%;
+      }
+
+      .overview-strip {
+        margin-top: -28px;
+      }
+    }
+
     @media (max-width: 980px) {
-      .top-message {
-        padding: 0 20px;
-      }
-      .top-message-left {
-        display: none;
-      }
-      .main-nav {
-        width: calc(100% - 36px);
-        grid-template-columns: 1fr auto auto;
-      }
-      .hamburger {
-        display: grid;
-      }
-      .nav-menu {
-        display: none;
-      }
-      .mega-panel {
-        display: none !important;
-      }
-      .header-actions {
-        gap: 8px;
-      }
-      .header-register {
-        padding: 0 14px;
-      }
       .main-shell {
         width: calc(100% - 36px);
       }
-      .hero {
-        padding: 52px 18px 92px;
-      }
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-      .plant-orb-wrap {
-        min-height: 230px;
-      }
-      .plant-orb {
-        width: 240px;
-      }
-      .plant-icon {
-        font-size: 100px;
-      }
-      .hero-title {
-        font-size: 40px;
-      }
-      .detail-panel {
-        grid-template-columns: 1fr;
-      }
-      .detail-visual {
-        min-height: 230px;
-      }
-      .detail-grid {
-        grid-template-columns: 1fr;
-      }
+
+      .hero-grid,
+      .detail-panel,
       .cta-section {
         grid-template-columns: 1fr;
       }
+
+      .plant-orb-wrap {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-visual {
+        min-height: 260px;
+      }
+
       .cta-buttons {
         justify-content: flex-start;
       }
+
       .footer-bottom {
         flex-direction: column;
       }
     }
 
     @media (max-width: 640px) {
-      .top-message-right a:first-child {
-        display: none;
+      .hero {
+        min-height: 690px;
       }
-      .brand-logo {
-        width: 98px;
-      }
-      .icon-button {
-        display: none;
-      }
+
       .hero-title {
         font-size: 34px;
       }
+
       .hero-subtitle {
         font-size: 16px;
       }
+
       .overview-strip,
       .disease-grid {
         grid-template-columns: 1fr;
       }
+
+      .overview-strip {
+        margin-top: -20px;
+      }
+
       .detail-head {
         display: grid;
       }
+
       .confidence-box {
         width: 100%;
       }
+
       .cta-section {
         padding: 32px 24px;
       }
     }
 
-
-
-
-
-
-    /* ===== Disease page clean split background ===== */
-    body {
-      background: #fff;
-    }
-
-    #navbar-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 9999;
-      background: transparent;
-      pointer-events: none;
-    }
-
-    #navbar-container .top-mini-bar,
-    #navbar-container .reaf-navbar {
-      pointer-events: auto;
-    }
-
-    .hero {
-      min-height: 760px;
-      margin: -70px calc(50% - 50vw) 0;
-      padding: 170px 76px 96px;
-      background:
-        linear-gradient(
-          90deg,
-          rgba(255,255,255,.72) 0%,
-          rgba(240,255,247,.42) 46%,
-          rgba(225,255,237,.20) 100%
-        ),
-        radial-gradient(circle at 16% 28%, rgba(255,255,255,.62), transparent 22%),
-        radial-gradient(circle at 82% 14%, rgba(195,255,151,.32), transparent 24%),
-        url("images/farm2.png");
-      background-size: cover;
-      background-position: center;
-    }
-
-    .hero::before {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.46)),
-        radial-gradient(circle at 78% 18%, rgba(255,255,255,.50), transparent 20%),
-        radial-gradient(circle at 18% 76%, rgba(125,240,176,.18), transparent 25%);
-    }
-
-    .hero::after {
-      opacity: .16;
-      background-image:
-        radial-gradient(circle, rgba(34,197,94,.34) 0 2px, transparent 3px),
-        radial-gradient(circle, rgba(255,255,255,.60) 0 1px, transparent 2px);
-    }
-
-    .main-shell,
-    .guide-layout,
-    .content-stack,
-    #diseaseList {
-      background: #fff;
-    }
-
-    @media (max-width: 1080px) {
-      .hero {
-        margin-top: -64px;
-        padding: 150px 20px 88px;
-      }
-    }
   </style>
 </head>
 
@@ -1114,10 +1014,7 @@
         </div>
 
         <div class="plant-orb-wrap">
-          <div class="plant-orb">
-            <img class="plant-icon-img" src="assets/icons/icon-stethoscope.png" alt="AI 질병정보 아이콘" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <div class="plant-icon" style="display:none">🌿</div>
-          </div>
+
         </div>
 
         <aside class="hero-side-card">
@@ -1276,6 +1173,56 @@
       "상추": "assets/icons/icon-lettuce.png"
     };
 
+    const DISEASE_IMAGE_MAP = {
+      "사과 검은점무늬병": "assets/crops/apple-scab.jpg",
+      "사과 검은썩음병": "assets/crops/apple-black-rot.jpg",
+      "사과 녹병": "assets/crops/apple-rust.jpg",
+      "사과 건강": "assets/crops/apple-healthy.jpg",
+      "블루베리 건강": "assets/crops/blueberry-healthy.jpg",
+      "체리 흰가루병": "assets/crops/cherry-powdery-mildew.jpg",
+      "체리 건강": "assets/crops/cherry-healthy.jpg",
+      "옥수수 회색잎반점병": "assets/crops/corn-gray-leaf-spot.jpg",
+      "옥수수 녹병": "assets/crops/corn-common-rust.jpg",
+      "옥수수 북부잎마름병": "assets/crops/corn-northern-leaf-blight.jpg",
+      "옥수수 건강": "assets/crops/corn-healthy.jpg",
+      "포도 검은썩음병": "assets/crops/grape-black-rot.jpg",
+      "포도 에스카병": "assets/crops/grape-esca.jpg",
+      "포도 잎마름병": "assets/crops/grape-leaf-blight.jpg",
+      "포도 건강": "assets/crops/grape-healthy.jpg",
+      "오렌지 황룡병": "assets/crops/orange-huanglongbing.jpg",
+      "복숭아 세균점무늬병": "assets/crops/peach-bacterial-spot.jpg",
+      "복숭아 건강": "assets/crops/peach-healthy.jpg",
+      "피망 세균점무늬병": "assets/crops/bell-pepper-bacterial-spot.jpg",
+      "피망 건강": "assets/crops/bell-pepper-healthy.jpg",
+      "감자 잎마름병": "assets/crops/potato-early-blight.jpg",
+      "감자 역병": "assets/crops/potato-late-blight.jpg",
+      "감자 건강": "assets/crops/potato-healthy.jpg",
+      "라즈베리 건강": "assets/crops/raspberry-healthy.jpg",
+      "콩 건강": "assets/crops/soybean-healthy.jpg",
+      "호박 흰가루병": "assets/crops/squash-powdery-mildew.jpg",
+      "딸기 잎마름병": "assets/crops/strawberry-leaf-scorch.jpg",
+      "딸기 건강": "assets/crops/strawberry-healthy.jpg",
+      "토마토 세균점무늬병": "assets/crops/tomato-bacterial-spot.jpg",
+      "토마토 잎마름병": "assets/crops/tomato-early-blight.jpg",
+      "토마토 역병": "assets/crops/tomato-late-blight.jpg",
+      "토마토 잎곰팡이병": "assets/crops/tomato-leaf-mold.jpg",
+      "토마토 점무늬병": "assets/crops/tomato-septoria-leaf-spot.jpg",
+      "토마토 응애 피해": "assets/crops/tomato-spider-mites.jpg",
+      "토마토 표적무늬병": "assets/crops/tomato-target-spot.jpg",
+      "토마토 황화잎말림바이러스": "assets/crops/tomato-yellow-leaf-curl-virus.jpg",
+      "토마토 모자이크바이러스": "assets/crops/tomato-mosaic-virus.jpg",
+      "토마토 건강": "assets/crops/tomato-healthy.jpg"
+    };
+
+    function getDiseaseImageSrc(item) {
+      if (!item) return "";
+      return item.image || DISEASE_IMAGE_MAP[item.name_ko] || DISEASE_IMAGE_MAP[item.class_name] || "";
+    }
+
+    function imageFallbackHandler(iconSrc, emoji = "🌿") {
+      return `this.onerror=null; this.classList.add('is-fallback-icon'); ${iconSrc ? `this.src='${iconSrc}';` : `this.replaceWith(document.createTextNode('${emoji}'));`}`;
+    }
+
     function getCropIconSrc(crop, name = "") {
       const text = `${crop || ""} ${name || ""}`;
       if (text.includes("파프리카") || text.includes("피망") || text.includes("고추")) return CROP_ICON_MAP["피망"];
@@ -1363,7 +1310,7 @@
         return `
           <article class="disease-card" data-id="${item.id}">
             <div class="disease-card-visual">
-              <img src="${getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png'}" alt="${item.crop} 아이콘" onerror="this.style.display='none';">
+              <img src="${getDiseaseImageSrc(item) || getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png'}" alt="${item.name_ko} 대표 이미지" onerror="${imageFallbackHandler(getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png', getCropEmoji(item.crop, item.name_ko))}">
             </div>
             <div class="card-top">
               <div class="crop-badge-row">
@@ -1407,8 +1354,7 @@
 
       detail.innerHTML = `
         <div class="detail-visual">
-          <img class="detail-crop-img" src="${getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png'}" alt="${item.crop} 아이콘" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="detail-emoji" style="display:none">${getCropEmoji(item.crop, item.name_ko)}</div>
+          <img class="detail-crop-img" src="${getDiseaseImageSrc(item) || getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png'}" alt="${item.name_ko} 대표 이미지" onerror="${imageFallbackHandler(getCropIconSrc(item.crop, item.name_ko) || 'assets/icons/icon-seedling.png', getCropEmoji(item.crop, item.name_ko))}">
         </div>
         <div class="detail-content">
           <div class="detail-head">
